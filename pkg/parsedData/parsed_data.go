@@ -1,7 +1,7 @@
 package parsedData
 
 import (
-	"argtools/pkg/argParserConfig"
+	"github.com/terryhay/argtools/pkg/argParserConfig"
 )
 
 // ParsedData - all parsed Command line data

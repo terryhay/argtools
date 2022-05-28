@@ -1,6 +1,6 @@
 package parsedData
 
-import "argtools/pkg/argParserConfig"
+import "github.com/terryhay/argtools/pkg/argParserConfig"
 
 // ParsedFlagData - parsed flag and arguments array
 type ParsedFlagData struct {

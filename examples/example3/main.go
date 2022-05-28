@@ -1,8 +1,8 @@
 package main
 
 import (
-	"argtools/examples/example3/argTools"
 	"fmt"
+	"github.com/terryhay/argtools/examples/example3/argTools"
 	"os"
 )
 

@@ -1,9 +1,9 @@
 package tests
 
 import (
-	"argtools/internal/generator/configDataExtractor"
-	"argtools/internal/generator/configYaml"
-	"argtools/pkg/argtoolsError"
+	"github.com/terryhay/argtools/internal/generator/configDataExtractor"
+	"github.com/terryhay/argtools/internal/generator/configYaml"
+	"github.com/terryhay/argtools/pkg/argtoolsError"
 	"testing"
 
 	"github.com/stretchr/testify/require"

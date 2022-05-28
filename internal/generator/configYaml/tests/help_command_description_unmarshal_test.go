@@ -1,9 +1,9 @@
 package tests
 
 import (
-	"argtools/internal/generator/configYaml"
-	"argtools/pkg/argtoolsError"
 	"fmt"
+	"github.com/terryhay/argtools/internal/generator/configYaml"
+	"github.com/terryhay/argtools/pkg/argtoolsError"
 	"testing"
 
 	"github.com/stretchr/testify/require"

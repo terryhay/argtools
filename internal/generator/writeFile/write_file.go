@@ -1,8 +1,8 @@
 package writeFile
 
 import (
-	"argtools/pkg/argtoolsError"
 	"fmt"
+	"github.com/terryhay/argtools/pkg/argtoolsError"
 	"os"
 	"unicode/utf8"
 )

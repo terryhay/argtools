@@ -1,8 +1,8 @@
 package helpPrinter
 
 import (
-	"argtools/pkg/argParserConfig"
 	"fmt"
+	"github.com/terryhay/argtools/pkg/argParserConfig"
 	"sort"
 	"strings"
 )

@@ -1,8 +1,8 @@
 package generate
 
 import (
-	"argtools/internal/generator/configYaml"
 	"fmt"
+	"github.com/terryhay/argtools/internal/generator/configYaml"
 )
 
 const appDescriptionTemplate = `			AppName: "%s",

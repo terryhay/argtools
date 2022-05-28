@@ -1,9 +1,9 @@
 package configDataExtractor
 
 import (
-	"argtools/internal/generator/configYaml"
-	"argtools/pkg/argtoolsError"
 	"fmt"
+	"github.com/terryhay/argtools/internal/generator/configYaml"
+	"github.com/terryhay/argtools/pkg/argtoolsError"
 )
 
 // ExtractFlagDescriptionMap - extracts flag descriptions by flags from config object

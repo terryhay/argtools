@@ -1,7 +1,7 @@
 package idTemplateDataCreator
 
 import (
-	"argtools/internal/generator/configYaml"
+	"github.com/terryhay/argtools/internal/generator/configYaml"
 	"regexp"
 	"unicode"
 )

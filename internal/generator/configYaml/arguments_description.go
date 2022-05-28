@@ -1,8 +1,8 @@
 package configYaml
 
 import (
-	"argtools/pkg/argParserConfig"
 	"fmt"
+	"github.com/terryhay/argtools/pkg/argParserConfig"
 )
 
 // ArgumentsDescription - description of command line flag arguments

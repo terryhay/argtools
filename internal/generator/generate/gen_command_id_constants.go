@@ -1,9 +1,9 @@
 package generate
 
 import (
-	"argtools/internal/generator/configYaml"
-	"argtools/internal/generator/idTemplateDataCreator"
 	"fmt"
+	"github.com/terryhay/argtools/internal/generator/configYaml"
+	"github.com/terryhay/argtools/internal/generator/idTemplateDataCreator"
 	"sort"
 )
 

@@ -1,9 +1,9 @@
 package generate
 
 import (
-	"argtools/internal/generator/configYaml"
-	"argtools/pkg/argParserConfig"
 	"fmt"
+	"github.com/terryhay/argtools/internal/generator/configYaml"
+	"github.com/terryhay/argtools/pkg/argParserConfig"
 	"strings"
 )
 

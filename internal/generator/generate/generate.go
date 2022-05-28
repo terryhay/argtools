@@ -1,8 +1,8 @@
 package generate
 
 import (
-	"argtools/internal/generator/configYaml"
-	"argtools/internal/generator/idTemplateDataCreator"
+	"github.com/terryhay/argtools/internal/generator/configYaml"
+	"github.com/terryhay/argtools/internal/generator/idTemplateDataCreator"
 )
 
 // Generate - creates argParser.go file text body

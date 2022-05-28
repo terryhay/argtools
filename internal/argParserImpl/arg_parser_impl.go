@@ -1,10 +1,10 @@
 package argParserImpl
 
 import (
-	"argtools/pkg/argParserConfig"
-	"argtools/pkg/argtoolsError"
-	"argtools/pkg/parsedData"
 	"fmt"
+	"github.com/terryhay/argtools/pkg/argParserConfig"
+	"github.com/terryhay/argtools/pkg/argtoolsError"
+	"github.com/terryhay/argtools/pkg/parsedData"
 )
 
 type parseState uint8

@@ -1,14 +1,14 @@
 package main
 
 import (
-	"argtools/internal/generator/configChecker"
-	"argtools/internal/generator/configDataExtractor"
-	"argtools/internal/generator/configYaml"
-	"argtools/internal/generator/generate"
-	"argtools/internal/generator/writeFile"
-	"argtools/pkg/argtoolsError"
 	"flag"
 	"fmt"
+	"github.com/terryhay/argtools/internal/generator/configChecker"
+	"github.com/terryhay/argtools/internal/generator/configDataExtractor"
+	"github.com/terryhay/argtools/internal/generator/configYaml"
+	"github.com/terryhay/argtools/internal/generator/generate"
+	"github.com/terryhay/argtools/internal/generator/writeFile"
+	"github.com/terryhay/argtools/pkg/argtoolsError"
 	"os"
 )
 

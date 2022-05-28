@@ -1,9 +1,9 @@
 package internal
 
 import (
-	"argtools/pkg/argParserConfig"
-	"argtools/pkg/argtoolsError"
 	"fmt"
+	"github.com/terryhay/argtools/pkg/argParserConfig"
+	"github.com/terryhay/argtools/pkg/argtoolsError"
 )
 
 func CheckArgSpec(commandDescriptions []*argParserConfig.CommandDescription, flagDescriptions map[argParserConfig.Flag]*argParserConfig.FlagDescription) *argtoolsError.Error {

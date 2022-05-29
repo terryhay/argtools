@@ -9,7 +9,7 @@ type FlagDescription struct {
 	SynopsisDescription string
 
 	// optional
-	ArgumentsDescription *ArgumentsDescription `yaml:"arguments_description"`
+	ArgumentsDescription *ArgumentsDescription
 }
 
 // GetFlag - Flag getter
@@ -28,8 +28,8 @@ func (i *FlagDescription) GetDescriptionHelpInfo() string {
 	return i.DescriptionHelpInfo
 }
 
-// GetValueTypeDescription - SynopsisDescription field getter
-func (i *FlagDescription) GetValueTypeDescription() string {
+// GetSynopsisDescription - SynopsisDescription field getter
+func (i *FlagDescription) GetSynopsisDescription() string {
 	if i == nil {
 		return ""
 	}

@@ -1,4 +1,4 @@
-package tests_test
+package testCases_test
 
 import (
 	"github.com/terryhay/argtools/internal/generator/configYaml"

@@ -18,7 +18,7 @@ type ArgumentsDescription struct {
 // GetAmountType - AmountType field getter
 func (i *ArgumentsDescription) GetAmountType() argParserConfig.ArgAmountType {
 	if i == nil {
-		return 0
+		return argParserConfig.ArgAmountTypeNoArgs
 	}
 	return i.AmountType
 }

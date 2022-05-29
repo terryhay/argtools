@@ -10,6 +10,7 @@ import (
 type parseState uint8
 
 const (
+	// nolint
 	parseStateNone parseState = iota
 	parseStateReadingFlag
 	parseStateReadingSingleArgument

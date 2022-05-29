@@ -1,8 +1,5 @@
 package parsedData
 
-// ArgValue - string value of an argument
-type ArgValue string
-
 // ParsedArgData - parsed argument values of a command or a flag
 type ParsedArgData struct {
 	ArgValues []ArgValue

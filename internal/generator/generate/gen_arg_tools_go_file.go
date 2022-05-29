@@ -58,7 +58,7 @@ func GenArgParserFileBody(
 	flagStringIDConstList FlagStringIDListComponent,
 	appDescriptionComponent AppDescriptionComponent,
 	flagMapComponents FlagMapElements,
-	commandMapElement commandSliceElement,
+	commandMapElement CommandSliceElement,
 	nullCommandComponent NullCommandComponent,
 	helpCommandID string) string {
 

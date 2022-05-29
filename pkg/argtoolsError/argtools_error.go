@@ -13,15 +13,6 @@ const (
 	// CodeConfigContainsDuplicateFlags - some flag is duplicating
 	CodeConfigContainsDuplicateFlags
 
-	// CodeConfigDoesNotContainCommandDescriptions - yaml config file doesn't contain command descriptions
-	CodeConfigDoesNotContainCommandDescriptions
-
-	// CodeConfigDoesNotContainFlagDescriptions - yaml config file doesn't contain flag descriptions
-	CodeConfigDoesNotContainFlagDescriptions
-
-	// CodeCantExtractFlagArgValue - error of extracting flag argument value
-	CodeCantExtractFlagArgValue
-
 	// CodeConfigFlagIsNotUsedInCommands - some flag is described, but not used in commands descriptions
 	CodeConfigFlagIsNotUsedInCommands
 
@@ -30,12 +21,6 @@ const (
 
 	// CodeCantFindFlagNameInGroupSpec - unexpected flag name for determine using flag group
 	CodeCantFindFlagNameInGroupSpec
-
-	// CodeDuplicatedGroupFlag - some group flags are duplicated
-	CodeDuplicatedGroupFlag
-
-	// CodeFlagArgCountError - flag arg amount less or more than settings expected
-	CodeFlagArgCountError
 
 	// CodeFlagHasNilSpec - flag has nil pointer to spec
 	CodeFlagHasNilSpec
@@ -58,9 +43,6 @@ const (
 	// CodeGeneratorCreateFileError - create a file error
 	CodeGeneratorCreateFileError
 
-	// CodeGeneratorCloseFileError - close a file error
-	CodeGeneratorCloseFileError
-
 	// CodeGeneratorWriteFileError - write file error
 	CodeGeneratorWriteFileError
 
@@ -75,12 +57,6 @@ const (
 
 	// CodeRequiredFlagIsNotSet - some required flag of group is not set
 	CodeRequiredFlagIsNotSet
-
-	// CodeUnexpectedFlagName - unexpected flag was found
-	CodeUnexpectedFlagName
-
-	// CodeUnexpectedFlagArgTypeDescription - no logic for flag arg type description
-	CodeUnexpectedFlagArgTypeDescription
 )
 
 // Error is detail of parser work error

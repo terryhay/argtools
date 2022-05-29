@@ -15,6 +15,9 @@ const (
 // Write - write file string by dir path
 func Write(fileString, dirPath string) (err *argtoolsError.Error) {
 	err = checkDirPath(dirPath)
+	if err != nil {
+		return err
+	}
 
 	argParserDirPath := expandPath(dirPath, argParserDirName)
 	if err = checkDirPath(argParserDirPath); err != nil {

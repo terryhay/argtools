@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-type commandSliceElement string
+type CommandSliceElement string
 
 const (
 	commandSliceElementPrefix = `			{
@@ -31,7 +31,7 @@ func GenCommandSliceElements(
 	commandDescriptions []*configYaml.CommandDescription,
 	helpCommandDescription *configYaml.HelpCommandDescription,
 	commandsIDTemplateData map[configYaml.Command]*idTemplateDataCreator.IDTemplateData,
-	flagsIDTemplateData map[configYaml.Flag]*idTemplateDataCreator.IDTemplateData) commandSliceElement {
+	flagsIDTemplateData map[configYaml.Flag]*idTemplateDataCreator.IDTemplateData) CommandSliceElement {
 
 	builder := new(strings.Builder)
 	builder.WriteString(`		[]*argParserConfig.CommandDescription{
@@ -86,7 +86,7 @@ func GenCommandSliceElements(
 
 	builder.WriteString(`		},`)
 
-	return commandSliceElement(builder.String())
+	return CommandSliceElement(builder.String())
 }
 
 func joinCallNames(nameAndIDSlice []*idTemplateDataCreator.IDTemplateData) (res string) {

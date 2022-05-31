@@ -7,7 +7,7 @@ import (
 )
 
 // PrintHelpInfo - prints help information by ArgParserConfig object
-func PrintHelpInfo(argParserConfig *argParserConfig.ArgParserConfig) {
+func PrintHelpInfo(argParserConfig argParserConfig.ArgParserConfig) {
 	builder := strings.Builder{}
 
 	builder.WriteString(CreateNameChapter(

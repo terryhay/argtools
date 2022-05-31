@@ -1,10 +1,9 @@
-package test_arg_value
+package parsedData
 
 import (
 	"fmt"
 	"github.com/brianvoe/gofakeit"
 	"github.com/stretchr/testify/require"
-	"github.com/terryhay/argtools/pkg/parsedData"
 	"math"
 	"testing"
 )
@@ -32,7 +31,7 @@ func TestArgValueToFloat32(t *testing.T) {
 
 	testData := []struct {
 		caseName string
-		argValue parsedData.ArgValue
+		argValue ArgValue
 
 		expectedRes float32
 		expectedErr bool
@@ -49,22 +48,22 @@ func TestArgValueToFloat32(t *testing.T) {
 		},
 		{
 			caseName:    "valid_positive_float32",
-			argValue:    parsedData.ArgValue(fmt.Sprintf("%v", randPositiveValue)),
+			argValue:    ArgValue(fmt.Sprintf("%v", randPositiveValue)),
 			expectedRes: randPositiveValue,
 		},
 		{
 			caseName:    "valid_negative_float32",
-			argValue:    parsedData.ArgValue(fmt.Sprintf("%v", randNegativeValue)),
+			argValue:    ArgValue(fmt.Sprintf("%v", randNegativeValue)),
 			expectedRes: randNegativeValue,
 		},
 		{
 			caseName:    "rand_positive_int64_overflow",
-			argValue:    parsedData.ArgValue(fmt.Sprintf("%v", randFloat64PositiveValue)),
+			argValue:    ArgValue(fmt.Sprintf("%v", randFloat64PositiveValue)),
 			expectedErr: true,
 		},
 		{
 			caseName:    "rand_negative_int64_overflow",
-			argValue:    parsedData.ArgValue(fmt.Sprintf("%v", randFloat64NegativeValue)),
+			argValue:    ArgValue(fmt.Sprintf("%v", randFloat64NegativeValue)),
 			expectedErr: true,
 		},
 	}

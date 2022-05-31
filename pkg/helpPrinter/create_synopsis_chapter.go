@@ -7,6 +7,10 @@ import (
 	"strings"
 )
 
+const (
+	synopsisChapterTitle = "\u001B[1mSYNOPSIS\u001B[0m\n"
+)
+
 // CreateSynopsisChapter - creates synopsis help chapter
 func CreateSynopsisChapter(
 	appName string,
@@ -18,11 +22,11 @@ func CreateSynopsisChapter(
 	var (
 		builder         strings.Builder
 		flagStr         string
-		success         bool
 		flagDescription *argParserConfig.FlagDescription
+		joinedString    string
 	)
 
-	builder.WriteString("\u001B[1mSYNOPSIS\u001B[0m\n")
+	builder.WriteString(synopsisChapterTitle)
 
 	if nullCommandDescription != nil {
 		// app name part
@@ -30,10 +34,7 @@ func CreateSynopsisChapter(
 
 		// required flags part
 		for _, flagStr = range getSortedFlags(nullCommandDescription.GetRequiredFlags()) {
-			flagDescription, success = flagDescriptions[argParserConfig.Flag(flagStr)]
-			if !success {
-				continue
-			}
+			flagDescription = flagDescriptions[argParserConfig.Flag(flagStr)]
 
 			builder.WriteString(fmt.Sprintf(" \u001B[1m%s\u001B[0m", flagStr))
 			builder.WriteString(fillUpArgumentsTemplatePart(flagDescription.GetArgDescription()))
@@ -41,10 +42,7 @@ func CreateSynopsisChapter(
 
 		// optional flags part
 		for _, flagStr = range getSortedFlags(nullCommandDescription.GetOptionalFlags()) {
-			flagDescription, success = flagDescriptions[argParserConfig.Flag(flagStr)]
-			if !success {
-				continue
-			}
+			flagDescription = flagDescriptions[argParserConfig.Flag(flagStr)]
 
 			builder.WriteString(fmt.Sprintf(" [\u001B[1m%s\u001B[0m", flagStr))
 			builder.WriteString(fillUpArgumentsTemplatePart(flagDescription.GetArgDescription()))
@@ -60,17 +58,15 @@ func CreateSynopsisChapter(
 		builder.WriteString(fmt.Sprintf(`	[1m%s [0m`, appName))
 
 		// command part
-		if len(commandDescription.GetCommands()) > 0 {
-			builder.WriteString(fmt.Sprintf(`[1m%s[0m`, strings.Join(getSortedCommands(commandDescription.GetCommands()), ", ")))
+		joinedString = strings.Join(getSortedCommands(commandDescription.GetCommands()), ", ")
+		if len(joinedString) > 0 {
+			builder.WriteString(fmt.Sprintf(`[1m%s[0m`, joinedString))
 			builder.WriteString(fillUpArgumentsTemplatePart(commandDescription.GetArgDescription()))
 		}
 
 		// required flags part
 		for _, flagStr = range getSortedFlags(commandDescription.GetRequiredFlags()) {
-			flagDescription, success = flagDescriptions[argParserConfig.Flag(flagStr)]
-			if !success {
-				continue
-			}
+			flagDescription = flagDescriptions[argParserConfig.Flag(flagStr)]
 
 			builder.WriteString(fmt.Sprintf(" \u001B[1m%s\u001B[0m", flagStr))
 			builder.WriteString(fillUpArgumentsTemplatePart(flagDescription.GetArgDescription()))
@@ -78,10 +74,7 @@ func CreateSynopsisChapter(
 
 		// optional flags part
 		for _, flagStr = range getSortedFlags(commandDescription.GetOptionalFlags()) {
-			flagDescription, success = flagDescriptions[argParserConfig.Flag(flagStr)]
-			if !success {
-				continue
-			}
+			flagDescription = flagDescriptions[argParserConfig.Flag(flagStr)]
 
 			builder.WriteString(fmt.Sprintf(" [\u001B[1m%s\u001B[0m", flagStr))
 			builder.WriteString(fillUpArgumentsTemplatePart(flagDescription.GetArgDescription()))
@@ -109,8 +102,9 @@ func fillUpArgumentsTemplatePart(argDescription *argParserConfig.ArgumentsDescri
 	}
 
 	allowedValuesTemplatePart := ""
-	if len(argDescription.GetAllowedValues()) > 0 {
-		allowedValuesTemplatePart = fmt.Sprintf(` [%s]`, strings.Join(getSortedStrings(argDescription.GetAllowedValues()), ", "))
+	joinedString := strings.Join(getSortedStrings(argDescription.GetAllowedValues()), ", ")
+	if len(joinedString) > 0 {
+		allowedValuesTemplatePart = fmt.Sprintf(` [%s]`, joinedString)
 	}
 
 	switch argDescription.GetAmountType() {

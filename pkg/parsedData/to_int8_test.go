@@ -1,19 +1,19 @@
-package test_arg_value
+package parsedData
 
 import (
 	"fmt"
 	"github.com/brianvoe/gofakeit"
 	"github.com/stretchr/testify/require"
-	"github.com/terryhay/argtools/pkg/parsedData"
+	"math"
 	"testing"
 )
 
-func TestArgValueToInt64(t *testing.T) {
+func TestArgValueToInt8(t *testing.T) {
 	t.Parallel()
 
-	randNotNullValue := gofakeit.Int64()
+	randNotNullValue := gofakeit.Int8()
 	for randNotNullValue == 0 {
-		randNotNullValue = gofakeit.Int64()
+		randNotNullValue = gofakeit.Int8()
 	}
 
 	randPositiveValue := randNotNullValue
@@ -25,48 +25,55 @@ func TestArgValueToInt64(t *testing.T) {
 		randNegativeValue *= -1
 	}
 
+	require.True(t, randNotNullValue != 0)
+	require.True(t, randPositiveValue > 0)
+	require.True(t, randNegativeValue < 0)
+
+	randInt64PositiveValue := int64(math.MaxUint32) + int64(randPositiveValue)
+	randInt64NegativeValue := -1 * randInt64PositiveValue
+
 	testData := []struct {
 		caseName string
-		argValue parsedData.ArgValue
+		argValue ArgValue
 
-		expectedRes int64
+		expectedRes int8
 		expectedErr bool
 	}{
 		{
-			caseName:    "empty_string_to_int64",
+			caseName:    "empty_string_to_int8",
 			argValue:    "",
 			expectedErr: true,
 		},
 		{
-			caseName:    "int64_null",
+			caseName:    "int8_null",
 			argValue:    "0",
 			expectedRes: 0,
 		},
 		{
-			caseName:    "valid_positive_int64",
-			argValue:    parsedData.ArgValue(fmt.Sprintf("%v", randPositiveValue)),
+			caseName:    "valid_positive_int8",
+			argValue:    ArgValue(fmt.Sprintf("%v", randPositiveValue)),
 			expectedRes: randPositiveValue,
 		},
 		{
-			caseName:    "valid_negative_int64",
-			argValue:    parsedData.ArgValue(fmt.Sprintf("%v", randNegativeValue)),
+			caseName:    "valid_negative_int8",
+			argValue:    ArgValue(fmt.Sprintf("%v", randNegativeValue)),
 			expectedRes: randNegativeValue,
 		},
 		{
 			caseName:    "rand_positive_int64_overflow",
-			argValue:    parsedData.ArgValue("18446744073709551616"),
+			argValue:    ArgValue(fmt.Sprintf("%v", randInt64PositiveValue)),
 			expectedErr: true,
 		},
 		{
 			caseName:    "rand_negative_int64_overflow",
-			argValue:    parsedData.ArgValue("-18446744073709551616"),
+			argValue:    ArgValue(fmt.Sprintf("%v", randInt64NegativeValue)),
 			expectedErr: true,
 		},
 	}
 
 	for _, td := range testData {
 		t.Run(td.caseName, func(t *testing.T) {
-			res, err := td.argValue.ToInt64()
+			res, err := td.argValue.ToInt8()
 			if td.expectedErr {
 				require.NotNil(t, err)
 				require.Equal(t, td.expectedRes, res)
@@ -80,59 +87,62 @@ func TestArgValueToInt64(t *testing.T) {
 	}
 }
 
-func TestArgValueToUint64(t *testing.T) {
+func TestArgValueToUint8(t *testing.T) {
 	t.Parallel()
 
-	randPositiveValue := gofakeit.Uint64()
+	randPositiveValue := gofakeit.Uint8()
 	for randPositiveValue == 0 {
-		randPositiveValue = gofakeit.Uint64()
+		randPositiveValue = gofakeit.Uint8()
 	}
 
 	require.True(t, randPositiveValue != 0)
 	require.True(t, randPositiveValue > 0)
 
+	randInt64PositiveValue := int64(math.MaxUint32) + int64(randPositiveValue)
+	randInt64NegativeValue := -1 * randInt64PositiveValue
+
 	testData := []struct {
 		caseName string
-		argValue parsedData.ArgValue
+		argValue ArgValue
 
-		expectedRes uint64
+		expectedRes uint8
 		expectedErr bool
 	}{
 		{
-			caseName:    "empty_string_to_int64",
+			caseName:    "empty_string_to_int8",
 			argValue:    "",
 			expectedErr: true,
 		},
 		{
-			caseName:    "int64_null",
+			caseName:    "int8_null",
 			argValue:    "0",
 			expectedRes: 0,
 		},
 		{
-			caseName:    "valid_positive_int64",
-			argValue:    parsedData.ArgValue(fmt.Sprintf("%v", randPositiveValue)),
+			caseName:    "valid_positive_int8",
+			argValue:    ArgValue(fmt.Sprintf("%v", randPositiveValue)),
 			expectedRes: randPositiveValue,
 		},
 		{
-			caseName:    "valid_negative_int64",
-			argValue:    parsedData.ArgValue(fmt.Sprintf("%v", -1*int64(randPositiveValue))),
+			caseName:    "valid_negative_int8",
+			argValue:    ArgValue(fmt.Sprintf("%v", -1*int64(randPositiveValue))),
 			expectedErr: true,
 		},
 		{
 			caseName:    "rand_positive_int64_overflow",
-			argValue:    parsedData.ArgValue("18446744073709551616"),
+			argValue:    ArgValue(fmt.Sprintf("%v", randInt64PositiveValue)),
 			expectedErr: true,
 		},
 		{
 			caseName:    "rand_negative_int64_overflow",
-			argValue:    parsedData.ArgValue("-18446744073709551616"),
+			argValue:    ArgValue(fmt.Sprintf("%v", randInt64NegativeValue)),
 			expectedErr: true,
 		},
 	}
 
 	for _, td := range testData {
 		t.Run(td.caseName, func(t *testing.T) {
-			res, err := td.argValue.ToUint64()
+			res, err := td.argValue.ToUint8()
 			if td.expectedErr {
 				require.NotNil(t, err)
 				require.Equal(t, td.expectedRes, res)

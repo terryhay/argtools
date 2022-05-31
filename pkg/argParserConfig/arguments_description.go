@@ -4,7 +4,6 @@ package argParserConfig
 type ArgumentsDescription struct {
 	AmountType              ArgAmountType
 	SynopsisHelpDescription string
-	IsRequired              bool
 	DefaultValues           []string
 	AllowedValues           map[string]bool
 }
@@ -23,14 +22,6 @@ func (i *ArgumentsDescription) GetSynopsisHelpDescription() string {
 		return ""
 	}
 	return i.SynopsisHelpDescription
-}
-
-// GetIsRequired - IsRequired field getter
-func (i *ArgumentsDescription) GetIsRequired() bool {
-	if i == nil {
-		return false
-	}
-	return i.IsRequired
 }
 
 // GetDefaultValues - DefaultValues field getter

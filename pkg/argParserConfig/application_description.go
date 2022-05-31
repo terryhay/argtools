@@ -19,5 +19,5 @@ func (i ApplicationDescription) GetNameHelpInfo() string {
 
 // GetDescriptionHelpInfo - NameHelpInfo field getter
 func (i ApplicationDescription) GetDescriptionHelpInfo() string {
-	return i.NameHelpInfo
+	return i.DescriptionHelpInfo
 }

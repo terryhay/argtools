@@ -1,9 +1,8 @@
-package test_arg_value
+package parsedData
 
 import (
 	"github.com/brianvoe/gofakeit"
 	"github.com/stretchr/testify/require"
-	"github.com/terryhay/argtools/pkg/parsedData"
 	"math/rand"
 	"testing"
 )
@@ -13,7 +12,7 @@ func TestArgValueToString(t *testing.T) {
 
 	testData := []struct {
 		caseName string
-		argValue parsedData.ArgValue
+		argValue ArgValue
 	}{
 		{
 			caseName: "empty_string",
@@ -21,7 +20,7 @@ func TestArgValueToString(t *testing.T) {
 		},
 		{
 			caseName: "some_string",
-			argValue: parsedData.ArgValue(getRandString()),
+			argValue: ArgValue(getRandString()),
 		},
 	}
 

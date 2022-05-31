@@ -1,10 +1,9 @@
-package test_arg_value
+package parsedData
 
 import (
 	"fmt"
 	"github.com/brianvoe/gofakeit"
 	"github.com/stretchr/testify/require"
-	"github.com/terryhay/argtools/pkg/parsedData"
 	"testing"
 )
 
@@ -28,7 +27,7 @@ func TestArgValueToFloat64(t *testing.T) {
 
 	testData := []struct {
 		caseName string
-		argValue parsedData.ArgValue
+		argValue ArgValue
 
 		expectedRes float64
 		expectedErr bool
@@ -45,12 +44,12 @@ func TestArgValueToFloat64(t *testing.T) {
 		},
 		{
 			caseName:    "valid_positive_float64",
-			argValue:    parsedData.ArgValue(fmt.Sprintf("%v", randPositiveValue)),
+			argValue:    ArgValue(fmt.Sprintf("%v", randPositiveValue)),
 			expectedRes: randPositiveValue,
 		},
 		{
 			caseName:    "valid_negative_float64",
-			argValue:    parsedData.ArgValue(fmt.Sprintf("%v", randNegativeValue)),
+			argValue:    ArgValue(fmt.Sprintf("%v", randNegativeValue)),
 			expectedRes: randNegativeValue,
 		},
 	}

@@ -1,7 +1,6 @@
-package tests
+package configDataExtractor
 
 import (
-	"github.com/terryhay/argtools/internal/generator/configDataExtractor"
 	"github.com/terryhay/argtools/internal/generator/configYaml"
 	"github.com/terryhay/argtools/pkg/argtoolsError"
 	"testing"
@@ -57,7 +56,7 @@ func TestExtractFlagDescriptionMapErrors(t *testing.T) {
 
 	for _, td := range testData {
 		t.Run(td.caseName, func(t *testing.T) {
-			flagDescriptionMap, err := configDataExtractor.ExtractFlagDescriptionMap(td.flagDescriptions)
+			flagDescriptionMap, err := ExtractFlagDescriptionMap(td.flagDescriptions)
 			require.Nil(t, flagDescriptionMap)
 			require.NotNil(t, err)
 			require.Equal(t, td.expectedErrorCode, err.Code())
@@ -114,7 +113,7 @@ func TestExtractFlagDescriptionMap(t *testing.T) {
 
 	for _, td := range testData {
 		t.Run(td.caseName, func(t *testing.T) {
-			flagDescriptionMap, err := configDataExtractor.ExtractFlagDescriptionMap(td.flagDescriptions)
+			flagDescriptionMap, err := ExtractFlagDescriptionMap(td.flagDescriptions)
 			require.Nil(t, err)
 			require.Equal(t, len(td.expectedMap), len(flagDescriptionMap))
 

@@ -59,7 +59,7 @@ func TestArgumentsDescriptionUnmarshalErrors(t *testing.T) {
 		},
 		{
 			yamlFileName:      "unexpected_amount_type.yaml",
-			expectedErrorText: "configYaml.GetConfig: unmarshal error: argumentsDescriptions unmarshal error: no required field \"synopsis_description\"",
+			expectedErrorText: "configYaml.GetConfig: unmarshal error: argumentsDescriptions unmarshal error: can't convert string value \"amount_type\": unexpected \"amount_type\" value: trash\\nallowed values: \"single\", \"array\"",
 		},
 	}
 

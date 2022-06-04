@@ -21,19 +21,20 @@ type CommandStringIDListComponent string
 
 type byStringID []*idTemplateDataCreator.IDTemplateData
 
-func (i byStringID) Len() int { return len(i) }
+func (i byStringID) Len() int {
+	return len(i)
+}
 
-func (i byStringID) Less(left, right int) bool { return i[left].GetStringID() < i[right].GetStringID() }
+func (i byStringID) Less(left, right int) bool {
+	return i[left].GetStringID() < i[right].GetStringID()
+}
 
-func (i byStringID) Swap(left, right int) { i[left], i[right] = i[right], i[left] }
+func (i byStringID) Swap(left, right int) {
+	i[left], i[right] = i[right], i[left]
+}
 
 func GenCommandStringIDConstants(commandsTemplateData map[configYaml.Command]*idTemplateDataCreator.IDTemplateData) CommandStringIDListComponent {
-	dataCount := len(commandsTemplateData)
-	if dataCount == 0 {
-		return ""
-	}
-
-	sortedCommandsTemplateData := make([]*idTemplateDataCreator.IDTemplateData, 0, dataCount)
+	sortedCommandsTemplateData := make([]*idTemplateDataCreator.IDTemplateData, 0, len(commandsTemplateData))
 	for _, data := range commandsTemplateData {
 		sortedCommandsTemplateData = append(sortedCommandsTemplateData, data)
 	}

@@ -21,11 +21,17 @@ type CommandIDListComponent string
 
 type byID []*idTemplateDataCreator.IDTemplateData
 
-func (i byID) Len() int { return len(i) }
+func (i byID) Len() int {
+	return len(i)
+}
 
-func (i byID) Less(left, right int) bool { return i[left].GetStringID() < i[right].GetStringID() }
+func (i byID) Less(left, right int) bool {
+	return i[left].GetStringID() < i[right].GetStringID()
+}
 
-func (i byID) Swap(left, right int) { i[left], i[right] = i[right], i[left] }
+func (i byID) Swap(left, right int) {
+	i[left], i[right] = i[right], i[left]
+}
 
 func GenCommandIDConstants(
 	commandsTemplateData map[configYaml.Command]*idTemplateDataCreator.IDTemplateData,
@@ -37,10 +43,6 @@ func GenCommandIDConstants(
 		dataCount++
 	}
 	dataCount += len(commandsTemplateData)
-
-	if dataCount == 0 {
-		return ""
-	}
 
 	checkDuplicates := make(map[string]bool, dataCount)
 	sortedCommandsTemplateData := make([]*idTemplateDataCreator.IDTemplateData, 0, dataCount)

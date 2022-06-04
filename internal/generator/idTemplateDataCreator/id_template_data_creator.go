@@ -79,17 +79,17 @@ func (i IDTemplateDataCreator) CreateIDTemplateData(
 		commandId = i.CreateID(PrefixCommandID, callName)
 
 		commandsIDTemplateData[commandDescription.GetCommand()] = NewIDTemplateData(
-			callName,
 			commandId,
 			i.CreateID(PrefixCommandStringID, callName),
+			callName,
 			commandDescription.GetDescriptionHelpInfo())
 
 		for k = range commandDescription.GetAdditionalCommands() {
 			callName = string(commandDescription.GetAdditionalCommands()[k])
 			commandsIDTemplateData[commandDescription.GetAdditionalCommands()[k]] = NewIDTemplateData(
-				callName,
 				commandId,
 				i.CreateID(PrefixCommandStringID, callName),
+				callName,
 				commandDescription.GetDescriptionHelpInfo())
 		}
 	}
@@ -99,25 +99,25 @@ func (i IDTemplateDataCreator) CreateIDTemplateData(
 	commandId = i.CreateID(PrefixCommandID, callName)
 
 	commandsIDTemplateData[helpCommandDescription.GetCommand()] = NewIDTemplateData(
-		callName,
 		commandId,
 		i.CreateID(PrefixCommandStringID, callName),
+		callName,
 		helpCommandComment)
 
 	for k = range helpCommandDescription.GetAdditionalCommands() {
 		callName = string(helpCommandDescription.GetAdditionalCommands()[k])
 		commandsIDTemplateData[helpCommandDescription.GetAdditionalCommands()[k]] = NewIDTemplateData(
-			callName,
 			commandId,
 			i.CreateID(PrefixCommandStringID, callName),
+			callName,
 			helpCommandComment)
 	}
 
 	// null command
 	if nullCommandDescription != nil {
 		nullCommandIDTemplateData = NewIDTemplateData(
-			"",
 			i.CreateID(PrefixCommandID, NullCommandIDPostfix),
+			"",
 			"",
 			nullCommandDescription.GetDescriptionHelpInfo())
 	}
@@ -125,7 +125,11 @@ func (i IDTemplateDataCreator) CreateIDTemplateData(
 	// flags
 	for _, flagDescription := range flagDescriptionMap {
 		callName = string(flagDescription.GetFlag())
-		flagsIDTemplateData[flagDescription.GetFlag()] = NewIDTemplateData(callName, "", i.CreateID(PrefixFlagStringID, callName), flagDescription.GetDescriptionHelpInfo())
+		flagsIDTemplateData[flagDescription.GetFlag()] = NewIDTemplateData(
+			"",
+			i.CreateID(PrefixFlagStringID, callName),
+			callName,
+			flagDescription.GetDescriptionHelpInfo())
 	}
 
 	return commandsIDTemplateData, nullCommandIDTemplateData, flagsIDTemplateData

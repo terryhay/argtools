@@ -296,8 +296,17 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 func TestGenerateWithoutNullCommand(t *testing.T) {
 	t.Parallel()
 
-	helpCommand := configYaml.Command(gofakeit.Color())
-	additionalHelpCommand := configYaml.Command(gofakeit.Color())
+	randNameCount := 2
+	sortedRandNames := make([]string, 0, randNameCount)
+	for i := 0; i < randNameCount; i++ {
+		sortedRandNames = append(sortedRandNames, gofakeit.Color())
+	}
+	sort.Strings(sortedRandNames)
+
+	require.True(t, sortedRandNames[0] < sortedRandNames[1])
+
+	helpCommand := configYaml.Command(sortedRandNames[0])
+	additionalHelpCommand := configYaml.Command(sortedRandNames[1])
 
 	argParserFileText := Generate(
 		&configYaml.Config{
@@ -366,7 +375,7 @@ nil,
 		return nil, err
 	}
 
-	if res.GetCommandID() == CommandIDDarkSlateGray {
+	if res.GetCommandID() == CommandID%[1]s {
 		helpPrinter.PrintHelpInfo(*appArgConfig)
 		return nil, nil
 	}

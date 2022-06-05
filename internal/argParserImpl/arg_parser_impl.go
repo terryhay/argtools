@@ -19,7 +19,7 @@ const (
 
 // ArgParserImpl - implementation of command line argument parser
 type ArgParserImpl struct {
-	nullCommandDescription *argParserConfig.NullCommandDescription
+	nullCommandDescription *argParserConfig.CommandDescription
 	commandDescriptions    map[argParserConfig.Command]*argParserConfig.CommandDescription
 	flagDescriptions       map[argParserConfig.Flag]*argParserConfig.FlagDescription
 }
@@ -38,9 +38,15 @@ func NewCmdArgParserImpl(config *argParserConfig.ArgParserConfig) (impl *ArgPars
 	}
 
 	return &ArgParserImpl{
-		nullCommandDescription: config.NullCommandDescription,
-		commandDescriptions:    commandDescriptions,
-		flagDescriptions:       config.GetFlagDescriptions(),
+		nullCommandDescription: &argParserConfig.CommandDescription{
+			ID:                  config.GetNullCommandDescription().GetID(),
+			DescriptionHelpInfo: config.GetNullCommandDescription().GetDescriptionHelpInfo(),
+			ArgDescription:      config.GetNullCommandDescription().GetArgDescription(),
+			RequiredFlags:       config.GetNullCommandDescription().GetRequiredFlags(),
+			OptionalFlags:       config.GetNullCommandDescription().GetOptionalFlags(),
+		},
+		commandDescriptions: commandDescriptions,
+		flagDescriptions:    config.GetFlagDescriptions(),
 	}
 }
 
@@ -57,6 +63,7 @@ func (i *ArgParserImpl) Parse(args []string) (res *parsedData.ParsedData, err *a
 	}
 
 	var (
+		argIndexStartValue      = 1
 		flag                    argParserConfig.Flag
 		arg                     string
 		contain                 bool
@@ -71,9 +78,14 @@ func (i *ArgParserImpl) Parse(args []string) (res *parsedData.ParsedData, err *a
 	command := argParserConfig.Command(args[0])
 	usingCommandDescription, contain = i.commandDescriptions[command]
 	if !contain {
-		return nil,
-			argtoolsError.NewError(argtoolsError.CodeCantFindFlagNameInGroupSpec,
-				fmt.Errorf(`CmdArgParser: unexpected command: "%s"`, command))
+		if i.nullCommandDescription == nil {
+
+			return nil,
+				argtoolsError.NewError(argtoolsError.CodeCantFindFlagNameInGroupSpec,
+					fmt.Errorf(`CmdArgParser: unexpected command: "%s"`, command))
+		}
+		usingCommandDescription = i.nullCommandDescription
+		argIndexStartValue = 0
 	}
 
 	if usingArgDescription = usingCommandDescription.GetArgDescription(); usingArgDescription != nil {
@@ -86,7 +98,7 @@ func (i *ArgParserImpl) Parse(args []string) (res *parsedData.ParsedData, err *a
 		map[argParserConfig.Flag]*parsedData.ParsedFlagData,
 		len(usingCommandDescription.GetRequiredFlags())+len(usingCommandDescription.GetOptionalFlags()))
 
-	for argIndex := 1; argIndex < len(args); argIndex++ {
+	for argIndex := argIndexStartValue; argIndex < len(args); argIndex++ {
 		arg = args[argIndex]
 
 		switch state {

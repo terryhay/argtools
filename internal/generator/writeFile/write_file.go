@@ -2,8 +2,8 @@ package writeFile
 
 import (
 	"fmt"
+	"github.com/terryhay/argtools/internal/generator/osDecorator"
 	"github.com/terryhay/argtools/pkg/argtoolsError"
-	"os"
 	"unicode/utf8"
 )
 
@@ -13,31 +13,28 @@ const (
 )
 
 // Write - write file string by dir path
-func Write(fileString, dirPath string) (err *argtoolsError.Error) {
-	err = checkDirPath(dirPath)
+func Write(osd osDecorator.OSDecorator, dirPath, fileString string) (err *argtoolsError.Error) {
+	err = checkDirPath(osd, dirPath)
 	if err != nil {
 		return err
 	}
 
 	argParserDirPath := expandPath(dirPath, argParserDirName)
-	if err = checkDirPath(argParserDirPath); err != nil {
-		err = createArgParserDir(argParserDirPath)
+	if err = checkDirPath(osd, argParserDirPath); err != nil {
+		err = createArgParserDir(osd, argParserDirPath)
 		if err != nil {
 			return err
 		}
 	}
 
 	argParserFilePath := expandPath(argParserDirPath, argParserFileName)
-	err = write(fileString, argParserFilePath)
-	if err != nil {
-		return err
-	}
+	err = write(osd, argParserFilePath, fileString)
 
-	return nil
+	return err
 }
 
-func checkDirPath(dirPath string) *argtoolsError.Error {
-	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
+func checkDirPath(osd osDecorator.OSDecorator, dirPath string) *argtoolsError.Error {
+	if _, err := osd.Stat(dirPath); osd.IsNotExist(err) {
 		return argtoolsError.NewError(
 			argtoolsError.CodeGeneratorInvalidGeneratePath,
 			fmt.Errorf("check path exist error: %v\n", err),
@@ -59,31 +56,38 @@ func expandPath(path, name string) string {
 	return path + name
 }
 
-func createArgParserDir(generatePath string) *argtoolsError.Error {
-	if osErr := os.MkdirAll(generatePath, 0777); osErr != nil {
+func createArgParserDir(osd osDecorator.OSDecorator, generatePath string) *argtoolsError.Error {
+	if err := osd.MkdirAll(generatePath, 0777); err != nil {
 		return argtoolsError.NewError(
 			argtoolsError.CodeGeneratorCreateDirError,
-			fmt.Errorf("create dir error: %v\n", osErr))
+			fmt.Errorf("create dir error: %v\n", err))
 	}
 	return nil
 }
 
-func write(fileString, filePath string) *argtoolsError.Error {
-	file, err := os.Create(filePath)
+func write(osd osDecorator.OSDecorator, filePath, fileBody string) (res *argtoolsError.Error) {
+	file, err := osd.Create(filePath)
 	if err != nil {
-		return argtoolsError.NewError(argtoolsError.CodeGeneratorCreateFileError, fmt.Errorf("create file error: %v\n", err))
+		return argtoolsError.NewError(
+			argtoolsError.CodeGeneratorCreateFileError,
+			fmt.Errorf("create file error: %v\n", err))
 	}
-	defer func(file *os.File) {
+
+	defer func(file osDecorator.FileDecorator) {
 		err = file.Close()
 		if err != nil {
-			err = fmt.Errorf("can't close the file: %v\n", err)
+			res = argtoolsError.NewError(
+				argtoolsError.CodeGeneratorFileCloseError,
+				fmt.Errorf("can't close the file: %v\n", err))
 		}
 	}(file)
 
-	_, err = file.WriteString(fileString)
+	err = file.WriteString(fileBody)
 	if err != nil {
-		return argtoolsError.NewError(argtoolsError.CodeGeneratorWriteFileError, fmt.Errorf("file write error: %v\n", err))
+		return argtoolsError.NewError(
+			argtoolsError.CodeGeneratorWriteFileError,
+			fmt.Errorf("file write error: %v\n", err))
 	}
 
-	return nil
+	return res
 }

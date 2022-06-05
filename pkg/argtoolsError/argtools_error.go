@@ -4,8 +4,11 @@ package argtoolsError
 type Code uint
 
 const (
+	// CodeNone - null value, no error
+	CodeNone Code = iota
+
 	// CodeUndefinedError - undefined internal error Code
-	CodeUndefinedError Code = iota
+	CodeUndefinedError
 
 	// CodeConfigContainsDuplicateCommands - some command is duplicating
 	CodeConfigContainsDuplicateCommands
@@ -36,6 +39,9 @@ const (
 
 	// CodeGeneratorInvalidGeneratePath - path is not exist
 	CodeGeneratorInvalidGeneratePath
+
+	// CodeGeneratorFileCloseError - file close error
+	CodeGeneratorFileCloseError
 
 	// CodeGeneratorCreateDirError - create a dir error
 	CodeGeneratorCreateDirError
@@ -71,6 +77,12 @@ func NewError(code Code, err error) *Error {
 		code: code,
 		err:  err,
 	}
+}
+
+// ReInit - updates error fields
+func (i *Error) ReInit(code Code, err error) {
+	i.code = code
+	i.err = err
 }
 
 // Code returns code of error, you must check if error == nil before

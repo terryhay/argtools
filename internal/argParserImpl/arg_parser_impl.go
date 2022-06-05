@@ -19,8 +19,9 @@ const (
 
 // ArgParserImpl - implementation of command line argument parser
 type ArgParserImpl struct {
-	flagDescriptions    map[argParserConfig.Flag]*argParserConfig.FlagDescription
-	commandDescriptions map[argParserConfig.Command]*argParserConfig.CommandDescription
+	nullCommandDescription *argParserConfig.NullCommandDescription
+	commandDescriptions    map[argParserConfig.Command]*argParserConfig.CommandDescription
+	flagDescriptions       map[argParserConfig.Flag]*argParserConfig.FlagDescription
 }
 
 // NewCmdArgParserImpl - ArgParserImpl object constructor
@@ -37,8 +38,9 @@ func NewCmdArgParserImpl(config *argParserConfig.ArgParserConfig) (impl *ArgPars
 	}
 
 	return &ArgParserImpl{
-		flagDescriptions:    config.GetFlagDescriptions(),
-		commandDescriptions: commandDescriptions,
+		nullCommandDescription: config.NullCommandDescription,
+		commandDescriptions:    commandDescriptions,
+		flagDescriptions:       config.GetFlagDescriptions(),
 	}
 }
 
@@ -49,7 +51,7 @@ func (i *ArgParserImpl) Parse(args []string) (res *parsedData.ParsedData, err *a
 	if len(args) == 0 {
 		return nil, nil
 	}
-	if len(i.commandDescriptions) == 0 {
+	if len(i.commandDescriptions) == 0 && i.nullCommandDescription == nil {
 		return nil,
 			argtoolsError.NewError(argtoolsError.CodeParserIsNotInitialized, fmt.Errorf(`CmdArgParser: parser is not initialized`))
 	}

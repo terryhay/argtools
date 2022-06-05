@@ -1,7 +1,9 @@
 package parsedData
 
 import (
+	"fmt"
 	"github.com/terryhay/argtools/pkg/argParserConfig"
+	"github.com/terryhay/argtools/pkg/argtoolsError"
 )
 
 // ParsedData - all parsed Command line data
@@ -58,4 +60,38 @@ func (i *ParsedData) GetFlagData() map[argParserConfig.Flag]*ParsedFlagData {
 		return nil
 	}
 	return i.FlagData
+}
+
+// GetFlagArgValue - extract flag argument value
+func (i *ParsedData) GetFlagArgValue(flag argParserConfig.Flag) (ArgValue, *argtoolsError.Error) {
+	values, err := i.GetFlagArgValues(flag)
+	if err != nil {
+		return "", argtoolsError.NewError(
+			err.Code(),
+			fmt.Errorf(`ParsedData.GetFlagArgValue: %v`, err.Error()))
+	}
+	if len(values) == 0 {
+		return "", argtoolsError.NewError(
+			argtoolsError.CodeUndefinedError, // todo
+			fmt.Errorf(`ParsedData.GetFlagArgValue: flag "%s" doesn't contain argument values'`, flag))
+	}
+
+	return values[0], nil
+}
+
+// GetFlagArgValues - extract flag argument value slice
+func (i *ParsedData) GetFlagArgValues(flag argParserConfig.Flag) ([]ArgValue, *argtoolsError.Error) {
+	if i == nil {
+		return nil, argtoolsError.NewError(
+			argtoolsError.CodeUndefinedError, // todo
+			fmt.Errorf(`ParsedData.GetFlagArgValues: try to call method by nil pointer`))
+	}
+	parsedFlagData, ok := i.GetFlagData()[flag]
+	if !ok {
+		return nil, argtoolsError.NewError(
+			argtoolsError.CodeUndefinedError, // todo
+			fmt.Errorf(`ParsedData.GetFlagArgValues: flag "%s" is not found in flag data map`, flag))
+	}
+
+	return parsedFlagData.GetArgData().GetArgValues(), nil
 }

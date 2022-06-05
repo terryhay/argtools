@@ -1,52 +1,71 @@
 package main
 
 import (
-	"flag"
-	"fmt"
+	"github.com/terryhay/argtools/internal/generator/argTools"
 	"github.com/terryhay/argtools/internal/generator/configChecker"
 	"github.com/terryhay/argtools/internal/generator/configDataExtractor"
 	"github.com/terryhay/argtools/internal/generator/configYaml"
 	"github.com/terryhay/argtools/internal/generator/generate"
+	"github.com/terryhay/argtools/internal/generator/osDecorator"
 	"github.com/terryhay/argtools/internal/generator/writeFile"
 	"github.com/terryhay/argtools/pkg/argtoolsError"
+	"github.com/terryhay/argtools/pkg/parsedData"
 	"os"
 )
 
 func main() {
-	configPath := flag.String("c", "", "yaml config file path")
-	generateDirPath := flag.String("o", "", "create package path")
-	flag.Parse()
+	osd := osDecorator.NewOSDecorator()
+	os.Exit(0)
+	osd.Exit(logic(argTools.Parse, configYaml.GetConfig, osd))
+}
 
-	config, err := configYaml.GetConfig(*configPath)
+func logic(
+	argToolsParseFunc func(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error),
+	getYAMLConfigFunc func(configPath string) (*configYaml.Config, *argtoolsError.Error),
+	osd osDecorator.OSDecorator,
+) (err *argtoolsError.Error) {
+
+	var argData *parsedData.ParsedData
+	argData, err = argToolsParseFunc(os.Args[1:]) // todo: write getter
 	if err != nil {
-		exitWithError(err)
+		return err
+	}
+
+	var configYAMLFilePath parsedData.ArgValue
+	configYAMLFilePath, err = argData.GetFlagArgValue(argTools.FlagC)
+	if err != nil {
+		return err
+	}
+
+	var generateDirPath parsedData.ArgValue
+	generateDirPath, err = argData.GetFlagArgValue(argTools.FlagO)
+	if err != nil {
+		return err
+	}
+
+	var config *configYaml.Config
+	config, err = getYAMLConfigFunc(string(configYAMLFilePath))
+	if err != nil {
+		return err
 	}
 
 	var flagDescriptions map[configYaml.Flag]*configYaml.FlagDescription
 	flagDescriptions, err = configDataExtractor.ExtractFlagDescriptionMap(config.GetFlagDescriptions())
 	if err != nil {
-		exitWithError(err)
+		return err
 	}
 
 	var commandDescriptions map[configYaml.Command]*configYaml.CommandDescription
 	commandDescriptions, err = configDataExtractor.ExtractCommandDescriptionMap(config.GetCommandDescriptions())
 	if err != nil {
-		exitWithError(err)
+		return err
 	}
 
-	if err = configChecker.Check(config.GetNullCommandDescription(), commandDescriptions, flagDescriptions); err != nil {
-		exitWithError(err)
-	}
-
-	err = writeFile.Write(generate.Generate(config, flagDescriptions), *generateDirPath)
+	err = configChecker.Check(config.GetNullCommandDescription(), commandDescriptions, flagDescriptions)
 	if err != nil {
-		exitWithError(err)
+		return err
 	}
 
-	os.Exit(0)
-}
-
-func exitWithError(err *argtoolsError.Error) {
-	fmt.Println("argParser generator: " + err.Error())
-	os.Exit(int(err.Code()))
+	err = writeFile.Write(osd, string(generateDirPath), generate.Generate(config, flagDescriptions))
+	return err
 }

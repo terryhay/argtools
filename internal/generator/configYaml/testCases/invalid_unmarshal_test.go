@@ -30,8 +30,7 @@ func TestUnmarshalErrorsInvalidPath(t *testing.T) {
 
 	for _, td := range testData {
 		t.Run(td.caseName, func(t *testing.T) {
-			config, err := configYaml.GetConfig(td.configYamlPath)
-			require.Nil(t, config)
+			_, err := configYaml.GetConfig(td.configYamlPath)
 			require.NotNil(t, err)
 			require.Equal(t, td.expectedErrorCode, err.Code())
 		})

@@ -277,7 +277,7 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 	}
 
 	if res.GetCommandID() == CommandID%[3]s {
-		helpPrinter.PrintHelpInfo(*appArgConfig)
+		helpPrinter.PrintHelpInfo(appArgConfig)
 		return nil, nil
 	}
 
@@ -376,7 +376,7 @@ nil,
 	}
 
 	if res.GetCommandID() == CommandID%[1]s {
-		helpPrinter.PrintHelpInfo(*appArgConfig)
+		helpPrinter.PrintHelpInfo(appArgConfig)
 		return nil, nil
 	}
 

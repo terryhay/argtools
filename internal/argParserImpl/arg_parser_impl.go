@@ -25,7 +25,7 @@ type ArgParserImpl struct {
 }
 
 // NewCmdArgParserImpl - ArgParserImpl object constructor
-func NewCmdArgParserImpl(config *argParserConfig.ArgParserConfig) (impl *ArgParserImpl) {
+func NewCmdArgParserImpl(config argParserConfig.ArgParserConfig) (impl *ArgParserImpl) {
 	commandDescriptions := make(
 		map[argParserConfig.Command]*argParserConfig.CommandDescription,
 		len(config.GetCommandDescriptions()))
@@ -37,17 +37,21 @@ func NewCmdArgParserImpl(config *argParserConfig.ArgParserConfig) (impl *ArgPars
 		}
 	}
 
-	return &ArgParserImpl{
-		nullCommandDescription: &argParserConfig.CommandDescription{
+	impl = &ArgParserImpl{
+		commandDescriptions: commandDescriptions,
+		flagDescriptions:    config.GetFlagDescriptions(),
+	}
+	if config.GetNullCommandDescription() != nil {
+		impl.nullCommandDescription = &argParserConfig.CommandDescription{
 			ID:                  config.GetNullCommandDescription().GetID(),
 			DescriptionHelpInfo: config.GetNullCommandDescription().GetDescriptionHelpInfo(),
 			ArgDescription:      config.GetNullCommandDescription().GetArgDescription(),
 			RequiredFlags:       config.GetNullCommandDescription().GetRequiredFlags(),
 			OptionalFlags:       config.GetNullCommandDescription().GetOptionalFlags(),
-		},
-		commandDescriptions: commandDescriptions,
-		flagDescriptions:    config.GetFlagDescriptions(),
+		}
 	}
+
+	return impl
 }
 
 // Parse - processes command line arguments
@@ -55,11 +59,21 @@ func (i *ArgParserImpl) Parse(args []string) (res *parsedData.ParsedData, err *a
 	_ = i // check if pointer is nil
 
 	if len(args) == 0 {
-		return nil, nil
+		if i.nullCommandDescription == nil {
+			return nil,
+				argtoolsError.NewError(argtoolsError.CodeArgParserNullCommandUndefined, fmt.Errorf(`ArgParserImpl: arguments are not set, but null command is not defined in config object`))
+		}
+
+		res = parsedData.NewParsedData(i.nullCommandDescription.GetID(), "", nil, nil)
+		err = i.checkParsedData(i.nullCommandDescription, res)
+		if err != nil {
+			return nil, err
+		}
+		return res, nil
 	}
 	if len(i.commandDescriptions) == 0 && i.nullCommandDescription == nil {
 		return nil,
-			argtoolsError.NewError(argtoolsError.CodeParserIsNotInitialized, fmt.Errorf(`CmdArgParser: parser is not initialized`))
+			argtoolsError.NewError(argtoolsError.CodeArgParserIsNotInitialized, fmt.Errorf(`CmdArgParser: parser is not initialized`))
 	}
 
 	var (
@@ -85,6 +99,8 @@ func (i *ArgParserImpl) Parse(args []string) (res *parsedData.ParsedData, err *a
 					fmt.Errorf(`CmdArgParser: unexpected command: "%s"`, command))
 		}
 		usingCommandDescription = i.nullCommandDescription
+		usingArgDescription = usingCommandDescription.GetArgDescription()
+		command = ""
 		argIndexStartValue = 0
 	}
 
@@ -103,6 +119,11 @@ func (i *ArgParserImpl) Parse(args []string) (res *parsedData.ParsedData, err *a
 
 		switch state {
 		case parseStateReadingSingleArgument:
+			if !checkNoDashInFront(arg) {
+				return nil, argtoolsError.NewError(argtoolsError.CodeArgParserDashInFrontOfArg,
+					fmt.Errorf(`CmdArgParser: duplicate flag: "%s"`, arg))
+			}
+
 			parsedArgData.ArgValues = []parsedData.ArgValue{parsedData.ArgValue(arg)}
 
 			state = parseStateReadingFlag
@@ -110,7 +131,8 @@ func (i *ArgParserImpl) Parse(args []string) (res *parsedData.ParsedData, err *a
 		case parseStateReadingFlag:
 			flag = argParserConfig.Flag(arg)
 			if flagDescription, contain = i.flagDescriptions[flag]; !contain {
-				return nil, nil //todo: error
+				return nil, argtoolsError.NewError(argtoolsError.CodeArgParserUnexpectedArg,
+					fmt.Errorf(`CmdArgParser: unexpected argument: "%s"`, arg))
 			}
 
 			parsedArgData = nil
@@ -119,23 +141,34 @@ func (i *ArgParserImpl) Parse(args []string) (res *parsedData.ParsedData, err *a
 			}
 
 			if _, contain = parsedFlagDataMap[flag]; contain {
-				// todo: return error
-				panic("duplicate")
+				return nil, argtoolsError.NewError(argtoolsError.CodeArgParserDuplicateFlags,
+					fmt.Errorf(`CmdArgParser: duplicate flag: "%s"`, arg))
 			}
 			parsedFlagDataMap[flag] = parsedData.NewParsedFlagData(flag, parsedArgData)
 
 			state = getParseState(usingArgDescription)
 
 		case parseStateReadingArgumentArray:
-			if flagDescription, contain = i.flagDescriptions[argParserConfig.Flag(arg)]; contain {
+			if !checkNoDashInFront(arg) {
+				if len(parsedArgData.ArgValues) == 0 {
+					return nil, argtoolsError.NewError(argtoolsError.CodeArgParserDashInFrontOfArg,
+						fmt.Errorf(`CmdArgParser: duplicate flag: "%s"`, arg))
+				}
+
+				if flagDescription, contain = i.flagDescriptions[argParserConfig.Flag(arg)]; !contain {
+					return nil, argtoolsError.NewError(argtoolsError.CodeArgParserUnexpectedFlag,
+						fmt.Errorf(`CmdArgParser: unexpected flag: "%s"`, arg))
+				}
+
 				parsedArgData = nil
 				if usingArgDescription = flagDescription.GetArgDescription(); usingArgDescription != nil {
 					parsedArgData = parsedData.NewParsedArgData(make([]parsedData.ArgValue, 0, 8))
 				}
 
+				flag = argParserConfig.Flag(arg)
 				if _, contain = parsedFlagDataMap[flag]; contain {
-					// todo: return error
-					panic("duplicate")
+					return nil, argtoolsError.NewError(argtoolsError.CodeArgParserDuplicateFlags,
+						fmt.Errorf(`CmdArgParser: duplicate flag: "%s"`, arg))
 				}
 				parsedFlagDataMap[flag] = parsedData.NewParsedFlagData(flag, parsedArgData)
 
@@ -144,20 +177,16 @@ func (i *ArgParserImpl) Parse(args []string) (res *parsedData.ParsedData, err *a
 			}
 
 			parsedArgData.ArgValues = append(parsedArgData.ArgValues, parsedData.ArgValue(arg))
-
-		default:
-			return nil,
-				argtoolsError.NewError(argtoolsError.CodeUndefinedError,
-					fmt.Errorf("CmdArgParser: internal error: unexpected state: %d", state))
 		}
 	}
 
-	return parsedData.NewParsedData(
-			usingCommandDescription.GetID(),
-			command,
-			commandArgData,
-			parsedFlagDataMap),
-		i.checkFlags(usingCommandDescription, parsedFlagDataMap)
+	res = parsedData.NewParsedData(usingCommandDescription.GetID(), command, commandArgData, parsedFlagDataMap)
+	err = i.checkParsedData(usingCommandDescription, res)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 func getParseState(argumentsDescription *argParserConfig.ArgumentsDescription) parseState {
@@ -171,22 +200,37 @@ func getParseState(argumentsDescription *argParserConfig.ArgumentsDescription) p
 	}
 }
 
-func (i *ArgParserImpl) checkFlags(
-	usingCommandDescription *argParserConfig.CommandDescription,
-	parsedFlagDataMap map[argParserConfig.Flag]*parsedData.ParsedFlagData,
-) *argtoolsError.Error {
-	_ = i // check if pointer is nil
+func checkNoDashInFront(arg string) bool {
+	return arg[:1] != "-"
+}
 
+func (i *ArgParserImpl) checkParsedData(
+	usingCommandDescription *argParserConfig.CommandDescription,
+	data *parsedData.ParsedData,
+) *argtoolsError.Error {
 	var (
-		contain bool
-		flag    argParserConfig.Flag
+		argDescription *argParserConfig.ArgumentsDescription
+		contain        bool
+		flag           argParserConfig.Flag
+		parsedFlagData = data.GetFlagData()
 	)
 
 	// check if all required flags is set
 	for flag = range usingCommandDescription.GetRequiredFlags() {
-		if _, contain = parsedFlagDataMap[flag]; !contain {
-			return argtoolsError.NewError(argtoolsError.CodeRequiredFlagIsNotSet,
-				fmt.Errorf("CmdArgParser: required flag is not set: %s", flag))
+		if _, contain = parsedFlagData[flag]; !contain {
+			return argtoolsError.NewError(
+				argtoolsError.CodeArgParserRequiredFlagIsNotSet,
+				fmt.Errorf("CmdArgParser.checkParsedData: required flag is not set: %s", flag))
+		}
+	}
+
+	// check command arguments
+	argDescription = usingCommandDescription.GetArgDescription()
+	if argDescription.GetAmountType() != argParserConfig.ArgAmountTypeNoArgs {
+		if data.GetAgrData() == nil {
+			return argtoolsError.NewError(
+				argtoolsError.CodeArgParserCommandDoesNotContainArgs,
+				fmt.Errorf("CmdArgParser.checkParsedData: required flag is not set: %s", flag))
 		}
 	}
 

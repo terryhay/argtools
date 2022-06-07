@@ -58,11 +58,29 @@ const (
 	// CodeGetConfigUnmarshalError - some unmarshal yaml config file error
 	CodeGetConfigUnmarshalError
 
-	// CodeParserIsNotInitialized - looks like Init method was not called or was called with nil CmdArgSpec pointer
-	CodeParserIsNotInitialized
+	// CodeArgParserDashInFrontOfArg - argument must not contain dash in front
+	CodeArgParserDashInFrontOfArg
 
-	// CodeRequiredFlagIsNotSet - some required flag of group is not set
-	CodeRequiredFlagIsNotSet
+	// CodeArgParserDuplicateFlags - some flag is duplicating
+	CodeArgParserDuplicateFlags
+
+	// CodeArgParserIsNotInitialized - looks like Init method was not called or was called with nil CmdArgSpec pointer
+	CodeArgParserIsNotInitialized
+
+	// CodeArgParserNullCommandUndefined - arguments are not set, but no data about null command in config object
+	CodeArgParserNullCommandUndefined
+
+	// CodeArgParserCommandDoesNotContainArgs - command doesn't contain required args
+	CodeArgParserCommandDoesNotContainArgs
+
+	// CodeArgParserRequiredFlagIsNotSet - some required flag is not set
+	CodeArgParserRequiredFlagIsNotSet
+
+	// CodeArgParserUnexpectedArg - unexpected command argument is set
+	CodeArgParserUnexpectedArg
+
+	// CodeArgParserUnexpectedFlag - unexpected flag
+	CodeArgParserUnexpectedFlag
 )
 
 // Error is detail of parser work error

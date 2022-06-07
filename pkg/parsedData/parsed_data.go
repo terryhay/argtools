@@ -21,7 +21,9 @@ func NewParsedData(
 	argData *ParsedArgData,
 	flagData map[argParserConfig.Flag]*ParsedFlagData,
 ) *ParsedData {
-
+	if len(flagData) == 0 {
+		flagData = nil
+	}
 	return &ParsedData{
 		CommandID: commandID,
 		Command:   command,

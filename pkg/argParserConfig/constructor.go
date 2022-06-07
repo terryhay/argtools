@@ -6,9 +6,9 @@ func NewArgParserConfig(
 	flagDescriptions map[Flag]*FlagDescription,
 	commandDescriptions []*CommandDescription,
 	nullCommandDescription *NullCommandDescription,
-) *ArgParserConfig {
+) ArgParserConfig {
 
-	return &ArgParserConfig{
+	return ArgParserConfig{
 		AppDescription:         appDescription,
 		FlagDescriptions:       flagDescriptions,
 		CommandDescriptions:    commandDescriptions,

@@ -64,6 +64,29 @@ func TestWrite(t *testing.T) {
 			expectedErrCode: argtoolsError.CodeGeneratorCreateDirError,
 		},
 		{
+			caseName: "create_file_error_with_successful_create_dir",
+
+			osd: osDecoratorMock.NewMockOSDecorator(osDecoratorMock.MockOSDecoratorInit{
+				CreateFunc: func(string) (osDecorator.FileDecorator, error) {
+					return nil, mockCreateFuncErrRes
+				},
+				IsNotExistFunc: func(err error) bool {
+					return err != nil
+				},
+				MkdirAllFunc: func(path string, perm os.FileMode) error {
+					return nil
+				},
+				StatFunc: func(path string) (os.FileInfo, error) {
+					if path == dirPath {
+						return nil, nil
+					}
+					return nil, mockStatFuncErrRes
+				},
+			}),
+			dirPath:         dirPath,
+			expectedErrCode: argtoolsError.CodeGeneratorCreateFileError,
+		},
+		{
 			caseName: "file_create_error",
 
 			osd: osDecoratorMock.NewMockOSDecorator(osDecoratorMock.MockOSDecoratorInit{

@@ -296,6 +296,8 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 func TestGenerateWithoutNullCommand(t *testing.T) {
 	t.Parallel()
 
+	descriptionHelpInfo := gofakeit.Name()
+
 	randNameCount := 2
 	sortedRandNames := make([]string, 0, randNameCount)
 	for i := 0; i < randNameCount; i++ {
@@ -310,7 +312,11 @@ func TestGenerateWithoutNullCommand(t *testing.T) {
 
 	argParserFileText := Generate(
 		&configYaml.Config{
-			AppHelpDescription: &configYaml.AppHelpDescription{},
+			AppHelpDescription: &configYaml.AppHelpDescription{
+				DescriptionHelpInfo: []string{
+					descriptionHelpInfo,
+				},
+			},
 			HelpCommandDescription: &configYaml.HelpCommandDescription{
 				Command: helpCommand,
 				AdditionalCommands: []configYaml.Command{
@@ -354,7 +360,9 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 		argParserConfig.ApplicationDescription{
 			AppName: "",
 			NameHelpInfo: "",
-			DescriptionHelpInfo: nil,
+			DescriptionHelpInfo: []string{
+				"%[3]s",
+			},
 		},
 		// flagDescriptions
 nil,
@@ -382,5 +390,5 @@ nil,
 
 	return res, nil
 }
-`, helpCommand, additionalHelpCommand), argParserFileText)
+`, helpCommand, additionalHelpCommand, descriptionHelpInfo), argParserFileText)
 }

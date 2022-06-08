@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bou.ke/monkey"
 	"fmt"
 	"github.com/brianvoe/gofakeit"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/terryhay/argtools/internal/generator/argTools"
 	"github.com/terryhay/argtools/internal/generator/configYaml"
@@ -11,7 +13,6 @@ import (
 	"github.com/terryhay/argtools/pkg/argParserConfig"
 	"github.com/terryhay/argtools/pkg/argtoolsError"
 	"github.com/terryhay/argtools/pkg/parsedData"
-	"io/ioutil"
 	"os"
 	"testing"
 )
@@ -45,7 +46,7 @@ func TestLogic(t *testing.T) {
 			argToolsParseFunc: func(arg []string) (res *parsedData.ParsedData, err *argtoolsError.Error) {
 				return nil, nil
 			},
-			expectedErrCode: argtoolsError.CodeUndefinedError,
+			expectedErrCode: argtoolsError.CodeParsedDataNilPointer,
 		},
 		{
 			caseName: "get_generate_dir_path_arg_error",
@@ -64,7 +65,7 @@ func TestLogic(t *testing.T) {
 					},
 					nil
 			},
-			expectedErrCode: argtoolsError.CodeUndefinedError,
+			expectedErrCode: argtoolsError.CodeParsedDataFlagDoesNotContainArgs,
 		},
 		{
 			caseName: "get_yaml_config_error",
@@ -250,37 +251,18 @@ func TestLogic(t *testing.T) {
 	}
 }
 
-func dieOn(err error, t *testing.T) {
-	if err != nil {
-		t.Fatal(err)
+func TestCrasher(t *testing.T) {
+	fakeExit := func(int) {
+		panic("os.Exit called")
 	}
+	patch := monkey.Patch(os.Exit, fakeExit)
+	defer patch.Unpatch()
+
+	assert.PanicsWithValue(
+		t,
+		"os.Exit called",
+		func() {
+			main()
+		},
+		"os.Exit was not called")
 }
-
-// catchStdOut - returns output to `os.Stdout` from `runnable` as string.
-func catchStdOut(t *testing.T, runnable func()) string {
-	realStdout := os.Stdout
-	defer func() { os.Stdout = realStdout }()
-
-	r, fakeStdout, err := os.Pipe()
-	dieOn(err, t)
-	os.Stdout = fakeStdout
-
-	runnable()
-
-	// need to close here, otherwise ReadAll never gets "EOF".
-	dieOn(fakeStdout.Close(), t)
-	newOutBytes, err := ioutil.ReadAll(r)
-	dieOn(err, t)
-	dieOn(r.Close(), t)
-
-	return string(newOutBytes)
-}
-
-/*func TestCrasher(t *testing.T) {
-	defer func() {
-		//require.Nil(t, recover())
-	}()
-	catchStdOut(t, func() {
-		main()
-	})
-}//*/

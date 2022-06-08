@@ -9,17 +9,9 @@ import (
 func TestParsedArgDataGetters(t *testing.T) {
 	t.Parallel()
 
-	t.Run("null_pointer", func(t *testing.T) {
-		var nilPointer *ParsedArgData
+	var pointer *ParsedArgData
+	require.Nil(t, pointer.GetArgValues())
 
-		require.Nil(t, nilPointer.GetArgValues())
-	})
-
-	t.Run("simple", func(t *testing.T) {
-		argValues := []ArgValue{ArgValue(gofakeit.Name())}
-
-		pointer := NewParsedArgData(argValues)
-
-		require.Equal(t, argValues, pointer.GetArgValues())
-	})
+	pointer = NewParsedArgData([]ArgValue{ArgValue(gofakeit.Name())})
+	require.Equal(t, pointer.ArgValues, pointer.GetArgValues())
 }

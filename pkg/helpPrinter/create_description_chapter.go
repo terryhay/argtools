@@ -13,13 +13,13 @@ const (
 )
 
 // CreateDescriptionChapter - creates description help chapter
-func CreateDescriptionChapter(descriptionHelpInfo string, flagDescriptions map[argParserConfig.Flag]*argParserConfig.FlagDescription) string {
+func CreateDescriptionChapter(descriptionHelpInfo []string, flagDescriptions map[argParserConfig.Flag]*argParserConfig.FlagDescription) string {
 	var (
 		builder         strings.Builder
 		flagDescription *argParserConfig.FlagDescription
 	)
 
-	builder.WriteString(fmt.Sprintf(descriptionChapterTitle, descriptionHelpInfo))
+	builder.WriteString(fmt.Sprintf(descriptionChapterTitle, strings.Join(descriptionHelpInfo, "\n")))
 
 	for _, flagStr := range getSortedFlagsForDescription(flagDescriptions) {
 		flagDescription = flagDescriptions[argParserConfig.Flag(flagStr)]

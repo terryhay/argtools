@@ -11,13 +11,12 @@ import (
 	"github.com/terryhay/argtools/pkg/argParserConfig"
 	"github.com/terryhay/argtools/pkg/argtoolsError"
 	"github.com/terryhay/argtools/pkg/parsedData"
+	"io/ioutil"
 	"os"
 	"testing"
 )
 
 func TestLogic(t *testing.T) {
-	t.Parallel()
-
 	parsingErr := argtoolsError.NewError(argtoolsError.CodeUndefinedError, fmt.Errorf(gofakeit.Name()))
 	configPath := parsedData.ArgValue(gofakeit.Name())
 
@@ -251,10 +250,37 @@ func TestLogic(t *testing.T) {
 	}
 }
 
-func TestCrasher(t *testing.T) {
-	t.Parallel()
-	defer func() {
-		require.NotNil(t, recover())
-	}()
-	main()
+func dieOn(err error, t *testing.T) {
+	if err != nil {
+		t.Fatal(err)
+	}
 }
+
+// catchStdOut - returns output to `os.Stdout` from `runnable` as string.
+func catchStdOut(t *testing.T, runnable func()) string {
+	realStdout := os.Stdout
+	defer func() { os.Stdout = realStdout }()
+
+	r, fakeStdout, err := os.Pipe()
+	dieOn(err, t)
+	os.Stdout = fakeStdout
+
+	runnable()
+
+	// need to close here, otherwise ReadAll never gets "EOF".
+	dieOn(fakeStdout.Close(), t)
+	newOutBytes, err := ioutil.ReadAll(r)
+	dieOn(err, t)
+	dieOn(r.Close(), t)
+
+	return string(newOutBytes)
+}
+
+/*func TestCrasher(t *testing.T) {
+	defer func() {
+		//require.Nil(t, recover())
+	}()
+	catchStdOut(t, func() {
+		main()
+	})
+}//*/

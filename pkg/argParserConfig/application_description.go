@@ -4,7 +4,7 @@ package argParserConfig
 type ApplicationDescription struct {
 	AppName             string
 	NameHelpInfo        string
-	DescriptionHelpInfo string
+	DescriptionHelpInfo []string
 }
 
 // GetAppName - AppName field getter
@@ -18,6 +18,6 @@ func (i ApplicationDescription) GetNameHelpInfo() string {
 }
 
 // GetDescriptionHelpInfo - NameHelpInfo field getter
-func (i ApplicationDescription) GetDescriptionHelpInfo() string {
+func (i ApplicationDescription) GetDescriptionHelpInfo() []string {
 	return i.DescriptionHelpInfo
 }

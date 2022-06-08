@@ -25,18 +25,6 @@ const (
 	// CodeCantFindFlagNameInGroupSpec - unexpected flag name for determine using flag group
 	CodeCantFindFlagNameInGroupSpec
 
-	// CodeFlagHasNilSpec - flag has nil pointer to spec
-	CodeFlagHasNilSpec
-
-	// CodeFlagMustHaveDashPrefix - some not group flag doesn't have a dash "-" prefix
-	CodeFlagMustHaveDashPrefix
-
-	// CodeFlagMustBeInGroup - some flag is not in commonFlagSpecMap
-	CodeFlagMustBeInGroup
-
-	// CodeFlagMustHaveSpec - some flag from groupSpecSlice is not found in groupSpecSlice
-	CodeFlagMustHaveSpec
-
 	// CodeGeneratorInvalidGeneratePath - path is not exist
 	CodeGeneratorInvalidGeneratePath
 
@@ -81,6 +69,12 @@ const (
 
 	// CodeArgParserUnexpectedFlag - unexpected flag
 	CodeArgParserUnexpectedFlag
+
+	// CodeParsedDataNilPointer - trying to call getter by nil pointer
+	CodeParsedDataNilPointer
+
+	// CodeParsedDataFlagDoesNotContainArgs - flag doesn't contain arg data
+	CodeParsedDataFlagDoesNotContainArgs
 )
 
 // Error is detail of parser work error
@@ -95,12 +89,6 @@ func NewError(code Code, err error) *Error {
 		code: code,
 		err:  err,
 	}
-}
-
-// ReInit - updates error fields
-func (i *Error) ReInit(code Code, err error) {
-	i.code = code
-	i.err = err
 }
 
 // Code returns code of error, you must check if error == nil before

@@ -6,7 +6,8 @@ app_help_description:
   # required fields:
   app_name: "example2"
   name_help_info: "shows how argtools generator works without commands"
-  description_help_info: "you can write more detailed description here"
+  description_help_info:
+    - "you can write more detailed description here"
 
 # required
 help_command_description:

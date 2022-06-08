@@ -12,29 +12,23 @@ import (
 func TestAppHelpDescriptionGetters(t *testing.T) {
 	t.Parallel()
 
-	t.Run("null_pointer", func(t *testing.T) {
-		var nilPointer *AppHelpDescription
+	var pointer *AppHelpDescription
 
-		require.Equal(t, "", nilPointer.GetApplicationName())
-		require.Equal(t, "", nilPointer.GetNameHelpInfo())
-		require.Equal(t, "", nilPointer.GetDescriptionHelpInfo())
-	})
+	require.Equal(t, "", pointer.GetApplicationName())
+	require.Equal(t, "", pointer.GetNameHelpInfo())
+	require.Nil(t, pointer.GetDescriptionHelpInfo())
 
-	t.Run("simple", func(t *testing.T) {
-		applicationName := gofakeit.Name()
-		nameHelpInfo := gofakeit.Name()
-		descriptionHelpInfo := gofakeit.Name()
+	pointer = &AppHelpDescription{
+		ApplicationName: gofakeit.Name(),
+		NameHelpInfo:    gofakeit.Name(),
+		DescriptionHelpInfo: []string{
+			gofakeit.Name(),
+		},
+	}
 
-		pointer := &AppHelpDescription{
-			ApplicationName:     applicationName,
-			NameHelpInfo:        nameHelpInfo,
-			DescriptionHelpInfo: descriptionHelpInfo,
-		}
-
-		require.Equal(t, applicationName, pointer.GetApplicationName())
-		require.Equal(t, nameHelpInfo, pointer.GetNameHelpInfo())
-		require.Equal(t, descriptionHelpInfo, pointer.GetDescriptionHelpInfo())
-	})
+	require.Equal(t, pointer.ApplicationName, pointer.GetApplicationName())
+	require.Equal(t, pointer.NameHelpInfo, pointer.GetNameHelpInfo())
+	require.Equal(t, pointer.DescriptionHelpInfo, pointer.GetDescriptionHelpInfo())
 }
 
 func TestAppHelpDescriptionUnmarshalErrors(t *testing.T) {

@@ -15,7 +15,6 @@ import (
 
 func main() {
 	osd := osDecorator.NewOSDecorator()
-	os.Exit(0)
 	osd.Exit(logic(argTools.Parse, configYaml.GetConfig, osd))
 }
 

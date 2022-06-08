@@ -13,7 +13,7 @@ func TestApplicationDescriptionGetters(t *testing.T) {
 		pointer := &ApplicationDescription{
 			AppName:             gofakeit.Name(),
 			NameHelpInfo:        gofakeit.Name(),
-			DescriptionHelpInfo: gofakeit.Name(),
+			DescriptionHelpInfo: []string{gofakeit.Name()},
 		}
 
 		require.Equal(t, pointer.AppName, pointer.GetAppName())

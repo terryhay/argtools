@@ -193,7 +193,7 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 		argParserConfig.ApplicationDescription{
 			AppName: "",
 			NameHelpInfo: "",
-			DescriptionHelpInfo: "",
+			DescriptionHelpInfo: nil,
 		},
 		// flagDescriptions
 		map[argParserConfig.Flag]*argParserConfig.FlagDescription{
@@ -354,7 +354,7 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 		argParserConfig.ApplicationDescription{
 			AppName: "",
 			NameHelpInfo: "",
-			DescriptionHelpInfo: "",
+			DescriptionHelpInfo: nil,
 		},
 		// flagDescriptions
 nil,

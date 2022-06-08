@@ -52,9 +52,11 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 	appArgConfig := argParserConfig.NewArgParserConfig(
 		// appDescription
 		argParserConfig.ApplicationDescription{
-			AppName:             "example1",
-			NameHelpInfo:        "shows how argtools generator works",
-			DescriptionHelpInfo: "you can write more detailed description here",
+			AppName:      "example1",
+			NameHelpInfo: "shows how argtools generator works",
+			DescriptionHelpInfo: []string{
+				"you can write more detailed description here",
+			},
 		},
 		// flagDescriptions
 		map[argParserConfig.Flag]*argParserConfig.FlagDescription{

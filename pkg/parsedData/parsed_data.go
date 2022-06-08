@@ -74,7 +74,7 @@ func (i *ParsedData) GetFlagArgValue(flag argParserConfig.Flag) (ArgValue, *argt
 	}
 	if len(values) == 0 {
 		return "", argtoolsError.NewError(
-			argtoolsError.CodeUndefinedError, // todo
+			argtoolsError.CodeParsedDataFlagDoesNotContainArgs,
 			fmt.Errorf(`ParsedData.GetFlagArgValue: flag "%s" doesn't contain argument values'`, flag))
 	}
 
@@ -85,13 +85,13 @@ func (i *ParsedData) GetFlagArgValue(flag argParserConfig.Flag) (ArgValue, *argt
 func (i *ParsedData) GetFlagArgValues(flag argParserConfig.Flag) ([]ArgValue, *argtoolsError.Error) {
 	if i == nil {
 		return nil, argtoolsError.NewError(
-			argtoolsError.CodeUndefinedError, // todo
+			argtoolsError.CodeParsedDataNilPointer, // todo
 			fmt.Errorf(`ParsedData.GetFlagArgValues: try to call method by nil pointer`))
 	}
 	parsedFlagData, ok := i.GetFlagData()[flag]
 	if !ok {
 		return nil, argtoolsError.NewError(
-			argtoolsError.CodeUndefinedError, // todo
+			argtoolsError.CodeParsedDataFlagDoesNotContainArgs, // todo
 			fmt.Errorf(`ParsedData.GetFlagArgValues: flag "%s" is not found in flag data map`, flag))
 	}
 

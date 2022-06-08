@@ -6,7 +6,8 @@ app_help_description:
 
 flag_descriptions:
   - flag: &langFlag "-lang"
-    description_help_info: "HTML code of default language for process files"
+    description_help_info:
+      - "HTML code of default language for process files"
     arguments_description:
       amount_type: "single"
       synopsis_description: "lang code"

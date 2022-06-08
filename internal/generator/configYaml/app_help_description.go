@@ -6,7 +6,7 @@ import "fmt"
 type AppHelpDescription struct {
 	ApplicationName     string
 	NameHelpInfo        string
-	DescriptionHelpInfo string
+	DescriptionHelpInfo []string
 }
 
 // GetApplicationName - ApplicationName field getter
@@ -26,17 +26,17 @@ func (i *AppHelpDescription) GetNameHelpInfo() string {
 }
 
 // GetDescriptionHelpInfo - DescriptionHelpInfo field getter
-func (i *AppHelpDescription) GetDescriptionHelpInfo() string {
+func (i *AppHelpDescription) GetDescriptionHelpInfo() []string {
 	if i == nil {
-		return ""
+		return nil
 	}
 	return i.DescriptionHelpInfo
 }
 
 type appHelpDescriptionSource struct {
-	ApplicationName     string `yaml:"app_name"`
-	NameHelpInfo        string `yaml:"name_help_info"`
-	DescriptionHelpInfo string `yaml:"description_help_info"`
+	ApplicationName     string   `yaml:"app_name"`
+	NameHelpInfo        string   `yaml:"name_help_info"`
+	DescriptionHelpInfo []string `yaml:"description_help_info"`
 }
 
 // UnmarshalYAML - custom unmarshal logic with checking required fields

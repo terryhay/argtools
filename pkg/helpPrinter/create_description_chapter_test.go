@@ -18,21 +18,21 @@ func TestCreateDescriptionChapter(t *testing.T) {
 	testData := []struct {
 		caseName string
 
-		descriptionHelpInfo string
+		descriptionHelpInfo []string
 		flagDescriptions    map[argParserConfig.Flag]*argParserConfig.FlagDescription
 
 		expected string
 	}{
 		{
 			caseName:            "empty",
-			descriptionHelpInfo: "",
+			descriptionHelpInfo: nil,
 			flagDescriptions:    nil,
 
 			expected: fmt.Sprintf(descriptionChapterTitle, ""),
 		},
 		{
 			caseName:            "two_flags",
-			descriptionHelpInfo: randomDescriptionHelpInfo,
+			descriptionHelpInfo: []string{randomDescriptionHelpInfo},
 			flagDescriptions: map[argParserConfig.Flag]*argParserConfig.FlagDescription{
 				randomFlag: {
 					DescriptionHelpInfo: randomFlagDescriptionHelpInfo,

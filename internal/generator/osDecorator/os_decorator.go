@@ -8,7 +8,7 @@ import (
 
 // OSDecorator - os methods decorator interface
 type OSDecorator interface {
-	// Args - returns command line arguments without application name
+	// GetArgs Args - returns command line arguments without application name
 	GetArgs() []string
 
 	// Create - creates or truncates the named file
@@ -34,7 +34,7 @@ func NewOSDecorator() OSDecorator {
 
 type osDecoratorImpl struct{}
 
-// Args - returns command line arguments without application name
+// GetArgs Args - returns command line arguments without application name
 func (osDecoratorImpl) GetArgs() []string {
 	return os.Args[1:]
 }

@@ -7,7 +7,7 @@ app_help_description:
     - "you can write more detailed description here"
 
 flag_descriptions:
-  - flag: &langFlag "-lang"
+  - flag: "-lang"
     description_help_info: "HTML code of default language for process files"
     arguments_description:
       amount_type: "single"
@@ -18,7 +18,7 @@ flag_descriptions:
         - "en"
         - "ru"
 
-  - flag: &logLevelFlag "-log"
+  - flag: "-log"
     description_help_info: "log level for output messages"
     arguments_description:
       amount_type: "single"
@@ -32,7 +32,7 @@ flag_descriptions:
         - "e"
         - "f"
 
-  - flag: &outputDirectoryFlag "-o"
+  - flag: "-o"
     description_help_info: "output directory path"
     arguments_description:
       amount_type: "single"

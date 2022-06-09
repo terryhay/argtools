@@ -32,7 +32,7 @@ flag_descriptions:
         - "e"
         - "f"
 
-  - flag: &outputDirectoryFlag "-o"
+  - flag: "-o"
     description_help_info: "output directory path"
     arguments_description:
       amount_type: "single"

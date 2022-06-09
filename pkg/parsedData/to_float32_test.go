@@ -26,7 +26,7 @@ func TestArgValueToFloat32(t *testing.T) {
 		randNegativeValue *= -1.
 	}
 
-	randFloat64PositiveValue := float64(math.MaxFloat32) + float64(randPositiveValue)
+	randFloat64PositiveValue := math.MaxFloat32 + float64(randPositiveValue)
 	randFloat64NegativeValue := -1. * randFloat64PositiveValue
 
 	testData := []struct {

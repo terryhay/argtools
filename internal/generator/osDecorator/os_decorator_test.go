@@ -25,7 +25,7 @@ func TestOSDecorator(t *testing.T) {
 
 	require.False(t, osDecorator.IsNotExist(nil))
 
-	require.Nil(t, osDecorator.MkdirAll("\\", 777))
+	require.Nil(t, osDecorator.MkdirAll("\\", 7777))
 
 	{
 		fileInfo, err := osDecorator.Stat(gofakeit.Name())

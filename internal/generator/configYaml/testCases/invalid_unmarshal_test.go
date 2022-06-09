@@ -23,7 +23,7 @@ func TestUnmarshalErrorsInvalidPath(t *testing.T) {
 		},
 		{
 			caseName:          "not_existed_path",
-			configYamlPath:    "./unexised/path",
+			configYamlPath:    "./unexist/path",
 			expectedErrorCode: argtoolsError.CodeGetConfigReadFileError,
 		},
 	}

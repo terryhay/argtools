@@ -294,10 +294,10 @@ func TestParse(t *testing.T) {
 	for _, td := range testData {
 		t.Run(td.caseName, func(t *testing.T) {
 			impl := NewCmdArgParserImpl(td.config)
-			parsedData, err := impl.Parse(td.args)
+			data, err := impl.Parse(td.args)
 
 			if td.expectedErr != nil {
-				require.Nil(t, parsedData)
+				require.Nil(t, data)
 				require.NotNil(t, err)
 
 				require.Equal(t, td.expectedErr.Code(), err.Code())
@@ -305,7 +305,7 @@ func TestParse(t *testing.T) {
 			}
 
 			require.Nil(t, err)
-			require.Equal(t, td.expectedParsedData, parsedData)
+			require.Equal(t, td.expectedParsedData, data)
 		})
 	}
 }

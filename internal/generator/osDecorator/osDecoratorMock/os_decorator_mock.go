@@ -37,7 +37,7 @@ type osDecoratorMockImpl struct {
 	mockStatFunc       func(name string) (os.FileInfo, error)
 }
 
-// Args - returns command line arguments without application name
+// GetArgs Args - returns command line arguments without application name
 func (i *osDecoratorMockImpl) GetArgs() []string {
 	return i.mockArgs
 }

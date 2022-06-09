@@ -99,7 +99,6 @@ func (i *ArgParserImpl) Parse(args []string) (res *parsedData.ParsedData, err *a
 					fmt.Errorf(`CmdArgParser: unexpected command: "%s"`, command))
 		}
 		usingCommandDescription = i.nullCommandDescription
-		usingArgDescription = usingCommandDescription.GetArgDescription()
 		command = ""
 		argIndexStartValue = 0
 	}

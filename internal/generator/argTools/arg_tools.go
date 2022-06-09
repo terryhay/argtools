@@ -56,9 +56,18 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 					SynopsisHelpDescription: "dir",
 				},
 			},
+			CommandHelp: {},
 		},
 		// commandDescriptions
-		nil,
+		[]*argParserConfig.CommandDescription{
+			{
+				ID: CommandIDHelp,
+				Commands: map[argParserConfig.Command]bool{
+					CommandHelp: true,
+					CommandH:    true,
+				},
+			},
+		},
 		// nullCommandDescription
 		&argParserConfig.NullCommandDescription{
 			ID:                  CommandIDNullCommand,
@@ -76,7 +85,7 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 
 	if res.GetCommandID() == CommandIDHelp {
 		helpPrinter.PrintHelpInfo(appArgConfig)
-		return nil, nil
+		return res, nil
 	}
 
 	return res, nil

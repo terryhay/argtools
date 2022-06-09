@@ -10,7 +10,6 @@ import (
 	"github.com/terryhay/argtools/internal/generator/writeFile"
 	"github.com/terryhay/argtools/pkg/argtoolsError"
 	"github.com/terryhay/argtools/pkg/parsedData"
-	"os"
 )
 
 func main() {
@@ -25,7 +24,7 @@ func logic(
 ) (err *argtoolsError.Error) {
 
 	var argData *parsedData.ParsedData
-	argData, err = argToolsParseFunc(os.Args[1:]) // todo: write getter
+	argData, err = argToolsParseFunc(osd.GetArgs()) // todo: write getter
 	if err != nil {
 		return err
 	}

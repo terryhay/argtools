@@ -38,6 +38,11 @@ func TestLogic(t *testing.T) {
 			argToolsParseFunc: func(arg []string) (res *parsedData.ParsedData, err *argtoolsError.Error) {
 				return nil, parsingErr
 			},
+			osd: osDecoratorMock.NewMockOSDecorator(
+				osDecoratorMock.MockOSDecoratorInit{
+					Args: []string{},
+				},
+			),
 			expectedErrCode: parsingErr.Code(),
 		},
 		{
@@ -46,6 +51,11 @@ func TestLogic(t *testing.T) {
 			argToolsParseFunc: func(arg []string) (res *parsedData.ParsedData, err *argtoolsError.Error) {
 				return nil, nil
 			},
+			osd: osDecoratorMock.NewMockOSDecorator(
+				osDecoratorMock.MockOSDecoratorInit{
+					Args: []string{},
+				},
+			),
 			expectedErrCode: argtoolsError.CodeParsedDataNilPointer,
 		},
 		{
@@ -65,6 +75,11 @@ func TestLogic(t *testing.T) {
 					},
 					nil
 			},
+			osd: osDecoratorMock.NewMockOSDecorator(
+				osDecoratorMock.MockOSDecoratorInit{
+					Args: []string{},
+				},
+			),
 			expectedErrCode: argtoolsError.CodeParsedDataFlagDoesNotContainArgs,
 		},
 		{
@@ -94,6 +109,11 @@ func TestLogic(t *testing.T) {
 			getYAMLConfigFunc: func(configPath string) (*configYaml.Config, *argtoolsError.Error) {
 				return nil, getYAMLConfigErr
 			},
+			osd: osDecoratorMock.NewMockOSDecorator(
+				osDecoratorMock.MockOSDecoratorInit{
+					Args: []string{},
+				},
+			),
 			expectedErrCode: argtoolsError.CodeConfigFlagIsNotUsedInCommands,
 		},
 		{
@@ -128,6 +148,11 @@ func TestLogic(t *testing.T) {
 					},
 					nil
 			},
+			osd: osDecoratorMock.NewMockOSDecorator(
+				osDecoratorMock.MockOSDecoratorInit{
+					Args: []string{},
+				},
+			),
 			expectedErrCode: argtoolsError.CodeUndefinedError,
 		},
 		{
@@ -162,6 +187,11 @@ func TestLogic(t *testing.T) {
 					},
 					nil
 			},
+			osd: osDecoratorMock.NewMockOSDecorator(
+				osDecoratorMock.MockOSDecoratorInit{
+					Args: []string{},
+				},
+			),
 			expectedErrCode: argtoolsError.CodeUndefinedError,
 		},
 		{
@@ -201,7 +231,12 @@ func TestLogic(t *testing.T) {
 					},
 					nil
 			},
-			expectedErrCode: argtoolsError.CodeConfigUndefinedFlag,
+			osd: osDecoratorMock.NewMockOSDecorator(
+				osDecoratorMock.MockOSDecoratorInit{
+					Args: []string{},
+				},
+			),
+			expectedErrCode: argtoolsError.CodeConfigFlagMustHaveDashInFront,
 		},
 		{
 			caseName: "file_write_error",
@@ -232,6 +267,7 @@ func TestLogic(t *testing.T) {
 					nil
 			},
 			osd: osDecoratorMock.NewMockOSDecorator(osDecoratorMock.MockOSDecoratorInit{
+				Args: []string{},
 				IsNotExistFunc: func(err error) bool {
 					return err != nil
 				},

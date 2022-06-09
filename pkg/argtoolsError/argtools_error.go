@@ -22,6 +22,15 @@ const (
 	// CodeConfigUndefinedFlag - some flag is undefined in flag description list of yaml config file
 	CodeConfigUndefinedFlag
 
+	// CodeConfigIncorrectCharacterInFlagName - flag contain incorrect character in its name
+	CodeConfigIncorrectCharacterInFlagName
+
+	// CodeConfigIncorrectFlagLen - some flag has an empty or too long call name
+	CodeConfigIncorrectFlagLen
+
+	// CodeConfigFlagMustHaveDashInFront - all flag call names must have a dash in front
+	CodeConfigFlagMustHaveDashInFront
+
 	// CodeCantFindFlagNameInGroupSpec - unexpected flag name for determine using flag group
 	CodeCantFindFlagNameInGroupSpec
 

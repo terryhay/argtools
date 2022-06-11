@@ -22,14 +22,13 @@ func GenNamelessCommandComponent(
 
 	builder.WriteString(fmt.Sprintf(`		&argParserConfig.NamelessCommandDescription{
 			ID: %s,
-			DescriptionHelpInfo: "%s",`,
+			DescriptionHelpInfo: "%s",
+`,
 		namelessCommandIDTemplateData.GetID(),
 		namelessCommandDescription.GetDescriptionHelpInfo()))
 
 	if namelessCommandDescription.GetArgumentsDescription() != nil {
-		builder.WriteString(fmt.Sprintf("\n%s", GenArgDescriptionElement(namelessCommandDescription.GetArgumentsDescription(), "\t\t\t")))
-	} else {
-		builder.WriteString("\n")
+		builder.WriteString(fmt.Sprintf("%s", GenArgDescriptionElement(namelessCommandDescription.GetArgumentsDescription(), "\t\t\t")))
 	}
 
 	builder.WriteString(`		},

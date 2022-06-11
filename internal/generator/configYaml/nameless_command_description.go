@@ -2,8 +2,8 @@ package configYaml
 
 import "fmt"
 
-// NullCommandDescription -
-type NullCommandDescription struct {
+// NamelessCommandDescription - pseudo command which doesn't have call name
+type NamelessCommandDescription struct {
 	DescriptionHelpInfo string
 
 	// optional
@@ -13,7 +13,7 @@ type NullCommandDescription struct {
 }
 
 // GetDescriptionHelpInfo - DescriptionHelpInfo field getter
-func (i *NullCommandDescription) GetDescriptionHelpInfo() string {
+func (i *NamelessCommandDescription) GetDescriptionHelpInfo() string {
 	if i == nil {
 		return ""
 	}
@@ -21,7 +21,7 @@ func (i *NullCommandDescription) GetDescriptionHelpInfo() string {
 }
 
 // GetRequiredFlags - RequiredFlags field getter
-func (i *NullCommandDescription) GetRequiredFlags() []Flag {
+func (i *NamelessCommandDescription) GetRequiredFlags() []Flag {
 	if i == nil {
 		return nil
 	}
@@ -29,7 +29,7 @@ func (i *NullCommandDescription) GetRequiredFlags() []Flag {
 }
 
 // GetOptionalFlags - OptionalFlags field getter
-func (i *NullCommandDescription) GetOptionalFlags() []Flag {
+func (i *NamelessCommandDescription) GetOptionalFlags() []Flag {
 	if i == nil {
 		return nil
 	}
@@ -37,7 +37,7 @@ func (i *NullCommandDescription) GetOptionalFlags() []Flag {
 }
 
 // GetArgumentsDescription - ArgumentsDescription field getter
-func (i *NullCommandDescription) GetArgumentsDescription() *ArgumentsDescription {
+func (i *NamelessCommandDescription) GetArgumentsDescription() *ArgumentsDescription {
 	if i == nil {
 		return nil
 	}
@@ -54,7 +54,7 @@ type nullCommandDescriptionSource struct {
 }
 
 // UnmarshalYAML - custom unmarshal logic with checking required fields
-func (i *NullCommandDescription) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
+func (i *NamelessCommandDescription) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
 	source := new(nullCommandDescriptionSource)
 	if err = unmarshal(&source); err != nil {
 		return err

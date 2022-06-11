@@ -18,12 +18,12 @@ func TestArgParserConfigGetters(t *testing.T) {
 			[]*CommandDescription{
 				{},
 			},
-			&NullCommandDescription{},
+			&NamelessCommandDescription{},
 		)
 
 		require.Equal(t, pointer.AppDescription, pointer.GetAppDescription())
 		require.Equal(t, pointer.FlagDescriptions, pointer.GetFlagDescriptions())
 		require.Equal(t, pointer.CommandDescriptions, pointer.GetCommandDescriptions())
-		require.Equal(t, pointer.NullCommandDescription, pointer.GetNullCommandDescription())
+		require.Equal(t, pointer.NamelessCommandDescription, pointer.GetNamelessCommandDescription())
 	})
 }

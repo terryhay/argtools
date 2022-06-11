@@ -73,7 +73,7 @@ func TestGenerate(t *testing.T) {
 				additionalHelpCommand,
 			},
 		},
-		NullCommandDescription: &configYaml.NullCommandDescription{
+		NamelessCommandDescription: &configYaml.NamelessCommandDescription{
 			ArgumentsDescription: &configYaml.ArgumentsDescription{},
 			RequiredFlags: []configYaml.Flag{
 				requiredFlag1,
@@ -152,8 +152,8 @@ import (
 )
 
 const (
-	// CommandIDNullCommand - 
-	CommandIDNullCommand argParserConfig.CommandID = iota + 1
+	// CommandIDNamelessCommand - 
+	CommandIDNamelessCommand argParserConfig.CommandID = iota + 1
 	//  - 
 	
 	// CommandID%[1]s - %[2]s
@@ -261,9 +261,9 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 				},
 			},
 		},
-		// nullCommandDescription
-		&argParserConfig.NullCommandDescription{
-			ID: CommandIDNullCommand,
+		// namelessCommandDescription
+		&argParserConfig.NamelessCommandDescription{
+			ID: CommandIDNamelessCommand,
 			DescriptionHelpInfo: "",
 				ArgDescription: &argParserConfig.ArgumentsDescription{
 					AmountType:              argParserConfig.ArgAmountTypeNoArgs,
@@ -293,7 +293,7 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 	require.Equal(t, expectedArgParserFileText, argParserFileText)
 }
 
-func TestGenerateWithoutNullCommand(t *testing.T) {
+func TestGenerateWithoutNamelessCommand(t *testing.T) {
 	t.Parallel()
 
 	descriptionHelpInfo := gofakeit.Name()
@@ -376,7 +376,7 @@ nil,
 				},
 			},
 		},
-		// nullCommandDescription
+		// namelessCommandDescription
 		nil)
 
 	if res, err = argParserImpl.NewCmdArgParserImpl(appArgConfig).Parse(args); err != nil {

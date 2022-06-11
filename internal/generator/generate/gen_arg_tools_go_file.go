@@ -35,7 +35,7 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 %s
 		// commandDescriptions
 %s
-		// nullCommandDescription
+		// namelessCommandDescription
 %s)
 
 	if res, err = argParserImpl.NewCmdArgParserImpl(appArgConfig).Parse(args); err != nil {
@@ -59,7 +59,7 @@ func GenArgParserFileBody(
 	appDescriptionComponent AppDescriptionComponent,
 	flagMapComponents FlagMapElements,
 	commandMapElement CommandSliceElement,
-	nullCommandComponent NullCommandComponent,
+	nullCommandComponent NamelessCommandComponent,
 	helpCommandID string) string {
 
 	return fmt.Sprintf(

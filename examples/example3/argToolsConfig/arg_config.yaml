@@ -10,7 +10,7 @@ app_help_description:
     - "you can write more detailed description here"
 
 # required if this is no command_descriptions
-null_command_description:
+nameless_command_description:
   # required
   description_help_info: "runs example3"
 

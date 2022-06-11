@@ -18,8 +18,8 @@ type Config struct {
 	HelpCommandDescription *HelpCommandDescription
 
 	// one or more of these field must be set
-	NullCommandDescription *NullCommandDescription
-	CommandDescriptions    []*CommandDescription
+	NamelessCommandDescription *NamelessCommandDescription
+	CommandDescriptions        []*CommandDescription
 
 	// optional
 	FlagDescriptions []*FlagDescription
@@ -49,12 +49,12 @@ func (i *Config) GetHelpCommandDescription() *HelpCommandDescription {
 	return i.HelpCommandDescription
 }
 
-// GetNullCommandDescription - NullCommandDescription field getter
-func (i *Config) GetNullCommandDescription() *NullCommandDescription {
+// GetNamelessCommandDescription - NamelessCommandDescription field getter
+func (i *Config) GetNamelessCommandDescription() *NamelessCommandDescription {
 	if i == nil {
 		return nil
 	}
-	return i.NullCommandDescription
+	return i.NamelessCommandDescription
 }
 
 // GetCommandDescriptions - CommandDescriptions field getter
@@ -79,8 +79,8 @@ type configSource struct {
 	HelpCommandDescription *HelpCommandDescription `yaml:"help_command_description"`
 
 	// one or more of these field must be set
-	NullCommandDescription *NullCommandDescription `yaml:"null_command_description"`
-	CommandDescriptions    []*CommandDescription   `yaml:"command_descriptions"`
+	NamelessCommandDescription *NamelessCommandDescription `yaml:"nameless_command_description"`
+	CommandDescriptions        []*CommandDescription       `yaml:"command_descriptions"`
 
 	// optional
 	FlagDescriptions []*FlagDescription `yaml:"flag_descriptions"`
@@ -108,14 +108,14 @@ func (i *Config) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
 	}
 	i.HelpCommandDescription = source.HelpCommandDescription
 
-	if len(source.CommandDescriptions) == 0 && source.NullCommandDescription == nil {
-		return fmt.Errorf(`config unmarshal error: one or more of felds "null_command_description" or "command_descriptions" must be set`)
+	if len(source.CommandDescriptions) == 0 && source.NamelessCommandDescription == nil {
+		return fmt.Errorf(`config unmarshal error: one or more of felds "nameless_command_description" or "command_descriptions" must be set`)
 	}
 
 	// don't check optional fields
 	i.CommandDescriptions = source.CommandDescriptions
 	i.FlagDescriptions = source.FlagDescriptions
-	i.NullCommandDescription = source.NullCommandDescription
+	i.NamelessCommandDescription = source.NamelessCommandDescription
 
 	return nil
 }

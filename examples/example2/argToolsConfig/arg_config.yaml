@@ -37,7 +37,7 @@ flag_descriptions:
           - "f"
 
 # required if this is no command_descriptions
-null_command_description:
+nameless_command_description:
   # required
   description_help_info: "checks arguments types"
   # optional fields

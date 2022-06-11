@@ -13,12 +13,12 @@ const (
 
 // Check - checks command and flag descriptions for duplicates
 func Check(
-	nullCommandDescription *configYaml.NullCommandDescription,
+	namelessCommandDescription *configYaml.NamelessCommandDescription,
 	commandDescriptions map[configYaml.Command]*configYaml.CommandDescription,
 	flagDescriptions map[configYaml.Flag]*configYaml.FlagDescription,
 ) *argtoolsError.Error {
 
-	allUsingFlags, err := getAllFlagsFromCommandDescriptions(nullCommandDescription, commandDescriptions)
+	allUsingFlags, err := getAllFlagsFromCommandDescriptions(namelessCommandDescription, commandDescriptions)
 	if err != nil {
 		return err
 	}
@@ -65,7 +65,7 @@ func CheckFlag(checkFlagCharsFunc func(s string) bool, flag configYaml.Flag) *ar
 }
 
 func getAllFlagsFromCommandDescriptions(
-	nullCommandDescription *configYaml.NullCommandDescription,
+	namelessCommandDescription *configYaml.NamelessCommandDescription,
 	commandDescriptionMap map[configYaml.Command]*configYaml.CommandDescription,
 ) (allUsingFlagMap map[configYaml.Flag]configYaml.Command, err *argtoolsError.Error) {
 
@@ -78,32 +78,32 @@ func getAllFlagsFromCommandDescriptions(
 		flag    configYaml.Flag
 	)
 
-	// checking for null command
-	const nullCommand configYaml.Command = "NullCommand"
-	for _, flag = range nullCommandDescription.GetRequiredFlags() {
+	// checking for nameless command
+	const namelessCommand configYaml.Command = "NamelessCommand"
+	for _, flag = range namelessCommandDescription.GetRequiredFlags() {
 		err = CheckFlag(checkFlagCharsFunc, flag)
 		if err != nil {
 			return nil, err
 		}
 		if _, contain = checkDuplicateFlagMap[flag]; contain {
-			return nil, argtoolsError.NewError(argtoolsError.CodeConfigContainsDuplicateFlags, fmt.Errorf(`getAllFlagsFromCommandDescriptions: command "%s" contains duplicate flag "%s"`, nullCommand, flag))
+			return nil, argtoolsError.NewError(argtoolsError.CodeConfigContainsDuplicateFlags, fmt.Errorf(`getAllFlagsFromCommandDescriptions: command "%s" contains duplicate flag "%s"`, namelessCommand, flag))
 		}
 		checkDuplicateFlagMap[flag] = true
 
-		allUsingFlagMap[flag] = nullCommand
+		allUsingFlagMap[flag] = namelessCommand
 	}
 
-	for _, flag = range nullCommandDescription.GetOptionalFlags() {
+	for _, flag = range namelessCommandDescription.GetOptionalFlags() {
 		err = CheckFlag(checkFlagCharsFunc, flag)
 		if err != nil {
 			return nil, err
 		}
 		if _, contain = checkDuplicateFlagMap[flag]; contain {
-			return nil, argtoolsError.NewError(argtoolsError.CodeConfigContainsDuplicateFlags, fmt.Errorf(`getAllFlagsFromCommandDescriptions: command "%s" contains duplicate flag "%s"`, nullCommand, flag))
+			return nil, argtoolsError.NewError(argtoolsError.CodeConfigContainsDuplicateFlags, fmt.Errorf(`getAllFlagsFromCommandDescriptions: command "%s" contains duplicate flag "%s"`, namelessCommand, flag))
 		}
 		checkDuplicateFlagMap[flag] = true
 
-		allUsingFlagMap[flag] = nullCommand
+		allUsingFlagMap[flag] = namelessCommand
 	}
 
 	// checking for commands

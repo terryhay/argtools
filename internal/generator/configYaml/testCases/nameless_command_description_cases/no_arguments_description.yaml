@@ -61,10 +61,13 @@ command_descriptions:
       - *logLevelFlag
       - *langFlag
 
-null_command_description:
+nameless_command_description:
   description_help_info: "info"
   required_flags:
     - *outputDirectoryFlag
+  optional_flags:
+    - *logLevelFlag
+    - *langFlag
 
 help_command_description:
   command: "help"

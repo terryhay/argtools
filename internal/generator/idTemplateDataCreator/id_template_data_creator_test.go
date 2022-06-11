@@ -39,7 +39,7 @@ func TestIDTemplateDataCreator(t *testing.T) {
 				additionalHelpCommand,
 			},
 		},
-		&configYaml.NullCommandDescription{},
+		&configYaml.NamelessCommandDescription{},
 		map[configYaml.Flag]*configYaml.FlagDescription{
 			flag: {
 				Flag: flag,
@@ -84,7 +84,7 @@ func TestIDTemplateDataCreator(t *testing.T) {
 		require.Equal(t, expectedIDTemplateData, idTemplateData)
 	}
 
-	require.Equal(t, &IDTemplateData{id: "CommandIDNullCommand"}, nullCommandIDTemplateData)
+	require.Equal(t, &IDTemplateData{id: "CommandIDNamelessCommand"}, nullCommandIDTemplateData)
 
 	flagIDTemplateData, ok := flagsIDTemplateData[flag]
 	require.True(t, ok)

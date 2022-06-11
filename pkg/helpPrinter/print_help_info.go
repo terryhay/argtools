@@ -16,7 +16,7 @@ func PrintHelpInfo(argParserConfig argParserConfig.ArgParserConfig) {
 
 	builder.WriteString(CreateSynopsisChapter(
 		argParserConfig.GetAppDescription().GetAppName(),
-		argParserConfig.GetNullCommandDescription(),
+		argParserConfig.GetNamelessCommandDescription(),
 		argParserConfig.GetCommandDescriptions(),
 		argParserConfig.GetFlagDescriptions()))
 

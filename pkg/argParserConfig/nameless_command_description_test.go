@@ -6,11 +6,11 @@ import (
 	"testing"
 )
 
-func TestNullCommandDescriptionGetters(t *testing.T) {
+func TestNamelessCommandDescriptionGetters(t *testing.T) {
 	t.Parallel()
 
 	t.Run("null_pointer", func(t *testing.T) {
-		var nilPointer *NullCommandDescription
+		var nilPointer *NamelessCommandDescription
 
 		require.Equal(t, CommandIDUndefined, nilPointer.GetID())
 		require.Equal(t, "", nilPointer.GetDescriptionHelpInfo())
@@ -20,7 +20,7 @@ func TestNullCommandDescriptionGetters(t *testing.T) {
 	})
 
 	t.Run("simple", func(t *testing.T) {
-		pointer := &NullCommandDescription{
+		pointer := &NamelessCommandDescription{
 			ID:                  CommandID(gofakeit.Uint32()),
 			DescriptionHelpInfo: gofakeit.Name(),
 			ArgDescription:      &ArgumentsDescription{},

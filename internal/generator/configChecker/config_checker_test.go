@@ -24,11 +24,11 @@ func TestConfigCheckerErrors(t *testing.T) {
 	}
 
 	testData := []struct {
-		caseName               string
-		nullCommandDescription *configYaml.NullCommandDescription
-		commandDescriptionMap  map[configYaml.Command]*configYaml.CommandDescription
-		flagDescriptionMap     map[configYaml.Flag]*configYaml.FlagDescription
-		expectedErrorCode      argtoolsError.Code
+		caseName                   string
+		namelessCommandDescription *configYaml.NamelessCommandDescription
+		commandDescriptionMap      map[configYaml.Command]*configYaml.CommandDescription
+		flagDescriptionMap         map[configYaml.Flag]*configYaml.FlagDescription
+		expectedErrorCode          argtoolsError.Code
 	}{
 		{
 			caseName: "duplicate_flag_in_required_list",
@@ -106,8 +106,8 @@ func TestConfigCheckerErrors(t *testing.T) {
 		},
 
 		{
-			caseName: "null_command_description_with_duplicate_required_flags",
-			nullCommandDescription: &configYaml.NullCommandDescription{
+			caseName: "nameless_command_description_with_duplicate_required_flags",
+			namelessCommandDescription: &configYaml.NamelessCommandDescription{
 				RequiredFlags: []configYaml.Flag{
 					flag,
 					flag,
@@ -117,8 +117,8 @@ func TestConfigCheckerErrors(t *testing.T) {
 			expectedErrorCode: argtoolsError.CodeConfigContainsDuplicateFlags,
 		},
 		{
-			caseName: "null_command_description_with_duplicate_optional_flags",
-			nullCommandDescription: &configYaml.NullCommandDescription{
+			caseName: "nameless_command_description_with_duplicate_optional_flags",
+			namelessCommandDescription: &configYaml.NamelessCommandDescription{
 				OptionalFlags: []configYaml.Flag{
 					flag,
 					flag,
@@ -128,8 +128,8 @@ func TestConfigCheckerErrors(t *testing.T) {
 			expectedErrorCode: argtoolsError.CodeConfigContainsDuplicateFlags,
 		},
 		{
-			caseName: "null_command_description_with_duplicate_required_and_optional_flags",
-			nullCommandDescription: &configYaml.NullCommandDescription{
+			caseName: "nameless_command_description_with_duplicate_required_and_optional_flags",
+			namelessCommandDescription: &configYaml.NamelessCommandDescription{
 				RequiredFlags: []configYaml.Flag{
 					flag,
 				},
@@ -142,7 +142,7 @@ func TestConfigCheckerErrors(t *testing.T) {
 		},
 		{
 			caseName: "null_command_required_flag_does_not_have_dash_in_front",
-			nullCommandDescription: &configYaml.NullCommandDescription{
+			namelessCommandDescription: &configYaml.NamelessCommandDescription{
 				RequiredFlags: []configYaml.Flag{
 					flag[1:],
 				},
@@ -155,7 +155,7 @@ func TestConfigCheckerErrors(t *testing.T) {
 		},
 		{
 			caseName: "null_command_optional_flag_has_russian_char",
-			nullCommandDescription: &configYaml.NullCommandDescription{
+			namelessCommandDescription: &configYaml.NamelessCommandDescription{
 				RequiredFlags: []configYaml.Flag{
 					flag,
 				},
@@ -194,7 +194,7 @@ func TestConfigCheckerErrors(t *testing.T) {
 
 	for _, td := range testData {
 		t.Run(td.caseName, func(t *testing.T) {
-			err := Check(td.nullCommandDescription, td.commandDescriptionMap, td.flagDescriptionMap)
+			err := Check(td.namelessCommandDescription, td.commandDescriptionMap, td.flagDescriptionMap)
 			require.NotNil(t, err)
 			require.Equal(t, td.expectedErrorCode, err.Code())
 		})

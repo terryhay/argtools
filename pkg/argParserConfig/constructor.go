@@ -5,13 +5,13 @@ func NewArgParserConfig(
 	appDescription ApplicationDescription,
 	flagDescriptions map[Flag]*FlagDescription,
 	commandDescriptions []*CommandDescription,
-	nullCommandDescription *NullCommandDescription,
+	namelessCommandDescription *NamelessCommandDescription,
 ) ArgParserConfig {
 
 	return ArgParserConfig{
-		AppDescription:         appDescription,
-		FlagDescriptions:       flagDescriptions,
-		CommandDescriptions:    commandDescriptions,
-		NullCommandDescription: nullCommandDescription,
+		AppDescription:             appDescription,
+		FlagDescriptions:           flagDescriptions,
+		CommandDescriptions:        commandDescriptions,
+		NamelessCommandDescription: namelessCommandDescription,
 	}
 }

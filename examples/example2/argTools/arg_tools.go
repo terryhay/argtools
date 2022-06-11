@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	// CommandIDNullCommand - checks arguments types
-	CommandIDNullCommand argParserConfig.CommandID = iota + 1
+	// CommandIDNamelessCommand - checks arguments types
+	CommandIDNamelessCommand argParserConfig.CommandID = iota + 1
 	// CommandIDHelp - print help info
 	CommandIDHelp
 )
@@ -60,9 +60,9 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 				},
 			},
 		},
-		// nullCommandDescription
-		&argParserConfig.NullCommandDescription{
-			ID:                  CommandIDNullCommand,
+		// namelessCommandDescription
+		&argParserConfig.NamelessCommandDescription{
+			ID:                  CommandIDNamelessCommand,
 			DescriptionHelpInfo: "checks arguments types",
 			ArgDescription: &argParserConfig.ArgumentsDescription{
 				AmountType:              argParserConfig.ArgAmountTypeList,

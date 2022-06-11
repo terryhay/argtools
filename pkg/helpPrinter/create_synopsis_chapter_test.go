@@ -49,7 +49,7 @@ func TestCreateSynopsisChapter(t *testing.T) {
 
 		command := argParserConfig.Command(gofakeit.Name())
 
-		nullCommandDescription := &argParserConfig.NullCommandDescription{
+		namelessCommandDescription := &argParserConfig.NamelessCommandDescription{
 			ArgDescription: &argParserConfig.ArgumentsDescription{
 				SynopsisHelpDescription: gofakeit.Name(),
 			},
@@ -103,7 +103,7 @@ func TestCreateSynopsisChapter(t *testing.T) {
 			commandFlagDescriptionWithListArgumentDefaultValue,
 			commandFlagDescriptionWithListArgumentAllowedValue,
 		)
-		chapter = CreateSynopsisChapter(appName, nullCommandDescription, commandDescriptions, flagDescriptions)
+		chapter = CreateSynopsisChapter(appName, namelessCommandDescription, commandDescriptions, flagDescriptions)
 		require.Equal(t,
 			expectedChapter,
 			chapter)

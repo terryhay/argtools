@@ -59,7 +59,7 @@ func logic(
 		return err
 	}
 
-	err = configChecker.Check(config.GetNullCommandDescription(), commandDescriptions, flagDescriptions)
+	err = configChecker.Check(config.GetNamelessCommandDescription(), commandDescriptions, flagDescriptions)
 	if err != nil {
 		return err
 	}

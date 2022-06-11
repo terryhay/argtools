@@ -1,6 +1,7 @@
 package argParserConfig
 
-type NullCommandDescription struct {
+// NamelessCommandDescription - contains a specification of a command without call name
+type NamelessCommandDescription struct {
 	ID                  CommandID
 	DescriptionHelpInfo string
 	ArgDescription      *ArgumentsDescription
@@ -9,7 +10,7 @@ type NullCommandDescription struct {
 }
 
 // GetID - ID field getter
-func (i *NullCommandDescription) GetID() CommandID {
+func (i *NamelessCommandDescription) GetID() CommandID {
 	if i == nil {
 		return CommandIDUndefined
 	}
@@ -17,7 +18,7 @@ func (i *NullCommandDescription) GetID() CommandID {
 }
 
 // GetDescriptionHelpInfo - DescriptionHelpInfo field getter
-func (i *NullCommandDescription) GetDescriptionHelpInfo() string {
+func (i *NamelessCommandDescription) GetDescriptionHelpInfo() string {
 	if i == nil {
 		return ""
 	}
@@ -25,7 +26,7 @@ func (i *NullCommandDescription) GetDescriptionHelpInfo() string {
 }
 
 // GetArgDescription - ArgDescription field getter
-func (i *NullCommandDescription) GetArgDescription() *ArgumentsDescription {
+func (i *NamelessCommandDescription) GetArgDescription() *ArgumentsDescription {
 	if i == nil {
 		return nil
 	}
@@ -33,7 +34,7 @@ func (i *NullCommandDescription) GetArgDescription() *ArgumentsDescription {
 }
 
 // GetRequiredFlags - RequiredFlags field getter
-func (i *NullCommandDescription) GetRequiredFlags() map[Flag]bool {
+func (i *NamelessCommandDescription) GetRequiredFlags() map[Flag]bool {
 	if i == nil {
 		return nil
 	}
@@ -41,7 +42,7 @@ func (i *NullCommandDescription) GetRequiredFlags() map[Flag]bool {
 }
 
 // GetOptionalFlags - OptionalFlags field getter
-func (i *NullCommandDescription) GetOptionalFlags() map[Flag]bool {
+func (i *NamelessCommandDescription) GetOptionalFlags() map[Flag]bool {
 	if i == nil {
 		return nil
 	}

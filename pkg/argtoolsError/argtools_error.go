@@ -64,8 +64,8 @@ const (
 	// CodeArgParserIsNotInitialized - looks like Init method was not called or was called with nil CmdArgSpec pointer
 	CodeArgParserIsNotInitialized
 
-	// CodeArgParserNullCommandUndefined - arguments are not set, but no data about null command in config object
-	CodeArgParserNullCommandUndefined
+	// CodeArgParserNamelessCommandUndefined - arguments are not set, but no data about nameless command in config object
+	CodeArgParserNamelessCommandUndefined
 
 	// CodeArgParserCommandDoesNotContainArgs - command doesn't contain required args
 	CodeArgParserCommandDoesNotContainArgs

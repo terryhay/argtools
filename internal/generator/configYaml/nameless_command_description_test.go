@@ -8,11 +8,11 @@ import (
 	"testing"
 )
 
-func TestNullCommandDescriptionGetters(t *testing.T) {
+func TestNamelessCommandDescriptionGetters(t *testing.T) {
 	t.Parallel()
 
 	t.Run("null_pointer", func(t *testing.T) {
-		var nilPointer *NullCommandDescription
+		var nilPointer *NamelessCommandDescription
 
 		require.Equal(t, "", nilPointer.GetDescriptionHelpInfo())
 		require.Nil(t, nilPointer.GetRequiredFlags())
@@ -26,7 +26,7 @@ func TestNullCommandDescriptionGetters(t *testing.T) {
 		optionalFlags := []Flag{Flag(gofakeit.Name())}
 		argumentsDescription := &ArgumentsDescription{}
 
-		pointer := &NullCommandDescription{
+		pointer := &NamelessCommandDescription{
 			DescriptionHelpInfo:  descriptionHelpInfo,
 			RequiredFlags:        requiredFlags,
 			OptionalFlags:        optionalFlags,
@@ -40,7 +40,7 @@ func TestNullCommandDescriptionGetters(t *testing.T) {
 	})
 }
 
-func TestNullCommandDescriptionErrors(t *testing.T) {
+func TestNamelessCommandDescriptionErrors(t *testing.T) {
 	t.Parallel()
 
 	testData := []struct {
@@ -55,7 +55,7 @@ func TestNullCommandDescriptionErrors(t *testing.T) {
 
 	for _, td := range testData {
 		t.Run(td.yamlFileName, func(t *testing.T) {
-			config, err := GetConfig(fmt.Sprintf("./testCases/null_command_description_cases/%s", td.yamlFileName))
+			config, err := GetConfig(fmt.Sprintf("./testCases/nameless_command_description_cases/%s", td.yamlFileName))
 			require.Nil(t, config)
 			require.NotNil(t, err)
 			require.Equal(t, argtoolsError.CodeGetConfigUnmarshalError, err.Code())
@@ -64,7 +64,7 @@ func TestNullCommandDescriptionErrors(t *testing.T) {
 	}
 
 	t.Run("fake_unmarshal_error", func(t *testing.T) {
-		pointer := &NullCommandDescription{}
+		pointer := &NamelessCommandDescription{}
 		err := pointer.UnmarshalYAML(func(interface{}) error {
 			return fmt.Errorf("error")
 		})
@@ -73,7 +73,7 @@ func TestNullCommandDescriptionErrors(t *testing.T) {
 	})
 }
 
-func TestNullCommandDescriptionNoErrorWhenNoOptionalFields(t *testing.T) {
+func TestNamelessCommandDescriptionNoErrorWhenNoOptionalFields(t *testing.T) {
 	t.Parallel()
 
 	testData := []struct {
@@ -92,7 +92,7 @@ func TestNullCommandDescriptionNoErrorWhenNoOptionalFields(t *testing.T) {
 
 	for _, td := range testData {
 		t.Run(td.yamlFileName, func(t *testing.T) {
-			config, err := GetConfig(fmt.Sprintf("./testCases/null_command_description_cases/%s", td.yamlFileName))
+			config, err := GetConfig(fmt.Sprintf("./testCases/nameless_command_description_cases/%s", td.yamlFileName))
 			require.NotNil(t, config)
 			require.Nil(t, err)
 		})

@@ -11,19 +11,19 @@ func Generate(
 	flagDescriptionMap map[configYaml.Flag]*configYaml.FlagDescription) string {
 
 	creator := idTemplateDataCreator.NewIDTemplateCreator()
-	commandsIDTemplateData, nullCommandIDTemplateData, flagsIDTemplateData := creator.CreateIDTemplateData(
+	commandsIDTemplateData, namelessCommandIDTemplateData, flagsIDTemplateData := creator.CreateIDTemplateData(
 		config.GetCommandDescriptions(),
 		config.GetHelpCommandDescription(),
-		config.GetNullCommandDescription(),
+		config.GetNamelessCommandDescription(),
 		flagDescriptionMap)
 
 	return GenArgParserFileBody(
-		GenCommandIDConstants(commandsIDTemplateData, nullCommandIDTemplateData),
+		GenCommandIDConstants(commandsIDTemplateData, namelessCommandIDTemplateData),
 		GenCommandStringIDConstants(commandsIDTemplateData),
 		GenFlagStringIDConstants(flagsIDTemplateData),
 		GenAppDescription(config.GetAppHelpDescription()),
 		GenFlagMapElements(config.GetFlagDescriptions(), flagsIDTemplateData),
 		GenCommandSliceElements(config.GetCommandDescriptions(), config.GetHelpCommandDescription(), commandsIDTemplateData, flagsIDTemplateData),
-		GenNullCommandComponent(config.GetNullCommandDescription(), nullCommandIDTemplateData),
+		GenNamelessCommandComponent(config.GetNamelessCommandDescription(), namelessCommandIDTemplateData),
 		commandsIDTemplateData[config.GetHelpCommandDescription().GetCommand()].GetID())
 }

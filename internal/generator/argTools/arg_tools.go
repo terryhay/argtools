@@ -69,7 +69,7 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 			},
 		},
 		// nullCommandDescription
-		&argParserConfig.NullCommandDescription{
+		&argParserConfig.NamelessCommandDescription{
 			ID:                  CommandIDNullCommand,
 			DescriptionHelpInfo: "generate argTools package",
 			RequiredFlags: map[argParserConfig.Flag]bool{

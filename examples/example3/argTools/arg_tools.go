@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	// CommandIDNullCommand - runs example3
-	CommandIDNullCommand argParserConfig.CommandID = iota + 1
+	// CommandIDNamelessCommand - runs example3
+	CommandIDNamelessCommand argParserConfig.CommandID = iota + 1
 	// CommandIDHelp - print help info
 	CommandIDHelp
 )
@@ -49,9 +49,9 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 				},
 			},
 		},
-		// nullCommandDescription
-		&argParserConfig.NullCommandDescription{
-			ID:                  CommandIDNullCommand,
+		// namelessCommandDescription
+		&argParserConfig.NamelessCommandDescription{
+			ID:                  CommandIDNamelessCommand,
 			DescriptionHelpInfo: "runs example3"},
 	)
 

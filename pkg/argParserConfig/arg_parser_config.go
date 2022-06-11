@@ -2,10 +2,10 @@ package argParserConfig
 
 // ArgParserConfig contains specifications of flags, arguments and command groups of application
 type ArgParserConfig struct {
-	AppDescription         ApplicationDescription
-	FlagDescriptions       map[Flag]*FlagDescription
-	CommandDescriptions    []*CommandDescription
-	NullCommandDescription *NullCommandDescription
+	AppDescription             ApplicationDescription
+	FlagDescriptions           map[Flag]*FlagDescription
+	CommandDescriptions        []*CommandDescription
+	NamelessCommandDescription *NamelessCommandDescription
 }
 
 // GetAppDescription - AppDescription field getter
@@ -23,7 +23,7 @@ func (i ArgParserConfig) GetFlagDescriptions() map[Flag]*FlagDescription {
 	return i.FlagDescriptions
 }
 
-// GetNullCommandDescription - NullCommandDescription field getter
-func (i ArgParserConfig) GetNullCommandDescription() *NullCommandDescription {
-	return i.NullCommandDescription
+// GetNamelessCommandDescription - NamelessCommandDescription field getter
+func (i ArgParserConfig) GetNamelessCommandDescription() *NamelessCommandDescription {
+	return i.NamelessCommandDescription
 }

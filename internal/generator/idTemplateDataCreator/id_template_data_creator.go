@@ -11,7 +11,7 @@ const (
 	PrefixCommandStringID = "Command"
 	PrefixFlagStringID    = "Flag"
 
-	NullCommandIDPostfix = "NullCommand"
+	NamelessCommandIDPostfix = "NamelessCommand"
 )
 
 const helpCommandComment = "print help info"
@@ -54,7 +54,7 @@ func (i IDTemplateDataCreator) CreateID(prefix string, callName string) string {
 func (i IDTemplateDataCreator) CreateIDTemplateData(
 	commandDescriptions []*configYaml.CommandDescription,
 	helpCommandDescription *configYaml.HelpCommandDescription,
-	nullCommandDescription *configYaml.NullCommandDescription,
+	nullCommandDescription *configYaml.NamelessCommandDescription,
 	flagDescriptionMap map[configYaml.Flag]*configYaml.FlagDescription,
 ) (
 	commandsIDTemplateData map[configYaml.Command]*IDTemplateData,
@@ -116,7 +116,7 @@ func (i IDTemplateDataCreator) CreateIDTemplateData(
 	// null command
 	if nullCommandDescription != nil {
 		nullCommandIDTemplateData = NewIDTemplateData(
-			i.CreateID(PrefixCommandID, NullCommandIDPostfix),
+			i.CreateID(PrefixCommandID, NamelessCommandIDPostfix),
 			"",
 			"",
 			nullCommandDescription.GetDescriptionHelpInfo())

@@ -88,7 +88,7 @@ flag_descriptions:
     description_help_info: "do arguments checking"
 
 # optional
-null_command_description:
+nameless_command_description:
   # required
   description_help_info: "checks arguments types"
   # optional fields

@@ -14,7 +14,7 @@ const (
 // CreateSynopsisChapter - creates synopsis help chapter
 func CreateSynopsisChapter(
 	appName string,
-	nullCommandDescription *argParserConfig.NullCommandDescription,
+	nullCommandDescription *argParserConfig.NamelessCommandDescription,
 	commandDescriptions []*argParserConfig.CommandDescription,
 	flagDescriptions map[argParserConfig.Flag]*argParserConfig.FlagDescription,
 ) string {

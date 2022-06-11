@@ -18,7 +18,7 @@ func TestConfigGetters(t *testing.T) {
 		require.Equal(t, Version(""), nilPointer.GetVersion())
 		require.Nil(t, nilPointer.GetAppHelpDescription())
 		require.Nil(t, nilPointer.GetHelpCommandDescription())
-		require.Nil(t, nilPointer.GetNullCommandDescription())
+		require.Nil(t, nilPointer.GetNamelessCommandDescription())
 		require.Nil(t, nilPointer.GetCommandDescriptions())
 		require.Nil(t, nilPointer.GetFlagDescriptions())
 	})
@@ -27,23 +27,23 @@ func TestConfigGetters(t *testing.T) {
 		version := Version(gofakeit.Name())
 		appHelpDescription := &AppHelpDescription{}
 		helpCommandDescription := &HelpCommandDescription{}
-		nullCommandDescription := &NullCommandDescription{}
+		namelessCommandDescription := &NamelessCommandDescription{}
 		commandDescriptions := []*CommandDescription{{}}
 		flagDescriptions := []*FlagDescription{{}}
 
 		pointer := &Config{
-			Version:                version,
-			AppHelpDescription:     appHelpDescription,
-			HelpCommandDescription: helpCommandDescription,
-			NullCommandDescription: nullCommandDescription,
-			CommandDescriptions:    commandDescriptions,
-			FlagDescriptions:       flagDescriptions,
+			Version:                    version,
+			AppHelpDescription:         appHelpDescription,
+			HelpCommandDescription:     helpCommandDescription,
+			NamelessCommandDescription: namelessCommandDescription,
+			CommandDescriptions:        commandDescriptions,
+			FlagDescriptions:           flagDescriptions,
 		}
 
 		require.Equal(t, version, pointer.GetVersion())
 		require.Equal(t, appHelpDescription, pointer.GetAppHelpDescription())
 		require.Equal(t, helpCommandDescription, pointer.GetHelpCommandDescription())
-		require.Equal(t, nullCommandDescription, pointer.GetNullCommandDescription())
+		require.Equal(t, namelessCommandDescription, pointer.GetNamelessCommandDescription())
 		require.Equal(t, commandDescriptions, pointer.GetCommandDescriptions())
 		require.Equal(t, flagDescriptions, pointer.GetFlagDescriptions())
 	})
@@ -74,7 +74,7 @@ func TestConfigUnmarshalErrors(t *testing.T) {
 		},
 		{
 			yamlFileName:      "no_command_description_and_null_command.yaml",
-			expectedErrorText: "configYaml.GetConfig: unmarshal error: config unmarshal error: one or more of felds \"null_command_description\" or \"command_descriptions\" must be set",
+			expectedErrorText: "configYaml.GetConfig: unmarshal error: config unmarshal error: one or more of felds \"nameless_command_description\" or \"command_descriptions\" must be set",
 		},
 	}
 
@@ -108,7 +108,7 @@ func TestConfigUnmarshalNoErrorWhenNoOptionalFields(t *testing.T) {
 			yamlFileName: "no_flag_descriptions.yaml",
 		},
 		{
-			yamlFileName: "no_command_descriptions_but_has_null_command_description.yaml",
+			yamlFileName: "no_command_descriptions_but_has_nameless_command_description.yaml",
 		},
 	}
 

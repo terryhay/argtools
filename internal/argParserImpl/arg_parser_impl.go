@@ -19,9 +19,9 @@ const (
 
 // ArgParserImpl - implementation of command line argument parser
 type ArgParserImpl struct {
-	nullCommandDescription *argParserConfig.CommandDescription
-	commandDescriptions    map[argParserConfig.Command]*argParserConfig.CommandDescription
-	flagDescriptions       map[argParserConfig.Flag]*argParserConfig.FlagDescription
+	namelessCommandDescription *argParserConfig.CommandDescription
+	commandDescriptions        map[argParserConfig.Command]*argParserConfig.CommandDescription
+	flagDescriptions           map[argParserConfig.Flag]*argParserConfig.FlagDescription
 }
 
 // NewCmdArgParserImpl - ArgParserImpl object constructor
@@ -41,13 +41,13 @@ func NewCmdArgParserImpl(config argParserConfig.ArgParserConfig) (impl *ArgParse
 		commandDescriptions: commandDescriptions,
 		flagDescriptions:    config.GetFlagDescriptions(),
 	}
-	if config.GetNullCommandDescription() != nil {
-		impl.nullCommandDescription = &argParserConfig.CommandDescription{
-			ID:                  config.GetNullCommandDescription().GetID(),
-			DescriptionHelpInfo: config.GetNullCommandDescription().GetDescriptionHelpInfo(),
-			ArgDescription:      config.GetNullCommandDescription().GetArgDescription(),
-			RequiredFlags:       config.GetNullCommandDescription().GetRequiredFlags(),
-			OptionalFlags:       config.GetNullCommandDescription().GetOptionalFlags(),
+	if config.GetNamelessCommandDescription() != nil {
+		impl.namelessCommandDescription = &argParserConfig.CommandDescription{
+			ID:                  config.GetNamelessCommandDescription().GetID(),
+			DescriptionHelpInfo: config.GetNamelessCommandDescription().GetDescriptionHelpInfo(),
+			ArgDescription:      config.GetNamelessCommandDescription().GetArgDescription(),
+			RequiredFlags:       config.GetNamelessCommandDescription().GetRequiredFlags(),
+			OptionalFlags:       config.GetNamelessCommandDescription().GetOptionalFlags(),
 		}
 	}
 
@@ -59,19 +59,19 @@ func (i *ArgParserImpl) Parse(args []string) (res *parsedData.ParsedData, err *a
 	_ = i // check if pointer is nil
 
 	if len(args) == 0 {
-		if i.nullCommandDescription == nil {
+		if i.namelessCommandDescription == nil {
 			return nil,
-				argtoolsError.NewError(argtoolsError.CodeArgParserNullCommandUndefined, fmt.Errorf(`ArgParserImpl: arguments are not set, but null command is not defined in config object`))
+				argtoolsError.NewError(argtoolsError.CodeArgParserNamelessCommandUndefined, fmt.Errorf(`ArgParserImpl: arguments are not set, but nameless command is not defined in config object`))
 		}
 
-		res = parsedData.NewParsedData(i.nullCommandDescription.GetID(), "", nil, nil)
-		err = i.checkParsedData(i.nullCommandDescription, res)
+		res = parsedData.NewParsedData(i.namelessCommandDescription.GetID(), "", nil, nil)
+		err = i.checkParsedData(i.namelessCommandDescription, res)
 		if err != nil {
 			return nil, err
 		}
 		return res, nil
 	}
-	if len(i.commandDescriptions) == 0 && i.nullCommandDescription == nil {
+	if len(i.commandDescriptions) == 0 && i.namelessCommandDescription == nil {
 		return nil,
 			argtoolsError.NewError(argtoolsError.CodeArgParserIsNotInitialized, fmt.Errorf(`CmdArgParser: parser is not initialized`))
 	}
@@ -92,13 +92,13 @@ func (i *ArgParserImpl) Parse(args []string) (res *parsedData.ParsedData, err *a
 	command := argParserConfig.Command(args[0])
 	usingCommandDescription, contain = i.commandDescriptions[command]
 	if !contain {
-		if i.nullCommandDescription == nil {
+		if i.namelessCommandDescription == nil {
 
 			return nil,
 				argtoolsError.NewError(argtoolsError.CodeCantFindFlagNameInGroupSpec,
 					fmt.Errorf(`CmdArgParser: unexpected command: "%s"`, command))
 		}
-		usingCommandDescription = i.nullCommandDescription
+		usingCommandDescription = i.namelessCommandDescription
 		command = ""
 		argIndexStartValue = 0
 	}

@@ -14,7 +14,7 @@ func main() {
 	}
 
 	switch parsedData.GetCommandID() {
-	case argTools.CommandIDNullCommand:
+	case argTools.CommandIDNamelessCommand:
 		fmt.Println("dir")
 	}
 

@@ -61,7 +61,7 @@ command_descriptions:
       - *logLevelFlag
       - *langFlag
 
-null_command_description:
+nameless_command_description:
   arguments_description:
     # required fields
     amount_type: "list"

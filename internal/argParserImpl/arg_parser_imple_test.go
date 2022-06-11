@@ -20,7 +20,7 @@ func TestParse(t *testing.T) {
 		arg           = gofakeit.Color()
 	)
 
-	testData := []*struct {
+	testData := []struct {
 		caseName string
 
 		config argParserConfig.ArgParserConfig
@@ -288,6 +288,118 @@ func TestParse(t *testing.T) {
 				},
 			},
 			expectedErr: fakeError(argtoolsError.CodeArgParserRequiredFlagIsNotSet),
+		},
+		{
+			caseName: "arg_and_no_default_value",
+			args:     []string{string(requiredFlag)},
+			config: argParserConfig.ArgParserConfig{
+				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
+					ID: nullCommandID,
+					ArgDescription: &argParserConfig.ArgumentsDescription{
+						AmountType: argParserConfig.ArgAmountTypeSingle,
+					},
+					RequiredFlags: map[argParserConfig.Flag]bool{
+						requiredFlag: true,
+					},
+				},
+				FlagDescriptions: map[argParserConfig.Flag]*argParserConfig.FlagDescription{
+					requiredFlag: {},
+				},
+			},
+			expectedErr: fakeError(argtoolsError.CodeArgParserFlagMustHaveArg),
+		},
+		{
+			caseName: "succcess_using_default_value",
+			args:     []string{string(requiredFlag)},
+			config: argParserConfig.ArgParserConfig{
+				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
+					ID: nullCommandID,
+					ArgDescription: &argParserConfig.ArgumentsDescription{
+						AmountType: argParserConfig.ArgAmountTypeSingle,
+						DefaultValues: []string{
+							arg,
+						},
+						AllowedValues: map[string]bool{
+							gofakeit.Color(): true,
+						},
+					},
+					RequiredFlags: map[argParserConfig.Flag]bool{
+						requiredFlag: true,
+					},
+				},
+				FlagDescriptions: map[argParserConfig.Flag]*argParserConfig.FlagDescription{
+					requiredFlag: {},
+				},
+			},
+			expectedParsedData: &parsedData.ParsedData{
+				CommandID: nullCommandID,
+				ArgData: &parsedData.ParsedArgData{
+					ArgValues: []parsedData.ArgValue{
+						parsedData.ArgValue(arg),
+					},
+				},
+				FlagData: map[argParserConfig.Flag]*parsedData.ParsedFlagData{
+					requiredFlag: {
+						Flag: requiredFlag,
+					},
+				},
+			},
+		},
+		{
+			caseName: "not_allowed_value",
+			args:     []string{gofakeit.Color(), string(requiredFlag)},
+			config: argParserConfig.ArgParserConfig{
+				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
+					ID: nullCommandID,
+					ArgDescription: &argParserConfig.ArgumentsDescription{
+						AmountType: argParserConfig.ArgAmountTypeSingle,
+						AllowedValues: map[string]bool{
+							gofakeit.Color(): true,
+						},
+					},
+					RequiredFlags: map[argParserConfig.Flag]bool{
+						requiredFlag: true,
+					},
+				},
+				FlagDescriptions: map[argParserConfig.Flag]*argParserConfig.FlagDescription{
+					requiredFlag: {},
+				},
+			},
+			expectedErr: fakeError(argtoolsError.CodeArgParserArgValueIsNotAllowed),
+		},
+		{
+			caseName: "success_allowed_value_checking",
+			args:     []string{arg, string(requiredFlag)},
+			config: argParserConfig.ArgParserConfig{
+				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
+					ID: nullCommandID,
+					ArgDescription: &argParserConfig.ArgumentsDescription{
+						AmountType: argParserConfig.ArgAmountTypeSingle,
+						AllowedValues: map[string]bool{
+							arg: true,
+						},
+					},
+					RequiredFlags: map[argParserConfig.Flag]bool{
+						requiredFlag: true,
+					},
+				},
+				FlagDescriptions: map[argParserConfig.Flag]*argParserConfig.FlagDescription{
+					requiredFlag: {},
+				},
+			},
+			expectedParsedData: &parsedData.ParsedData{
+				CommandID: nullCommandID,
+				ArgData: &parsedData.ParsedArgData{
+					ArgValues: []parsedData.ArgValue{
+						parsedData.ArgValue(arg),
+					},
+				},
+				FlagData: map[argParserConfig.Flag]*parsedData.ParsedFlagData{
+					requiredFlag: {
+						Flag: requiredFlag,
+					},
+				},
+			},
 		},
 	}
 

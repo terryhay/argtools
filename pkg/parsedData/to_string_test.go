@@ -10,7 +10,7 @@ import (
 func TestArgValueToString(t *testing.T) {
 	t.Parallel()
 
-	testData := []*struct {
+	testData := []struct {
 		caseName string
 		argValue ArgValue
 	}{

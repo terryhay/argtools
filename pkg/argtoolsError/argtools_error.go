@@ -16,6 +16,9 @@ const (
 	// CodeConfigContainsDuplicateFlags - some flag is duplicating
 	CodeConfigContainsDuplicateFlags
 
+	// CodeConfigDefaultValueIsNotAllowed - some default value is not allowed
+	CodeConfigDefaultValueIsNotAllowed
+
 	// CodeConfigFlagIsNotUsedInCommands - some flag is described, but not used in commands descriptions
 	CodeConfigFlagIsNotUsedInCommands
 
@@ -30,6 +33,9 @@ const (
 
 	// CodeConfigFlagMustHaveDashInFront - all flag call names must have a dash in front
 	CodeConfigFlagMustHaveDashInFront
+
+	// CodeConfigUnexpectedDefaultValue - this set amount type description "single" if you want to use default values logic
+	CodeConfigUnexpectedDefaultValue
 
 	// CodeCantFindFlagNameInGroupSpec - unexpected flag name for determine using flag group
 	CodeCantFindFlagNameInGroupSpec
@@ -55,11 +61,20 @@ const (
 	// CodeGetConfigUnmarshalError - some unmarshal yaml config file error
 	CodeGetConfigUnmarshalError
 
+	// CodeArgParserArgValueIsNotAllowed - arg value is not found in allowed values list
+	CodeArgParserArgValueIsNotAllowed
+
 	// CodeArgParserDashInFrontOfArg - argument must not contain dash in front
 	CodeArgParserDashInFrontOfArg
 
+	// CodeArgParserCheckValueAllowabilityError - internal error: try to check a value allowability by nil pointer
+	CodeArgParserCheckValueAllowabilityError
+
 	// CodeArgParserDuplicateFlags - some flag is duplicating
 	CodeArgParserDuplicateFlags
+
+	// CodeArgParserFlagMustHaveArg - some flag doesn't have arg
+	CodeArgParserFlagMustHaveArg
 
 	// CodeArgParserIsNotInitialized - looks like Init method was not called or was called with nil CmdArgSpec pointer
 	CodeArgParserIsNotInitialized

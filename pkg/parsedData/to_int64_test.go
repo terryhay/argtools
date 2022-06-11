@@ -24,7 +24,7 @@ func TestArgValueToInt64(t *testing.T) {
 		randNegativeValue *= -1
 	}
 
-	testData := []*struct {
+	testData := []struct {
 		caseName string
 		argValue ArgValue
 
@@ -90,7 +90,7 @@ func TestArgValueToUint64(t *testing.T) {
 	require.True(t, randPositiveValue != 0)
 	require.True(t, randPositiveValue > 0)
 
-	testData := []*struct {
+	testData := []struct {
 		caseName string
 		argValue ArgValue
 

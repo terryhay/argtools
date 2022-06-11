@@ -3,8 +3,10 @@ package configChecker
 import (
 	"fmt"
 	"github.com/terryhay/argtools/internal/generator/configYaml"
+	"github.com/terryhay/argtools/pkg/argParserConfig"
 	"github.com/terryhay/argtools/pkg/argtoolsError"
 	"regexp"
+	"strings"
 )
 
 const (
@@ -18,16 +20,26 @@ func Check(
 	flagDescriptions map[configYaml.Flag]*configYaml.FlagDescription,
 ) *argtoolsError.Error {
 
-	allUsingFlags, err := getAllFlagsFromCommandDescriptions(namelessCommandDescription, commandDescriptions)
+	var (
+		contain bool
+		err     *argtoolsError.Error
+	)
+	if err = checkArgumentDescription(namelessCommandDescription.GetArgumentsDescription()); err != nil {
+		return err
+	}
+
+	var allUsingFlags map[configYaml.Flag]configYaml.Command
+	allUsingFlags, err = getAllFlagsFromCommandDescriptions(namelessCommandDescription, commandDescriptions)
 	if err != nil {
 		return err
 	}
 
-	var contain bool
-
-	for flag := range flagDescriptions {
+	for flag, flagDescription := range flagDescriptions {
 		if _, contain = allUsingFlags[flag]; !contain {
 			return argtoolsError.NewError(argtoolsError.CodeConfigFlagIsNotUsedInCommands, fmt.Errorf(`configChecker.Check: flag "%s" is not found in command descriptions`, flag))
+		}
+		if err = checkArgumentDescription(flagDescription.GetArgumentsDescription()); err != nil {
+			return err
 		}
 	}
 
@@ -64,6 +76,52 @@ func CheckFlag(checkFlagCharsFunc func(s string) bool, flag configYaml.Flag) *ar
 	return nil
 }
 
+func checkArgumentDescription(argDescription *configYaml.ArgumentsDescription) *argtoolsError.Error {
+	defaultValuesCount := len(argDescription.GetDefaultValues())
+	if defaultValuesCount == 0 {
+		return nil
+	}
+
+	if defaultValuesCount == 1 {
+		if argDescription.GetAmountType() != argParserConfig.ArgAmountTypeSingle {
+			return argtoolsError.NewError(
+				argtoolsError.CodeConfigUnexpectedDefaultValue,
+				fmt.Errorf(`configChecker.checkArgumentDescription: you need to set amount_type "single" if you want to use default_values logic`))
+		}
+	} else {
+		if argDescription.GetAmountType() != argParserConfig.ArgAmountTypeList {
+			return argtoolsError.NewError(
+				argtoolsError.CodeConfigUnexpectedDefaultValue,
+				fmt.Errorf(`configChecker.checkArgumentDescription: you need to set amount_type "list" if you want to use default_values logic`))
+		}
+	}
+
+	allowedValuesCount := len(argDescription.GetAllowedValues())
+	if allowedValuesCount == 0 {
+		return nil
+	}
+
+	var allowed bool
+	for i := 0; i < defaultValuesCount; i++ {
+		allowed = false
+		for j := 0; j < allowedValuesCount; j++ {
+			if argDescription.GetDefaultValues()[i] == argDescription.GetAllowedValues()[j] {
+				allowed = true
+			}
+		}
+
+		if !allowed {
+			return argtoolsError.NewError(
+				argtoolsError.CodeConfigDefaultValueIsNotAllowed,
+				fmt.Errorf(`configChecker.checkArgumentDescription: default value "%s" is not found in allowed values list: [%s]`,
+					argDescription.GetDefaultValues()[i], strings.Join(argDescription.GetAllowedValues(), ", ")),
+			)
+		}
+	}
+
+	return nil
+}
+
 func getAllFlagsFromCommandDescriptions(
 	namelessCommandDescription *configYaml.NamelessCommandDescription,
 	commandDescriptionMap map[configYaml.Command]*configYaml.CommandDescription,
@@ -81,10 +139,10 @@ func getAllFlagsFromCommandDescriptions(
 	// checking for nameless command
 	const namelessCommand configYaml.Command = "NamelessCommand"
 	for _, flag = range namelessCommandDescription.GetRequiredFlags() {
-		err = CheckFlag(checkFlagCharsFunc, flag)
-		if err != nil {
+		if err = CheckFlag(checkFlagCharsFunc, flag); err != nil {
 			return nil, err
 		}
+
 		if _, contain = checkDuplicateFlagMap[flag]; contain {
 			return nil, argtoolsError.NewError(argtoolsError.CodeConfigContainsDuplicateFlags, fmt.Errorf(`getAllFlagsFromCommandDescriptions: command "%s" contains duplicate flag "%s"`, namelessCommand, flag))
 		}
@@ -94,8 +152,7 @@ func getAllFlagsFromCommandDescriptions(
 	}
 
 	for _, flag = range namelessCommandDescription.GetOptionalFlags() {
-		err = CheckFlag(checkFlagCharsFunc, flag)
-		if err != nil {
+		if err = CheckFlag(checkFlagCharsFunc, flag); err != nil {
 			return nil, err
 		}
 		if _, contain = checkDuplicateFlagMap[flag]; contain {
@@ -109,6 +166,10 @@ func getAllFlagsFromCommandDescriptions(
 	// checking for commands
 	for _, commandDescription := range commandDescriptionMap {
 		checkDuplicateFlagMap = map[configYaml.Flag]bool{}
+
+		if err = checkArgumentDescription(commandDescription.GetArgumentsDescription()); err != nil {
+			return nil, err
+		}
 
 		for _, flag = range commandDescription.GetRequiredFlags() {
 			err = CheckFlag(checkFlagCharsFunc, flag)

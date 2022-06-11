@@ -45,7 +45,7 @@ func TestConfigGetters(t *testing.T) {
 func TestConfigUnmarshalErrors(t *testing.T) {
 	t.Parallel()
 
-	testData := []*struct {
+	testData := []struct {
 		yamlFileName      string
 		expectedErrorText string
 	}{
@@ -67,7 +67,7 @@ func TestConfigUnmarshalErrors(t *testing.T) {
 		},
 		{
 			yamlFileName:      "no_command_description_and_nameless_command.yaml",
-			expectedErrorText: "configYaml.GetConfig: unmarshal error: config unmarshal error: one or more of felds \"nameless_command_description\" or \"command_descriptions\" must be set",
+			expectedErrorText: "configYaml.GetConfig: unmarshal error: config unmarshal error: one or more of fields \"nameless_command_description\" or \"command_descriptions\" must be set",
 		},
 	}
 
@@ -94,7 +94,7 @@ func TestConfigUnmarshalErrors(t *testing.T) {
 func TestConfigUnmarshalNoErrorWhenNoOptionalFields(t *testing.T) {
 	t.Parallel()
 
-	testData := []*struct {
+	testData := []struct {
 		yamlFileName string
 	}{
 		{

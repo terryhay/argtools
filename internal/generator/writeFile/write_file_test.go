@@ -20,7 +20,7 @@ func TestWrite(t *testing.T) {
 
 	dirPath := gofakeit.Color()
 
-	testData := []*struct {
+	testData := []struct {
 		caseName string
 
 		osd      osDecorator.OSDecorator

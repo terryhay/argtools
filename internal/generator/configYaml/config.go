@@ -109,7 +109,7 @@ func (i *Config) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
 	i.HelpCommandDescription = source.HelpCommandDescription
 
 	if len(source.CommandDescriptions) == 0 && source.NamelessCommandDescription == nil {
-		return fmt.Errorf(`config unmarshal error: one or more of felds "nameless_command_description" or "command_descriptions" must be set`)
+		return fmt.Errorf(`config unmarshal error: one or more of fields "nameless_command_description" or "command_descriptions" must be set`)
 	}
 
 	// don't check optional fields

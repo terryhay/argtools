@@ -38,7 +38,7 @@ func TestAppHelpDescriptionGetters(t *testing.T) {
 func TestAppHelpDescriptionUnmarshalErrors(t *testing.T) {
 	t.Parallel()
 
-	testData := []*struct {
+	testData := []struct {
 		yamlFileName      string
 		expectedErrorText string
 	}{

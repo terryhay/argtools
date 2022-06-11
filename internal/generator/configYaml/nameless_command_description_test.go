@@ -38,7 +38,7 @@ func TestNamelessCommandDescriptionGetters(t *testing.T) {
 func TestNamelessCommandDescriptionErrors(t *testing.T) {
 	t.Parallel()
 
-	testData := []*struct {
+	testData := []struct {
 		yamlFileName      string
 		expectedErrorText string
 	}{
@@ -71,7 +71,7 @@ func TestNamelessCommandDescriptionErrors(t *testing.T) {
 func TestNamelessCommandDescriptionNoErrorWhenNoOptionalFields(t *testing.T) {
 	t.Parallel()
 
-	testData := []*struct {
+	testData := []struct {
 		yamlFileName string
 	}{
 		{

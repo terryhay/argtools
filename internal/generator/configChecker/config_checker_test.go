@@ -3,6 +3,7 @@ package configChecker
 import (
 	"github.com/brianvoe/gofakeit"
 	"github.com/terryhay/argtools/internal/generator/configYaml"
+	"github.com/terryhay/argtools/pkg/argParserConfig"
 	"github.com/terryhay/argtools/pkg/argtoolsError"
 	"testing"
 
@@ -18,12 +19,14 @@ func TestConfigCheckerCorrectResponse(t *testing.T) {
 func TestConfigCheckerErrors(t *testing.T) {
 	t.Parallel()
 
+	value := gofakeit.Color()
+
 	flag := "-" + configYaml.Flag(gofakeit.Color())
 	if len(flag) >= maxFlagLen {
 		flag = flag[:maxFlagLen]
 	}
 
-	testData := []*struct {
+	testData := []struct {
 		caseName                   string
 		namelessCommandDescription *configYaml.NamelessCommandDescription
 		commandDescriptionMap      map[configYaml.Command]*configYaml.CommandDescription
@@ -31,9 +34,78 @@ func TestConfigCheckerErrors(t *testing.T) {
 		expectedErrorCode          argtoolsError.Code
 	}{
 		{
+			caseName: "default_value_with_no_args_amount_type_in_nameless_command",
+			namelessCommandDescription: &configYaml.NamelessCommandDescription{
+				ArgumentsDescription: &configYaml.ArgumentsDescription{
+					DefaultValues: []string{value},
+				},
+			},
+			expectedErrorCode: argtoolsError.CodeConfigUnexpectedDefaultValue,
+		},
+		{
+			caseName: "default_value_with_no_args_amount_type_in_command",
+			commandDescriptionMap: map[configYaml.Command]*configYaml.CommandDescription{
+				configYaml.Command(gofakeit.Name()): {
+					ArgumentsDescription: &configYaml.ArgumentsDescription{
+						DefaultValues: []string{value},
+					},
+				},
+			},
+			expectedErrorCode: argtoolsError.CodeConfigUnexpectedDefaultValue,
+		},
+		{
+			caseName: "twp_default_values_with_no_args_amount_type",
+			namelessCommandDescription: &configYaml.NamelessCommandDescription{
+				ArgumentsDescription: &configYaml.ArgumentsDescription{
+					DefaultValues: []string{
+						value,
+						gofakeit.Color(),
+					},
+				},
+			},
+			expectedErrorCode: argtoolsError.CodeConfigUnexpectedDefaultValue,
+		},
+		{
+			caseName: "default_value_is_not_allowed",
+			namelessCommandDescription: &configYaml.NamelessCommandDescription{
+				ArgumentsDescription: &configYaml.ArgumentsDescription{
+					AmountType: argParserConfig.ArgAmountTypeList,
+					DefaultValues: []string{
+						value,
+						gofakeit.Color(),
+					},
+					AllowedValues: []string{
+						value,
+					},
+				},
+			},
+			expectedErrorCode: argtoolsError.CodeConfigDefaultValueIsNotAllowed,
+		},
+		{
+			caseName: "flag_with_check_arg_error",
+			namelessCommandDescription: &configYaml.NamelessCommandDescription{
+				RequiredFlags: []configYaml.Flag{
+					flag,
+				},
+			},
+			flagDescriptionMap: map[configYaml.Flag]*configYaml.FlagDescription{
+				flag: {
+					Flag: flag,
+					ArgumentsDescription: &configYaml.ArgumentsDescription{
+						DefaultValues: []string{value},
+					},
+				},
+			},
+			expectedErrorCode: argtoolsError.CodeConfigUnexpectedDefaultValue,
+		},
+		{
 			caseName: "duplicate_flag_in_required_list",
 			commandDescriptionMap: map[configYaml.Command]*configYaml.CommandDescription{
 				configYaml.Command(gofakeit.Name()): {
+					ArgumentsDescription: &configYaml.ArgumentsDescription{
+						AmountType:    argParserConfig.ArgAmountTypeSingle,
+						DefaultValues: []string{gofakeit.Color()},
+					},
 					RequiredFlags: []configYaml.Flag{
 						flag,
 						flag,
@@ -46,6 +118,15 @@ func TestConfigCheckerErrors(t *testing.T) {
 			caseName: "duplicate_flag_in_optional_list",
 			commandDescriptionMap: map[configYaml.Command]*configYaml.CommandDescription{
 				configYaml.Command(gofakeit.Name()): {
+					ArgumentsDescription: &configYaml.ArgumentsDescription{
+						AmountType: argParserConfig.ArgAmountTypeSingle,
+						DefaultValues: []string{
+							value,
+						},
+						AllowedValues: []string{
+							value,
+						},
+					},
 					OptionalFlags: []configYaml.Flag{
 						flag,
 						flag,

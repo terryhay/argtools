@@ -9,7 +9,7 @@ import (
 func TestGetConfigErrors(t *testing.T) {
 	t.Parallel()
 
-	testData := []*struct {
+	testData := []struct {
 		caseName          string
 		configYamlPath    string
 		expectedErrorCode argtoolsError.Code

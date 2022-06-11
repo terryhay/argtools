@@ -45,7 +45,7 @@ func TestCommandDescriptionGetters(t *testing.T) {
 func TestCommandDescriptionUnmarshalErrors(t *testing.T) {
 	t.Parallel()
 
-	testData := []*struct {
+	testData := []struct {
 		yamlFileName      string
 		expectedErrorText string
 	}{
@@ -82,7 +82,7 @@ func TestCommandDescriptionUnmarshalErrors(t *testing.T) {
 func TestCommandDescriptionUnmarshalNoErrorWhenNoOptionalFields(t *testing.T) {
 	t.Parallel()
 
-	testData := []*struct {
+	testData := []struct {
 		yamlFileName string
 	}{
 		{

@@ -11,7 +11,7 @@ import (
 func TestExtractFlagDescriptionMapErrors(t *testing.T) {
 	t.Parallel()
 
-	testData := []*struct {
+	testData := []struct {
 		caseName          string
 		flagDescriptions  []*configYaml.FlagDescription
 		expectedErrorCode argtoolsError.Code
@@ -67,7 +67,7 @@ func TestExtractFlagDescriptionMapErrors(t *testing.T) {
 func TestExtractFlagDescriptionMap(t *testing.T) {
 	t.Parallel()
 
-	testData := []*struct {
+	testData := []struct {
 		caseName         string
 		flagDescriptions []*configYaml.FlagDescription
 		expectedMap      map[configYaml.Flag]*configYaml.FlagDescription

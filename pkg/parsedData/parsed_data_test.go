@@ -53,7 +53,7 @@ func TestGetFlagArgValuesErrors(t *testing.T) {
 
 	flag := argParserConfig.Flag(gofakeit.Color())
 
-	testData := []*struct {
+	testData := []struct {
 		caseName string
 
 		parsedData      *ParsedData
@@ -103,7 +103,7 @@ func TestGetFlagArgValueErrors(t *testing.T) {
 
 	flag := argParserConfig.Flag(gofakeit.Color())
 
-	testData := []*struct {
+	testData := []struct {
 		caseName string
 
 		parsedData      *ParsedData

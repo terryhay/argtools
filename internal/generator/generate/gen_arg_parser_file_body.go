@@ -22,10 +22,7 @@ const (
 const (
 %s)
 
-const (
-%s)
-
-// Parse - processes command line arguments
+%s// Parse - processes command line arguments
 func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error) {
 	appArgConfig := argParserConfig.NewArgParserConfig(
 		// appDescription
@@ -55,7 +52,7 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 func GenArgParserFileBody(
 	commandIDConstList CommandIDListComponent,
 	commandStringIDConstList CommandStringIDListComponent,
-	flagStringIDConstList FlagStringIDListComponent,
+	flagStringIDConstComponent FlagStringIDListComponent,
 	appDescriptionComponent AppDescriptionComponent,
 	flagMapComponents FlagMapElements,
 	commandMapElement CommandSliceElement,
@@ -67,7 +64,7 @@ func GenArgParserFileBody(
 
 		commandIDConstList,
 		commandStringIDConstList,
-		flagStringIDConstList,
+		flagStringIDConstComponent,
 
 		appDescriptionComponent,
 		flagMapComponents,

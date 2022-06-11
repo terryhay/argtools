@@ -27,7 +27,9 @@ func GenNamelessCommandComponent(
 		namelessCommandDescription.GetDescriptionHelpInfo()))
 
 	if namelessCommandDescription.GetArgumentsDescription() != nil {
-		builder.WriteString(fmt.Sprintf("\n%s", GenArgDescriptionElement(namelessCommandDescription.GetArgumentsDescription())))
+		builder.WriteString(fmt.Sprintf("\n%s", GenArgDescriptionElement(namelessCommandDescription.GetArgumentsDescription(), "\t\t\t")))
+	} else {
+		builder.WriteString("\n")
 	}
 
 	builder.WriteString(`		},

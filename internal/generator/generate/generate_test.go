@@ -350,9 +350,6 @@ const (
 	Command%[2]s = "%[2]s"
 )
 
-const (
-)
-
 // Parse - processes command line arguments
 func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error) {
 	appArgConfig := argParserConfig.NewArgParserConfig(

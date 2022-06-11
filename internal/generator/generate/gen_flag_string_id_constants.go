@@ -5,14 +5,21 @@ import (
 	"github.com/terryhay/argtools/internal/generator/configYaml"
 	"github.com/terryhay/argtools/internal/generator/idTemplateDataCreator"
 	"sort"
+	"strings"
 )
 
 const (
+	flagStringIDConstPrefixTemplate = `const (
+`
+
 	flagStringIDFirstConstTemplate = `	// %s - %s
 	%s argParserConfig.Flag = "%s"
 `
 	flagStringIDConstTemplate = `	// %s - %s
 	%s = "%s"
+`
+	flagStringIDConstPostfixTemplate = `)
+
 `
 )
 
@@ -24,6 +31,9 @@ func GenFlagStringIDConstants(flagsTemplateData map[configYaml.Flag]*idTemplateD
 		return ""
 	}
 
+	builder := strings.Builder{}
+	builder.WriteString(flagStringIDConstPrefixTemplate)
+
 	sortedFlagsTemplateData := make([]*idTemplateDataCreator.IDTemplateData, 0, dataCount)
 	for _, data := range flagsTemplateData {
 		sortedFlagsTemplateData = append(sortedFlagsTemplateData, data)
@@ -31,12 +41,17 @@ func GenFlagStringIDConstants(flagsTemplateData map[configYaml.Flag]*idTemplateD
 	sort.Sort(byStringID(sortedFlagsTemplateData))
 
 	templateData := sortedFlagsTemplateData[0]
-	res := fmt.Sprintf(flagStringIDFirstConstTemplate, templateData.GetStringID(), templateData.GetComment(), templateData.GetStringID(), templateData.GetCallName())
+	builder.WriteString(fmt.Sprintf(flagStringIDFirstConstTemplate,
+		templateData.GetStringID(),
+		templateData.GetComment(),
+		templateData.GetStringID(),
+		templateData.GetCallName()))
 
 	for i := 1; i < len(sortedFlagsTemplateData); i++ {
 		templateData = sortedFlagsTemplateData[i]
-		res += fmt.Sprintf(flagStringIDConstTemplate, templateData.GetStringID(), templateData.GetComment(), templateData.GetStringID(), templateData.GetCallName())
+		builder.WriteString(fmt.Sprintf(flagStringIDConstTemplate, templateData.GetStringID(), templateData.GetComment(), templateData.GetStringID(), templateData.GetCallName()))
 	}
 
-	return FlagStringIDListComponent(res)
+	builder.WriteString(flagStringIDConstPostfixTemplate)
+	return FlagStringIDListComponent(builder.String())
 }

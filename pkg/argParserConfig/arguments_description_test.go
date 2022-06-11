@@ -9,17 +9,17 @@ import (
 func TestArgumentsDescriptionGetters(t *testing.T) {
 	t.Parallel()
 
-	t.Run("null_pointer", func(t *testing.T) {
-		var nilPointer *ArgumentsDescription
+	var pointer *ArgumentsDescription
 
-		require.Equal(t, ArgAmountTypeNoArgs, nilPointer.GetAmountType())
-		require.Equal(t, "", nilPointer.GetSynopsisHelpDescription())
-		require.Nil(t, nilPointer.GetDefaultValues())
-		require.Nil(t, nilPointer.GetAllowedValues())
+	t.Run("nil_pointer", func(t *testing.T) {
+		require.Equal(t, ArgAmountTypeNoArgs, pointer.GetAmountType())
+		require.Equal(t, "", pointer.GetSynopsisHelpDescription())
+		require.Nil(t, pointer.GetDefaultValues())
+		require.Nil(t, pointer.GetAllowedValues())
 	})
 
-	t.Run("simple", func(t *testing.T) {
-		pointer := &ArgumentsDescription{
+	t.Run("initialized_pointer", func(t *testing.T) {
+		pointer = &ArgumentsDescription{
 			AmountType:              ArgAmountTypeSingle,
 			SynopsisHelpDescription: gofakeit.Name(),
 			DefaultValues:           []string{gofakeit.Name()},

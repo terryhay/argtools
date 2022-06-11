@@ -13,39 +13,34 @@ import (
 func TestArgumentsDescriptionGetters(t *testing.T) {
 	t.Parallel()
 
-	t.Run("null_pointer", func(t *testing.T) {
-		var nilPointer *ArgumentsDescription
+	var pointer *ArgumentsDescription
 
-		require.Equal(t, argParserConfig.ArgAmountTypeNoArgs, nilPointer.GetAmountType())
-		require.Equal(t, "", nilPointer.GetSynopsisHelpDescription())
-		require.Nil(t, nilPointer.GetDefaultValues())
-		require.Nil(t, nilPointer.GetAllowedValues())
+	t.Run("nil_pointer", func(t *testing.T) {
+		require.Equal(t, argParserConfig.ArgAmountTypeNoArgs, pointer.GetAmountType())
+		require.Equal(t, "", pointer.GetSynopsisHelpDescription())
+		require.Nil(t, pointer.GetDefaultValues())
+		require.Nil(t, pointer.GetAllowedValues())
 	})
 
-	t.Run("simple", func(t *testing.T) {
-		amountType := argParserConfig.ArgAmountTypeSingle
-		synopsisHelpDescription := gofakeit.Name()
-		defaultValues := []string{gofakeit.Name()}
-		allowedValues := []string{gofakeit.Name()}
-
-		pointer := &ArgumentsDescription{
-			AmountType:              amountType,
-			SynopsisHelpDescription: synopsisHelpDescription,
-			DefaultValues:           defaultValues,
-			AllowedValues:           allowedValues,
+	t.Run("initialized_pointer", func(t *testing.T) {
+		pointer = &ArgumentsDescription{
+			AmountType:              argParserConfig.ArgAmountTypeSingle,
+			SynopsisHelpDescription: gofakeit.Name(),
+			DefaultValues:           []string{gofakeit.Name()},
+			AllowedValues:           []string{gofakeit.Name()},
 		}
 
-		require.Equal(t, amountType, pointer.GetAmountType())
-		require.Equal(t, synopsisHelpDescription, pointer.GetSynopsisHelpDescription())
-		require.Equal(t, defaultValues, pointer.GetDefaultValues())
-		require.Equal(t, allowedValues, pointer.GetAllowedValues())
+		require.Equal(t, pointer.AmountType, pointer.GetAmountType())
+		require.Equal(t, pointer.SynopsisHelpDescription, pointer.GetSynopsisHelpDescription())
+		require.Equal(t, pointer.DefaultValues, pointer.GetDefaultValues())
+		require.Equal(t, pointer.AllowedValues, pointer.GetAllowedValues())
 	})
 }
 
 func TestArgumentsDescriptionUnmarshalErrors(t *testing.T) {
 	t.Parallel()
 
-	testData := []struct {
+	testData := []*struct {
 		yamlFileName      string
 		expectedErrorText string
 	}{
@@ -86,7 +81,7 @@ func TestArgumentsDescriptionUnmarshalErrors(t *testing.T) {
 func TestArgumentsDescriptionUnmarshalNoErrorWhenNoOptionalFields(t *testing.T) {
 	t.Parallel()
 
-	testData := []struct {
+	testData := []*struct {
 		yamlFileName string
 	}{
 		{

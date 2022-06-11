@@ -9,15 +9,13 @@ import (
 func TestApplicationDescriptionGetters(t *testing.T) {
 	t.Parallel()
 
-	t.Run("simple", func(t *testing.T) {
-		pointer := &ApplicationDescription{
-			AppName:             gofakeit.Name(),
-			NameHelpInfo:        gofakeit.Name(),
-			DescriptionHelpInfo: []string{gofakeit.Name()},
-		}
+	obj := ApplicationDescription{
+		AppName:             gofakeit.Name(),
+		NameHelpInfo:        gofakeit.Name(),
+		DescriptionHelpInfo: []string{gofakeit.Name()},
+	}
 
-		require.Equal(t, pointer.AppName, pointer.GetAppName())
-		require.Equal(t, pointer.NameHelpInfo, pointer.GetNameHelpInfo())
-		require.Equal(t, pointer.DescriptionHelpInfo, pointer.GetDescriptionHelpInfo())
-	})
+	require.Equal(t, obj.AppName, obj.GetAppName())
+	require.Equal(t, obj.NameHelpInfo, obj.GetNameHelpInfo())
+	require.Equal(t, obj.DescriptionHelpInfo, obj.GetDescriptionHelpInfo())
 }

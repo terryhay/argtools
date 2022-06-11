@@ -20,7 +20,7 @@ func TestParse(t *testing.T) {
 		arg           = gofakeit.Color()
 	)
 
-	testData := []struct {
+	testData := []*struct {
 		caseName string
 
 		config argParserConfig.ArgParserConfig
@@ -55,7 +55,7 @@ func TestParse(t *testing.T) {
 			expectedErr: fakeError(argtoolsError.CodeCantFindFlagNameInGroupSpec),
 		},
 		{
-			caseName: "no_args_for_null_command",
+			caseName: "no_args_for_nameless_command",
 			config: argParserConfig.ArgParserConfig{
 				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
 					ID: nullCommandID,
@@ -66,7 +66,7 @@ func TestParse(t *testing.T) {
 			},
 		},
 		{
-			caseName: "no_args_for_null_command_with_required_flag",
+			caseName: "no_args_for_nameless_command_with_required_flag",
 			config: argParserConfig.ArgParserConfig{
 				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
 					ID: nullCommandID,
@@ -78,7 +78,7 @@ func TestParse(t *testing.T) {
 			expectedErr: fakeError(argtoolsError.CodeArgParserRequiredFlagIsNotSet),
 		},
 		{
-			caseName: "no_args_for_null_command_with_required_argument",
+			caseName: "no_args_for_nameless_command_with_required_argument",
 			config: argParserConfig.ArgParserConfig{
 				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
 					ID: nullCommandID,
@@ -90,7 +90,7 @@ func TestParse(t *testing.T) {
 			expectedErr: fakeError(argtoolsError.CodeArgParserCommandDoesNotContainArgs),
 		},
 		{
-			caseName: "waste_arg_for_null_command",
+			caseName: "waste_arg_for_nameless_command",
 			args:     []string{arg},
 			config: argParserConfig.ArgParserConfig{
 				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
@@ -100,7 +100,7 @@ func TestParse(t *testing.T) {
 			expectedErr: fakeError(argtoolsError.CodeArgParserUnexpectedArg),
 		},
 		{
-			caseName: "arg_for_null_command_with_required_arg",
+			caseName: "arg_for_nameless_command_with_required_arg",
 			args:     []string{arg},
 			config: argParserConfig.ArgParserConfig{
 				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{

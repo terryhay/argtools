@@ -11,7 +11,7 @@ import (
 func TestExtractCommandDescriptionMapErrors(t *testing.T) {
 	t.Parallel()
 
-	testData := []struct {
+	testData := []*struct {
 		caseName            string
 		commandDescriptions []*configYaml.CommandDescription
 		expectedErrorCode   argtoolsError.Code
@@ -105,7 +105,7 @@ func TestExtractCommandDescriptionMapErrors(t *testing.T) {
 func TestExtractCommandDescriptionMap(t *testing.T) {
 	t.Parallel()
 
-	testData := []struct {
+	testData := []*struct {
 		caseName            string
 		commandDescriptions []*configYaml.CommandDescription
 		expectedMap         map[configYaml.Command]*configYaml.CommandDescription

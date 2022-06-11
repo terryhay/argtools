@@ -14,27 +14,31 @@ func TestAppHelpDescriptionGetters(t *testing.T) {
 
 	var pointer *AppHelpDescription
 
-	require.Equal(t, "", pointer.GetApplicationName())
-	require.Equal(t, "", pointer.GetNameHelpInfo())
-	require.Nil(t, pointer.GetDescriptionHelpInfo())
+	t.Run("nil_pointer", func(t *testing.T) {
+		require.Equal(t, "", pointer.GetApplicationName())
+		require.Equal(t, "", pointer.GetNameHelpInfo())
+		require.Nil(t, pointer.GetDescriptionHelpInfo())
+	})
 
-	pointer = &AppHelpDescription{
-		ApplicationName: gofakeit.Name(),
-		NameHelpInfo:    gofakeit.Name(),
-		DescriptionHelpInfo: []string{
-			gofakeit.Name(),
-		},
-	}
+	t.Run("initialized_pointer", func(t *testing.T) {
+		pointer = &AppHelpDescription{
+			ApplicationName: gofakeit.Name(),
+			NameHelpInfo:    gofakeit.Name(),
+			DescriptionHelpInfo: []string{
+				gofakeit.Name(),
+			},
+		}
 
-	require.Equal(t, pointer.ApplicationName, pointer.GetApplicationName())
-	require.Equal(t, pointer.NameHelpInfo, pointer.GetNameHelpInfo())
-	require.Equal(t, pointer.DescriptionHelpInfo, pointer.GetDescriptionHelpInfo())
+		require.Equal(t, pointer.ApplicationName, pointer.GetApplicationName())
+		require.Equal(t, pointer.NameHelpInfo, pointer.GetNameHelpInfo())
+		require.Equal(t, pointer.DescriptionHelpInfo, pointer.GetDescriptionHelpInfo())
+	})
 }
 
 func TestAppHelpDescriptionUnmarshalErrors(t *testing.T) {
 	t.Parallel()
 
-	testData := []struct {
+	testData := []*struct {
 		yamlFileName      string
 		expectedErrorText string
 	}{

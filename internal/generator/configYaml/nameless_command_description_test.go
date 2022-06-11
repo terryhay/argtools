@@ -11,39 +11,34 @@ import (
 func TestNamelessCommandDescriptionGetters(t *testing.T) {
 	t.Parallel()
 
-	t.Run("null_pointer", func(t *testing.T) {
-		var nilPointer *NamelessCommandDescription
+	var pointer *NamelessCommandDescription
 
-		require.Equal(t, "", nilPointer.GetDescriptionHelpInfo())
-		require.Nil(t, nilPointer.GetRequiredFlags())
-		require.Nil(t, nilPointer.GetOptionalFlags())
-		require.Nil(t, nilPointer.GetArgumentsDescription())
+	t.Run("nil_pointer", func(t *testing.T) {
+		require.Equal(t, "", pointer.GetDescriptionHelpInfo())
+		require.Nil(t, pointer.GetRequiredFlags())
+		require.Nil(t, pointer.GetOptionalFlags())
+		require.Nil(t, pointer.GetArgumentsDescription())
 	})
 
-	t.Run("simple", func(t *testing.T) {
-		descriptionHelpInfo := gofakeit.Name()
-		requiredFlags := []Flag{Flag(gofakeit.Name())}
-		optionalFlags := []Flag{Flag(gofakeit.Name())}
-		argumentsDescription := &ArgumentsDescription{}
-
-		pointer := &NamelessCommandDescription{
-			DescriptionHelpInfo:  descriptionHelpInfo,
-			RequiredFlags:        requiredFlags,
-			OptionalFlags:        optionalFlags,
-			ArgumentsDescription: argumentsDescription,
+	t.Run("initialized_pointer", func(t *testing.T) {
+		pointer = &NamelessCommandDescription{
+			DescriptionHelpInfo:  gofakeit.Name(),
+			RequiredFlags:        []Flag{Flag(gofakeit.Name())},
+			OptionalFlags:        []Flag{Flag(gofakeit.Name())},
+			ArgumentsDescription: &ArgumentsDescription{},
 		}
 
-		require.Equal(t, descriptionHelpInfo, pointer.GetDescriptionHelpInfo())
-		require.Equal(t, requiredFlags, pointer.GetRequiredFlags())
-		require.Equal(t, optionalFlags, pointer.GetOptionalFlags())
-		require.Equal(t, argumentsDescription, pointer.GetArgumentsDescription())
+		require.Equal(t, pointer.DescriptionHelpInfo, pointer.GetDescriptionHelpInfo())
+		require.Equal(t, pointer.RequiredFlags, pointer.GetRequiredFlags())
+		require.Equal(t, pointer.OptionalFlags, pointer.GetOptionalFlags())
+		require.Equal(t, pointer.ArgumentsDescription, pointer.GetArgumentsDescription())
 	})
 }
 
 func TestNamelessCommandDescriptionErrors(t *testing.T) {
 	t.Parallel()
 
-	testData := []struct {
+	testData := []*struct {
 		yamlFileName      string
 		expectedErrorText string
 	}{
@@ -76,7 +71,7 @@ func TestNamelessCommandDescriptionErrors(t *testing.T) {
 func TestNamelessCommandDescriptionNoErrorWhenNoOptionalFields(t *testing.T) {
 	t.Parallel()
 
-	testData := []struct {
+	testData := []*struct {
 		yamlFileName string
 	}{
 		{

@@ -32,7 +32,7 @@ func TestArgValueToInt16(t *testing.T) {
 	randInt64PositiveValue := int64(math.MaxUint32) + int64(randPositiveValue)
 	randInt64NegativeValue := -1 * randInt64PositiveValue
 
-	testData := []struct {
+	testData := []*struct {
 		caseName string
 		argValue ArgValue
 
@@ -101,7 +101,7 @@ func TestArgValueToUint16(t *testing.T) {
 	randInt64PositiveValue := int64(math.MaxUint32) + int64(randPositiveValue)
 	randInt64NegativeValue := -1 * randInt64PositiveValue
 
-	testData := []struct {
+	testData := []*struct {
 		caseName string
 		argValue ArgValue
 

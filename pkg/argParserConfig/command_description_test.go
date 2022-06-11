@@ -9,19 +9,19 @@ import (
 func TestCommandDescriptionGetters(t *testing.T) {
 	t.Parallel()
 
-	t.Run("null_pointer", func(t *testing.T) {
-		var nilPointer *CommandDescription
+	var pointer *CommandDescription
 
-		require.Equal(t, CommandIDUndefined, nilPointer.GetID())
-		require.Equal(t, "", nilPointer.GetDescriptionHelpInfo())
-		require.Nil(t, nilPointer.GetCommands())
-		require.Nil(t, nilPointer.GetArgDescription())
-		require.Nil(t, nilPointer.GetRequiredFlags())
-		require.Nil(t, nilPointer.GetOptionalFlags())
+	t.Run("nil_pointer", func(t *testing.T) {
+		require.Equal(t, CommandIDUndefined, pointer.GetID())
+		require.Equal(t, "", pointer.GetDescriptionHelpInfo())
+		require.Nil(t, pointer.GetCommands())
+		require.Nil(t, pointer.GetArgDescription())
+		require.Nil(t, pointer.GetRequiredFlags())
+		require.Nil(t, pointer.GetOptionalFlags())
 	})
 
-	t.Run("simple", func(t *testing.T) {
-		pointer := &CommandDescription{
+	t.Run("initialized_pointer", func(t *testing.T) {
+		pointer = &CommandDescription{
 			ID:                  CommandID(gofakeit.Uint32()),
 			DescriptionHelpInfo: gofakeit.Name(),
 			Commands: map[Command]bool{

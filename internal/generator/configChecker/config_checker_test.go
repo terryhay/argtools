@@ -23,7 +23,7 @@ func TestConfigCheckerErrors(t *testing.T) {
 		flag = flag[:maxFlagLen]
 	}
 
-	testData := []struct {
+	testData := []*struct {
 		caseName                   string
 		namelessCommandDescription *configYaml.NamelessCommandDescription
 		commandDescriptionMap      map[configYaml.Command]*configYaml.CommandDescription
@@ -141,7 +141,7 @@ func TestConfigCheckerErrors(t *testing.T) {
 			expectedErrorCode: argtoolsError.CodeConfigContainsDuplicateFlags,
 		},
 		{
-			caseName: "null_command_required_flag_does_not_have_dash_in_front",
+			caseName: "nameless_command_required_flag_does_not_have_dash_in_front",
 			namelessCommandDescription: &configYaml.NamelessCommandDescription{
 				RequiredFlags: []configYaml.Flag{
 					flag[1:],
@@ -154,7 +154,7 @@ func TestConfigCheckerErrors(t *testing.T) {
 			expectedErrorCode: argtoolsError.CodeConfigFlagMustHaveDashInFront,
 		},
 		{
-			caseName: "null_command_optional_flag_has_russian_char",
+			caseName: "nameless_command_optional_flag_has_russian_char",
 			namelessCommandDescription: &configYaml.NamelessCommandDescription{
 				RequiredFlags: []configYaml.Flag{
 					flag,

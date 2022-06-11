@@ -12,31 +12,28 @@ import (
 func TestHelpCommandDescriptionGetters(t *testing.T) {
 	t.Parallel()
 
-	t.Run("null_pointer", func(t *testing.T) {
-		var nilPointer *HelpCommandDescription
+	var pointer *HelpCommandDescription
 
-		require.Equal(t, Command(""), nilPointer.GetCommand())
-		require.Nil(t, nilPointer.GetAdditionalCommands())
+	t.Run("nil_pointer", func(t *testing.T) {
+		require.Equal(t, Command(""), pointer.GetCommand())
+		require.Nil(t, pointer.GetAdditionalCommands())
 	})
 
-	t.Run("simple", func(t *testing.T) {
-		command := Command(gofakeit.Name())
-		additionalCommands := []Command{Command(gofakeit.Name())}
-
-		pointer := &HelpCommandDescription{
-			Command:            command,
-			AdditionalCommands: additionalCommands,
+	t.Run("initialized_pointer", func(t *testing.T) {
+		pointer = &HelpCommandDescription{
+			Command:            Command(gofakeit.Name()),
+			AdditionalCommands: []Command{Command(gofakeit.Name())},
 		}
 
-		require.Equal(t, command, pointer.GetCommand())
-		require.Equal(t, additionalCommands, pointer.GetAdditionalCommands())
+		require.Equal(t, pointer.Command, pointer.GetCommand())
+		require.Equal(t, pointer.AdditionalCommands, pointer.GetAdditionalCommands())
 	})
 }
 
 func TestHelpCommandDescriptionUnmarshalErrors(t *testing.T) {
 	t.Parallel()
 
-	testData := []struct {
+	testData := []*struct {
 		yamlFileName      string
 		expectedErrorText string
 	}{
@@ -69,7 +66,7 @@ func TestHelpCommandDescriptionUnmarshalErrors(t *testing.T) {
 func TestHelpCommandDescriptionUnmarshalNoErrorWhenNoOptionalFields(t *testing.T) {
 	t.Parallel()
 
-	testData := []struct {
+	testData := []*struct {
 		yamlFileName string
 	}{
 		{

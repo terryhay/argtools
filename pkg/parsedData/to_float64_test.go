@@ -25,7 +25,7 @@ func TestArgValueToFloat64(t *testing.T) {
 		randNegativeValue *= -1.
 	}
 
-	testData := []struct {
+	testData := []*struct {
 		caseName string
 		argValue ArgValue
 

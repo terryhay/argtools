@@ -12,47 +12,40 @@ import (
 func TestConfigGetters(t *testing.T) {
 	t.Parallel()
 
-	t.Run("null_pointer", func(t *testing.T) {
-		var nilPointer *Config
+	var pointer *Config
 
-		require.Equal(t, Version(""), nilPointer.GetVersion())
-		require.Nil(t, nilPointer.GetAppHelpDescription())
-		require.Nil(t, nilPointer.GetHelpCommandDescription())
-		require.Nil(t, nilPointer.GetNamelessCommandDescription())
-		require.Nil(t, nilPointer.GetCommandDescriptions())
-		require.Nil(t, nilPointer.GetFlagDescriptions())
+	t.Run("nil_pointer", func(t *testing.T) {
+		require.Equal(t, Version(""), pointer.GetVersion())
+		require.Nil(t, pointer.GetAppHelpDescription())
+		require.Nil(t, pointer.GetHelpCommandDescription())
+		require.Nil(t, pointer.GetNamelessCommandDescription())
+		require.Nil(t, pointer.GetCommandDescriptions())
+		require.Nil(t, pointer.GetFlagDescriptions())
 	})
 
-	t.Run("simple", func(t *testing.T) {
-		version := Version(gofakeit.Name())
-		appHelpDescription := &AppHelpDescription{}
-		helpCommandDescription := &HelpCommandDescription{}
-		namelessCommandDescription := &NamelessCommandDescription{}
-		commandDescriptions := []*CommandDescription{{}}
-		flagDescriptions := []*FlagDescription{{}}
-
-		pointer := &Config{
-			Version:                    version,
-			AppHelpDescription:         appHelpDescription,
-			HelpCommandDescription:     helpCommandDescription,
-			NamelessCommandDescription: namelessCommandDescription,
-			CommandDescriptions:        commandDescriptions,
-			FlagDescriptions:           flagDescriptions,
+	t.Run("initialized_pointer", func(t *testing.T) {
+		pointer = &Config{
+			Version:                    Version(gofakeit.Name()),
+			AppHelpDescription:         &AppHelpDescription{},
+			HelpCommandDescription:     &HelpCommandDescription{},
+			NamelessCommandDescription: &NamelessCommandDescription{},
+			CommandDescriptions:        []*CommandDescription{{}},
+			FlagDescriptions:           []*FlagDescription{{}},
 		}
 
-		require.Equal(t, version, pointer.GetVersion())
-		require.Equal(t, appHelpDescription, pointer.GetAppHelpDescription())
-		require.Equal(t, helpCommandDescription, pointer.GetHelpCommandDescription())
-		require.Equal(t, namelessCommandDescription, pointer.GetNamelessCommandDescription())
-		require.Equal(t, commandDescriptions, pointer.GetCommandDescriptions())
-		require.Equal(t, flagDescriptions, pointer.GetFlagDescriptions())
+		require.Equal(t, pointer.Version, pointer.GetVersion())
+		require.Equal(t, pointer.AppHelpDescription, pointer.GetAppHelpDescription())
+		require.Equal(t, pointer.HelpCommandDescription, pointer.GetHelpCommandDescription())
+		require.Equal(t, pointer.NamelessCommandDescription, pointer.GetNamelessCommandDescription())
+		require.Equal(t, pointer.CommandDescriptions, pointer.GetCommandDescriptions())
+		require.Equal(t, pointer.FlagDescriptions, pointer.GetFlagDescriptions())
 	})
 }
 
 func TestConfigUnmarshalErrors(t *testing.T) {
 	t.Parallel()
 
-	testData := []struct {
+	testData := []*struct {
 		yamlFileName      string
 		expectedErrorText string
 	}{
@@ -73,7 +66,7 @@ func TestConfigUnmarshalErrors(t *testing.T) {
 			expectedErrorText: "configYaml.GetConfig: unmarshal error: config unmarshal error: no required field \"help_command_description\"",
 		},
 		{
-			yamlFileName:      "no_command_description_and_null_command.yaml",
+			yamlFileName:      "no_command_description_and_nameless_command.yaml",
 			expectedErrorText: "configYaml.GetConfig: unmarshal error: config unmarshal error: one or more of felds \"nameless_command_description\" or \"command_descriptions\" must be set",
 		},
 	}
@@ -101,7 +94,7 @@ func TestConfigUnmarshalErrors(t *testing.T) {
 func TestConfigUnmarshalNoErrorWhenNoOptionalFields(t *testing.T) {
 	t.Parallel()
 
-	testData := []struct {
+	testData := []*struct {
 		yamlFileName string
 	}{
 		{

@@ -12,39 +12,34 @@ import (
 func TestFlagDescriptionGetters(t *testing.T) {
 	t.Parallel()
 
-	t.Run("null_pointer", func(t *testing.T) {
-		var nilPointer *FlagDescription
+	var pointer *FlagDescription
 
-		require.Equal(t, Flag(""), nilPointer.GetFlag())
-		require.Equal(t, "", nilPointer.GetDescriptionHelpInfo())
-		require.Equal(t, "", nilPointer.GetSynopsisDescription())
-		require.Nil(t, nilPointer.GetArgumentsDescription())
+	t.Run("nil_pointer", func(t *testing.T) {
+		require.Equal(t, Flag(""), pointer.GetFlag())
+		require.Equal(t, "", pointer.GetDescriptionHelpInfo())
+		require.Equal(t, "", pointer.GetSynopsisDescription())
+		require.Nil(t, pointer.GetArgumentsDescription())
 	})
 
-	t.Run("simple", func(t *testing.T) {
-		flag := Flag(gofakeit.Name())
-		descriptionHelpInfo := gofakeit.Name()
-		synopsisDescription := gofakeit.Name()
-		argumentsDescription := &ArgumentsDescription{}
-
-		pointer := &FlagDescription{
-			Flag:                 flag,
-			DescriptionHelpInfo:  descriptionHelpInfo,
-			SynopsisDescription:  synopsisDescription,
-			ArgumentsDescription: argumentsDescription,
+	t.Run("initialized_pointer", func(t *testing.T) {
+		pointer = &FlagDescription{
+			Flag:                 Flag(gofakeit.Name()),
+			DescriptionHelpInfo:  gofakeit.Name(),
+			SynopsisDescription:  gofakeit.Name(),
+			ArgumentsDescription: &ArgumentsDescription{},
 		}
 
-		require.Equal(t, flag, pointer.GetFlag())
-		require.Equal(t, descriptionHelpInfo, pointer.GetDescriptionHelpInfo())
-		require.Equal(t, synopsisDescription, pointer.GetSynopsisDescription())
-		require.Equal(t, argumentsDescription, pointer.GetArgumentsDescription())
+		require.Equal(t, pointer.Flag, pointer.GetFlag())
+		require.Equal(t, pointer.DescriptionHelpInfo, pointer.GetDescriptionHelpInfo())
+		require.Equal(t, pointer.SynopsisDescription, pointer.GetSynopsisDescription())
+		require.Equal(t, pointer.ArgumentsDescription, pointer.GetArgumentsDescription())
 	})
 }
 
 func TestFlagDescriptionUnmarshalErrors(t *testing.T) {
 	t.Parallel()
 
-	testData := []struct {
+	testData := []*struct {
 		yamlFileName      string
 		expectedErrorText string
 	}{
@@ -81,7 +76,7 @@ func TestFlagDescriptionUnmarshalErrors(t *testing.T) {
 func TestFlagDescriptionUnmarshalNoErrorWhenNoOptionalFields(t *testing.T) {
 	t.Parallel()
 
-	testData := []struct {
+	testData := []*struct {
 		yamlFileName string
 	}{
 		{

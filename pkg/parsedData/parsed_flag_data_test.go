@@ -10,20 +10,20 @@ import (
 func TestParsedFlagDataGetters(t *testing.T) {
 	t.Parallel()
 
-	t.Run("null_pointer", func(t *testing.T) {
-		var nilPointer *ParsedFlagData
+	var pointer *ParsedFlagData
 
-		require.Equal(t, argParserConfig.Flag(""), nilPointer.GetFlag())
-		require.Nil(t, nilPointer.GetArgData())
+	t.Run("nil_pointer", func(t *testing.T) {
+		require.Equal(t, argParserConfig.Flag(""), pointer.GetFlag())
+		require.Nil(t, pointer.GetArgData())
 	})
 
-	t.Run("simple", func(t *testing.T) {
-		flag := argParserConfig.Flag(gofakeit.Name())
-		argData := NewParsedArgData(nil)
+	t.Run("initialized_pointer", func(t *testing.T) {
+		pointer = NewParsedFlagData(
+			argParserConfig.Flag(gofakeit.Name()),
+			NewParsedArgData(nil),
+		)
 
-		pointer := NewParsedFlagData(flag, argData)
-
-		require.Equal(t, flag, pointer.GetFlag())
-		require.Equal(t, argData, pointer.GetArgData())
+		require.Equal(t, pointer.Flag, pointer.GetFlag())
+		require.Equal(t, pointer.ArgData, pointer.GetArgData())
 	})
 }

@@ -12,47 +12,40 @@ import (
 func TestCommandDescriptionGetters(t *testing.T) {
 	t.Parallel()
 
-	t.Run("null_pointer", func(t *testing.T) {
-		var nilPointer *CommandDescription
+	var pointer *CommandDescription
 
-		require.Equal(t, Command(""), nilPointer.GetCommand())
-		require.Equal(t, "", nilPointer.GetDescriptionHelpInfo())
-		require.Nil(t, nilPointer.GetRequiredFlags())
-		require.Nil(t, nilPointer.GetOptionalFlags())
-		require.Nil(t, nilPointer.GetAdditionalCommands())
-		require.Nil(t, nilPointer.GetArgumentsDescription())
+	t.Run("nil_pointer", func(t *testing.T) {
+		require.Equal(t, Command(""), pointer.GetCommand())
+		require.Equal(t, "", pointer.GetDescriptionHelpInfo())
+		require.Nil(t, pointer.GetRequiredFlags())
+		require.Nil(t, pointer.GetOptionalFlags())
+		require.Nil(t, pointer.GetAdditionalCommands())
+		require.Nil(t, pointer.GetArgumentsDescription())
 	})
 
-	t.Run("simple", func(t *testing.T) {
-		command := Command(gofakeit.Name())
-		descriptionHelpInfo := gofakeit.Name()
-		requiredFlags := []Flag{Flag(gofakeit.Name())}
-		optionalFlags := []Flag{Flag(gofakeit.Name())}
-		additionalCommands := []Command{Command(gofakeit.Name())}
-		argumentsDescription := &ArgumentsDescription{}
-
-		pointer := &CommandDescription{
-			Command:              command,
-			DescriptionHelpInfo:  descriptionHelpInfo,
-			RequiredFlags:        requiredFlags,
-			OptionalFlags:        optionalFlags,
-			AdditionalCommands:   additionalCommands,
-			ArgumentsDescription: argumentsDescription,
+	t.Run("initialized_pointer", func(t *testing.T) {
+		pointer = &CommandDescription{
+			Command:              Command(gofakeit.Name()),
+			DescriptionHelpInfo:  gofakeit.Name(),
+			RequiredFlags:        []Flag{Flag(gofakeit.Name())},
+			OptionalFlags:        []Flag{Flag(gofakeit.Name())},
+			AdditionalCommands:   []Command{Command(gofakeit.Name())},
+			ArgumentsDescription: &ArgumentsDescription{},
 		}
 
-		require.Equal(t, command, pointer.GetCommand())
-		require.Equal(t, descriptionHelpInfo, pointer.GetDescriptionHelpInfo())
-		require.Equal(t, requiredFlags, pointer.GetRequiredFlags())
-		require.Equal(t, optionalFlags, pointer.GetOptionalFlags())
-		require.Equal(t, additionalCommands, pointer.GetAdditionalCommands())
-		require.Equal(t, argumentsDescription, pointer.GetArgumentsDescription())
+		require.Equal(t, pointer.Command, pointer.GetCommand())
+		require.Equal(t, pointer.DescriptionHelpInfo, pointer.GetDescriptionHelpInfo())
+		require.Equal(t, pointer.RequiredFlags, pointer.GetRequiredFlags())
+		require.Equal(t, pointer.OptionalFlags, pointer.GetOptionalFlags())
+		require.Equal(t, pointer.AdditionalCommands, pointer.GetAdditionalCommands())
+		require.Equal(t, pointer.ArgumentsDescription, pointer.GetArgumentsDescription())
 	})
 }
 
 func TestCommandDescriptionUnmarshalErrors(t *testing.T) {
 	t.Parallel()
 
-	testData := []struct {
+	testData := []*struct {
 		yamlFileName      string
 		expectedErrorText string
 	}{
@@ -89,7 +82,7 @@ func TestCommandDescriptionUnmarshalErrors(t *testing.T) {
 func TestCommandDescriptionUnmarshalNoErrorWhenNoOptionalFields(t *testing.T) {
 	t.Parallel()
 
-	testData := []struct {
+	testData := []*struct {
 		yamlFileName string
 	}{
 		{

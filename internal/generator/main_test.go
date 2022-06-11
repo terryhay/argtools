@@ -23,7 +23,7 @@ func TestLogic(t *testing.T) {
 
 	getYAMLConfigErr := argtoolsError.NewError(argtoolsError.CodeConfigFlagIsNotUsedInCommands, fmt.Errorf(gofakeit.Name()))
 
-	testData := []struct {
+	testData := []*struct {
 		caseName string
 
 		argToolsParseFunc func(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)

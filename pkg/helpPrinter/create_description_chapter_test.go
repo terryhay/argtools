@@ -15,7 +15,7 @@ func TestCreateDescriptionChapter(t *testing.T) {
 	randomFlag := argParserConfig.Flag(gofakeit.Name())
 	randomFlagDescriptionHelpInfo := gofakeit.Name()
 
-	testData := []struct {
+	testData := []*struct {
 		caseName string
 
 		descriptionHelpInfo []string

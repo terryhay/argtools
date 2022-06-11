@@ -8,50 +8,54 @@ import (
 )
 
 const (
-	argumentsDescriptionPrefix = `				ArgDescription: &argParserConfig.ArgumentsDescription{
-					AmountType:              %s,
-					SynopsisHelpDescription: "%s",
+	argumentsDescriptionPrefix = `%[1]sArgDescription: &argParserConfig.ArgumentsDescription{
+%[1]s	AmountType:              %[2]s,
+%[1]s	SynopsisHelpDescription: "%[3]s",
 `
-	argumentsDescriptionDefaultValuesPrefix = `					DefaultValues: []string{
+	argumentsDescriptionDefaultValuesPrefix = `%s	DefaultValues: []string{
 `
-	argumentsDescriptionAllowedValuesPrefix = `					AllowedValues: map[string]bool{
+	argumentsDescriptionAllowedValuesPrefix = `%s	AllowedValues: map[string]bool{
 `
-	argumentsDescriptionVariantValue = `						"%s",
+	argumentsDescriptionVariantValue = `%s		"%s",
 `
-	argumentsDescriptionMapVariantValue = `						"%s": true,
+	argumentsDescriptionMapVariantValue = `%s		"%s": true,
 `
-	argumentsDescriptionVariantValuesPostfix = `					},
+	argumentsDescriptionVariantValuesPostfix = `%s	},
 `
-	argumentsDescriptionPostfix = `				},
+	argumentsDescriptionPostfix = `%s},
 `
 )
 
 type ArgDescriptionElement string
 
-func GenArgDescriptionElement(argumentsDescription *configYaml.ArgumentsDescription) ArgDescriptionElement {
+func GenArgDescriptionElement(
+	argumentsDescription *configYaml.ArgumentsDescription,
+	indent string,
+) ArgDescriptionElement {
 	builder := new(strings.Builder)
 
 	builder.WriteString(fmt.Sprintf(argumentsDescriptionPrefix,
+		indent,
 		getArgAmountTypeElement(argumentsDescription.GetAmountType()),
 		argumentsDescription.GetSynopsisHelpDescription()))
 
 	if defaultValues := argumentsDescription.GetDefaultValues(); len(defaultValues) > 0 {
-		builder.WriteString(argumentsDescriptionDefaultValuesPrefix)
+		builder.WriteString(fmt.Sprintf(argumentsDescriptionDefaultValuesPrefix, indent))
 		for _, value := range defaultValues {
-			builder.WriteString(fmt.Sprintf(argumentsDescriptionVariantValue, value))
+			builder.WriteString(fmt.Sprintf(argumentsDescriptionVariantValue, indent, value))
 		}
-		builder.WriteString(argumentsDescriptionVariantValuesPostfix)
+		builder.WriteString(fmt.Sprintf(argumentsDescriptionVariantValuesPostfix, indent))
 	}
 
 	if allowedValues := argumentsDescription.GetAllowedValues(); len(allowedValues) > 0 {
-		builder.WriteString(argumentsDescriptionAllowedValuesPrefix)
+		builder.WriteString(fmt.Sprintf(argumentsDescriptionAllowedValuesPrefix, indent))
 		for _, value := range allowedValues {
-			builder.WriteString(fmt.Sprintf(argumentsDescriptionMapVariantValue, value))
+			builder.WriteString(fmt.Sprintf(argumentsDescriptionMapVariantValue, indent, value))
 		}
-		builder.WriteString(argumentsDescriptionVariantValuesPostfix)
+		builder.WriteString(fmt.Sprintf(argumentsDescriptionVariantValuesPostfix, indent))
 	}
 
-	builder.WriteString(argumentsDescriptionPostfix)
+	builder.WriteString(fmt.Sprintf(argumentsDescriptionPostfix, indent))
 
 	return ArgDescriptionElement(builder.String())
 }

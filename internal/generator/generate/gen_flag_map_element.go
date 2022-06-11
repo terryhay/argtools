@@ -42,7 +42,7 @@ func GenFlagMapElements(
 		builder.WriteString(fmt.Sprintf(flagMapElementDescriptionHelpInfo, flagDescription.GetDescriptionHelpInfo()))
 
 		if argumentsDescription = flagDescription.GetArgumentsDescription(); argumentsDescription != nil {
-			builder.WriteString(string(GenArgDescriptionElement(argumentsDescription)))
+			builder.WriteString(string(GenArgDescriptionElement(argumentsDescription, "\t\t\t\t")))
 		}
 
 		builder.WriteString(flagMapElementPostfix)

@@ -35,6 +35,7 @@ func catchStdOut(t *testing.T, runnable func()) string {
 }
 
 func TestPrintHelpInfo(t *testing.T) {
+	t.Parallel()
 
 	t.Run("empty_config", func(t *testing.T) {
 		out := catchStdOut(t, func() {

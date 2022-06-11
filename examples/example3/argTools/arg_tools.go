@@ -24,8 +24,6 @@ const (
 	CommandHelp = "help"
 )
 
-const ()
-
 // Parse - processes command line arguments
 func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error) {
 	appArgConfig := argParserConfig.NewArgParserConfig(
@@ -52,7 +50,8 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 		// namelessCommandDescription
 		&argParserConfig.NamelessCommandDescription{
 			ID:                  CommandIDNamelessCommand,
-			DescriptionHelpInfo: "runs example3"},
+			DescriptionHelpInfo: "runs example3",
+		},
 	)
 
 	if res, err = argParserImpl.NewCmdArgParserImpl(appArgConfig).Parse(args); err != nil {

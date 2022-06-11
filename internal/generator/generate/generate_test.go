@@ -265,10 +265,10 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 		&argParserConfig.NamelessCommandDescription{
 			ID: CommandIDNamelessCommand,
 			DescriptionHelpInfo: "",
-				ArgDescription: &argParserConfig.ArgumentsDescription{
-					AmountType:              argParserConfig.ArgAmountTypeNoArgs,
-					SynopsisHelpDescription: "",
-				},
+			ArgDescription: &argParserConfig.ArgumentsDescription{
+				AmountType:              argParserConfig.ArgAmountTypeNoArgs,
+				SynopsisHelpDescription: "",
+			},
 		},
 )
 
@@ -348,9 +348,6 @@ const (
 	Command%[1]s argParserConfig.Command = "%[1]s"
 	// Command%[2]s - print help info
 	Command%[2]s = "%[2]s"
-)
-
-const (
 )
 
 // Parse - processes command line arguments

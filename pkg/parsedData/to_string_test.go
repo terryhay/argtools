@@ -26,9 +26,7 @@ func TestArgValueToString(t *testing.T) {
 
 	for _, td := range testData {
 		t.Run(td.caseName, func(t *testing.T) {
-			res, err := td.argValue.ToString()
-
-			require.Nil(t, err)
+			res := td.argValue.ToString()
 			require.Equal(t, string(td.argValue), res)
 		})
 	}

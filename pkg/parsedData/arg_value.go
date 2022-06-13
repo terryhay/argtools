@@ -9,8 +9,8 @@ import (
 type ArgValue string
 
 // ToString - converts ArgValue object to string
-func (i ArgValue) ToString() (string, error) {
-	return string(i), nil
+func (i ArgValue) ToString() string {
+	return string(i)
 }
 
 // ToUint8 - converts ArgValue object to uint8

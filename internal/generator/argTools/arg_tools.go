@@ -59,24 +59,26 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 			CommandHelp: {},
 		},
 		// commandDescriptions
-		[]*argParserConfig.CommandDescription{
-			{
-				ID: CommandIDHelp,
-				Commands: map[argParserConfig.Command]bool{
-					CommandHelp: true,
-					CommandH:    true,
-				},
+		nil,
+		// helpCommandDescription
+		argParserConfig.NewHelpCommandDescription(
+			CommandIDHelp,
+			map[argParserConfig.Command]bool{
+				CommandHelp: true,
+				CommandH:    true,
 			},
-		},
-		// nullCommandDescription
-		&argParserConfig.NamelessCommandDescription{
-			ID:                  CommandIDNullCommand,
-			DescriptionHelpInfo: "generate argTools package",
-			RequiredFlags: map[argParserConfig.Flag]bool{
+		),
+		// namelessCommandDescription
+		argParserConfig.NewNamelessCommandDescription(
+			CommandIDNullCommand,
+			"generate argTools package",
+			nil,
+			map[argParserConfig.Flag]bool{
 				FlagC: true,
 				FlagO: true,
 			},
-		},
+			nil,
+		),
 	)
 
 	if res, err = argParserImpl.NewCmdArgParserImpl(appArgConfig).Parse(args); err != nil {

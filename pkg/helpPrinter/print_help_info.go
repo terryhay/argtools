@@ -22,6 +22,8 @@ func PrintHelpInfo(argParserConfig argParserConfig.ArgParserConfig) {
 
 	builder.WriteString(CreateDescriptionChapter(
 		argParserConfig.GetAppDescription().GetDescriptionHelpInfo(),
+		argParserConfig.GetNamelessCommandDescription(),
+		argParserConfig.GetCommandDescriptions(),
 		argParserConfig.GetFlagDescriptions()))
 
 	fmt.Println(builder.String())

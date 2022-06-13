@@ -14,7 +14,10 @@ const (
 	NamelessCommandIDPostfix = "NamelessCommand"
 )
 
-const helpCommandComment = "print help info"
+const (
+	helpCommandIDStr   = "PrintHelpInfo"
+	helpCommandComment = "print help info"
+)
 
 // IDTemplateDataCreator - creates slices of id template data
 type IDTemplateDataCreator struct {
@@ -95,8 +98,8 @@ func (i IDTemplateDataCreator) CreateIDTemplateData(
 	}
 
 	// help command
+	commandId = i.CreateID(PrefixCommandID, helpCommandIDStr)
 	callName = string(helpCommandDescription.GetCommand())
-	commandId = i.CreateID(PrefixCommandID, callName)
 
 	commandsIDTemplateData[helpCommandDescription.GetCommand()] = NewIDTemplateData(
 		commandId,

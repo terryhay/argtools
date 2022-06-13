@@ -11,8 +11,8 @@ type CommandSliceElement string
 
 const (
 	commandSliceElementPrefix = `			{
-`
-	commandSliceElementIDTemplate = `				ID: %s,
+				ID:                  %s,
+				DescriptionHelpInfo: "%s",
 `
 	commandSliceElementCommandsTemplate = `				Commands: map[argParserConfig.Command]bool{%s
 				},
@@ -33,7 +33,11 @@ func GenCommandSliceElements(
 	commandsIDTemplateData map[configYaml.Command]*idTemplateDataCreator.IDTemplateData,
 	flagsIDTemplateData map[configYaml.Flag]*idTemplateDataCreator.IDTemplateData) CommandSliceElement {
 
-	builder := new(strings.Builder)
+	if len(commandDescriptions) == 0 {
+		return "\t\tnil,"
+	}
+
+	builder := strings.Builder{}
 	builder.WriteString(`		[]*argParserConfig.CommandDescription{
 `)
 
@@ -51,8 +55,9 @@ func GenCommandSliceElements(
 			idTemplateDataSlice = append(idTemplateDataSlice, commandsIDTemplateData[commandDescription.GetAdditionalCommands()[j]])
 		}
 
-		builder.WriteString(commandSliceElementPrefix)
-		builder.WriteString(fmt.Sprintf(commandSliceElementIDTemplate, commandsIDTemplateData[commandDescription.GetCommand()].GetID()))
+		builder.WriteString(fmt.Sprintf(commandSliceElementPrefix,
+			commandsIDTemplateData[commandDescription.GetCommand()].GetID(),
+			commandDescription.GetDescriptionHelpInfo()))
 		builder.WriteString(fmt.Sprintf(commandSliceElementCommandsTemplate, joinCallNames(idTemplateDataSlice)))
 		idTemplateDataSlice = []*idTemplateDataCreator.IDTemplateData{}
 
@@ -74,15 +79,6 @@ func GenCommandSliceElements(
 
 		builder.WriteString(commandSliceElementPostfix)
 	}
-
-	idTemplateDataSlice = append(idTemplateDataSlice, commandsIDTemplateData[helpCommandDescription.GetCommand()])
-	for j = range helpCommandDescription.GetAdditionalCommands() {
-		idTemplateDataSlice = append(idTemplateDataSlice, commandsIDTemplateData[helpCommandDescription.GetAdditionalCommands()[j]])
-	}
-	builder.WriteString(commandSliceElementPrefix)
-	builder.WriteString(fmt.Sprintf(commandSliceElementIDTemplate, commandsIDTemplateData[helpCommandDescription.GetCommand()].GetID()))
-	builder.WriteString(fmt.Sprintf(commandSliceElementCommandsTemplate, joinCallNames(idTemplateDataSlice)))
-	builder.WriteString(commandSliceElementPostfix)
 
 	builder.WriteString(`		},`)
 

@@ -1,50 +1,27 @@
 package argParserConfig
 
-// NamelessCommandDescription - contains a specification of a command without call name
-type NamelessCommandDescription struct {
-	ID                  CommandID
-	DescriptionHelpInfo string
-	ArgDescription      *ArgumentsDescription
-	RequiredFlags       map[Flag]bool
-	OptionalFlags       map[Flag]bool
+// NamelessCommandDescription - interface for specification of a command without call name
+type NamelessCommandDescription interface {
+	GetID() CommandID
+	GetDescriptionHelpInfo() string
+	GetArgDescription() *ArgumentsDescription
+	GetRequiredFlags() map[Flag]bool
+	GetOptionalFlags() map[Flag]bool
 }
 
-// GetID - ID field getter
-func (i *NamelessCommandDescription) GetID() CommandID {
-	if i == nil {
-		return CommandIDUndefined
-	}
-	return i.ID
-}
+func NewNamelessCommandDescription(
+	id CommandID,
+	descriptionHelpInfo string,
+	argDescription *ArgumentsDescription,
+	requiredFlags map[Flag]bool,
+	optionalFlags map[Flag]bool,
+) NamelessCommandDescription {
 
-// GetDescriptionHelpInfo - DescriptionHelpInfo field getter
-func (i *NamelessCommandDescription) GetDescriptionHelpInfo() string {
-	if i == nil {
-		return ""
+	return &CommandDescription{
+		ID:                  id,
+		DescriptionHelpInfo: descriptionHelpInfo,
+		ArgDescription:      argDescription,
+		RequiredFlags:       requiredFlags,
+		OptionalFlags:       optionalFlags,
 	}
-	return i.DescriptionHelpInfo
-}
-
-// GetArgDescription - ArgDescription field getter
-func (i *NamelessCommandDescription) GetArgDescription() *ArgumentsDescription {
-	if i == nil {
-		return nil
-	}
-	return i.ArgDescription
-}
-
-// GetRequiredFlags - RequiredFlags field getter
-func (i *NamelessCommandDescription) GetRequiredFlags() map[Flag]bool {
-	if i == nil {
-		return nil
-	}
-	return i.RequiredFlags
-}
-
-// GetOptionalFlags - OptionalFlags field getter
-func (i *NamelessCommandDescription) GetOptionalFlags() map[Flag]bool {
-	if i == nil {
-		return nil
-	}
-	return i.OptionalFlags
 }

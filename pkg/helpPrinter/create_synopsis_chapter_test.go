@@ -49,17 +49,19 @@ func TestCreateSynopsisChapter(t *testing.T) {
 
 		command := argParserConfig.Command(gofakeit.Name())
 
-		namelessCommandDescription := &argParserConfig.NamelessCommandDescription{
-			ArgDescription: &argParserConfig.ArgumentsDescription{
+		namelessCommandDescription := argParserConfig.NewNamelessCommandDescription(
+			0,
+			"",
+			&argParserConfig.ArgumentsDescription{
 				SynopsisHelpDescription: gofakeit.Name(),
 			},
-			RequiredFlags: map[argParserConfig.Flag]bool{
+			map[argParserConfig.Flag]bool{
 				nullCommandRequiredFlag: true,
 			},
-			OptionalFlags: map[argParserConfig.Flag]bool{
+			map[argParserConfig.Flag]bool{
 				nullCommandOptionalFlag: true,
 			},
-		}
+		)
 		commandDescriptions := []*argParserConfig.CommandDescription{
 			{
 				Commands: map[argParserConfig.Command]bool{

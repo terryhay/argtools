@@ -5,7 +5,8 @@ type ArgParserConfig struct {
 	AppDescription             ApplicationDescription
 	FlagDescriptions           map[Flag]*FlagDescription
 	CommandDescriptions        []*CommandDescription
-	NamelessCommandDescription *NamelessCommandDescription
+	HelpCommandDescription     HelpCommandDescription
+	NamelessCommandDescription NamelessCommandDescription
 }
 
 // GetAppDescription - AppDescription field getter
@@ -23,7 +24,12 @@ func (i ArgParserConfig) GetFlagDescriptions() map[Flag]*FlagDescription {
 	return i.FlagDescriptions
 }
 
+// GetHelpCommandDescription i.HelpCommandDescription
+func (i ArgParserConfig) GetHelpCommandDescription() HelpCommandDescription {
+	return i.HelpCommandDescription
+}
+
 // GetNamelessCommandDescription - NamelessCommandDescription field getter
-func (i ArgParserConfig) GetNamelessCommandDescription() *NamelessCommandDescription {
+func (i ArgParserConfig) GetNamelessCommandDescription() NamelessCommandDescription {
 	return i.NamelessCommandDescription
 }

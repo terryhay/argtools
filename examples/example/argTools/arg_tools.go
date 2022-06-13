@@ -13,8 +13,8 @@ import (
 const (
 	// CommandIDNamelessCommand - checks arguments types
 	CommandIDNamelessCommand argParserConfig.CommandID = iota + 1
-	// CommandIDHelp - print help info
-	CommandIDHelp
+	// CommandIDPrintHelpInfo - print help info
+	CommandIDPrintHelpInfo
 	// CommandIDPrint - print command line arguments with optional checking
 	CommandIDPrint
 )
@@ -52,10 +52,11 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 	appArgConfig := argParserConfig.NewArgParserConfig(
 		// appDescription
 		argParserConfig.ApplicationDescription{
-			AppName:      "example1",
+			AppName:      "example",
 			NameHelpInfo: "shows how argtools generator works",
 			DescriptionHelpInfo: []string{
 				"you can write more detailed description here",
+				"and use several paragraphs",
 			},
 		},
 		// flagDescriptions
@@ -116,7 +117,8 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 		// commandDescriptions
 		[]*argParserConfig.CommandDescription{
 			{
-				ID: CommandIDPrint,
+				ID:                  CommandIDPrint,
+				DescriptionHelpInfo: "print command line arguments with optional checking",
 				Commands: map[argParserConfig.Command]bool{
 					CommandPrint: true,
 				},
@@ -130,30 +132,34 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 					FlagCheckargs: true,
 				},
 			},
-			{
-				ID: CommandIDHelp,
-				Commands: map[argParserConfig.Command]bool{
-					CommandHelp: true,
-					CommandH:    true,
-				},
-			},
 		},
+		// helpCommandDescription
+		argParserConfig.NewHelpCommandDescription(
+			CommandIDPrintHelpInfo,
+			map[argParserConfig.Command]bool{
+				"help": true,
+				"-h":   true,
+			},
+		),
 		// namelessCommandDescription
-		&argParserConfig.NamelessCommandDescription{
-			ID:                  CommandIDNamelessCommand,
-			DescriptionHelpInfo: "checks arguments types",
-			ArgDescription: &argParserConfig.ArgumentsDescription{
+		argParserConfig.NewNamelessCommandDescription(
+			CommandIDNamelessCommand,
+			"checks arguments types",
+			&argParserConfig.ArgumentsDescription{
 				AmountType:              argParserConfig.ArgAmountTypeList,
 				SynopsisHelpDescription: "str list",
 			},
-		},
-	)
+			map[argParserConfig.Flag]bool{
+				FlagCheck: true,
+			},
+			nil,
+		))
 
 	if res, err = argParserImpl.NewCmdArgParserImpl(appArgConfig).Parse(args); err != nil {
 		return nil, err
 	}
 
-	if res.GetCommandID() == CommandIDHelp {
+	if res.GetCommandID() == CommandIDPrintHelpInfo {
 		helpPrinter.PrintHelpInfo(appArgConfig)
 		return nil, nil
 	}

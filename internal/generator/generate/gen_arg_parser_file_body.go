@@ -32,6 +32,8 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 %s
 		// commandDescriptions
 %s
+		// helpCommandDescription
+%s
 		// namelessCommandDescription
 %s)
 
@@ -56,6 +58,7 @@ func GenArgParserFileBody(
 	appDescriptionComponent AppDescriptionComponent,
 	flagMapComponents FlagMapElements,
 	commandMapElement CommandSliceElement,
+	helpCommandComponent HelpCommandComponent,
 	nullCommandComponent NamelessCommandComponent,
 	helpCommandID string) string {
 
@@ -69,6 +72,7 @@ func GenArgParserFileBody(
 		appDescriptionComponent,
 		flagMapComponents,
 		commandMapElement,
+		helpCommandComponent,
 		nullCommandComponent,
 
 		helpCommandID,

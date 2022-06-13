@@ -1,7 +1,7 @@
 version: 1.0.0
 
 app_help_description:
-  app_name: "example1"
+  app_name: "example"
   description_help_info:
     - "you can write more detailed description here"
 

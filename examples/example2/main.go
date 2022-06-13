@@ -9,7 +9,7 @@ import (
 func main() {
 	parsedData, err := argTools.Parse(os.Args[1:])
 	if err != nil {
-		fmt.Printf("example1.Argparser error: %v", err.Error())
+		fmt.Printf("example.Argparser error: %v", err.Error())
 		os.Exit(int(err.Code()))
 	}
 

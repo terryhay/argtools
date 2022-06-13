@@ -13,8 +13,8 @@ import (
 const (
 	// CommandIDNamelessCommand - checks arguments types
 	CommandIDNamelessCommand argParserConfig.CommandID = iota + 1
-	// CommandIDHelp - print help info
-	CommandIDHelp
+	// CommandIDPrintHelpInfo - print help info
+	CommandIDPrintHelpInfo
 )
 
 const (
@@ -51,31 +51,34 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 			},
 		},
 		// commandDescriptions
-		[]*argParserConfig.CommandDescription{
-			{
-				ID: CommandIDHelp,
-				Commands: map[argParserConfig.Command]bool{
-					CommandHelp: true,
-					CommandH:    true,
-				},
+		nil,
+		// helpCommandDescription
+		argParserConfig.NewHelpCommandDescription(
+			CommandIDPrintHelpInfo,
+			map[argParserConfig.Command]bool{
+				"help": true,
+				"-h":   true,
 			},
-		},
+		),
 		// namelessCommandDescription
-		&argParserConfig.NamelessCommandDescription{
-			ID:                  CommandIDNamelessCommand,
-			DescriptionHelpInfo: "checks arguments types",
-			ArgDescription: &argParserConfig.ArgumentsDescription{
+		argParserConfig.NewNamelessCommandDescription(
+			CommandIDNamelessCommand,
+			"checks arguments types",
+			&argParserConfig.ArgumentsDescription{
 				AmountType:              argParserConfig.ArgAmountTypeList,
 				SynopsisHelpDescription: "str list",
 			},
-		},
-	)
+			map[argParserConfig.Flag]bool{
+				FlagCheck: true,
+			},
+			nil,
+		))
 
 	if res, err = argParserImpl.NewCmdArgParserImpl(appArgConfig).Parse(args); err != nil {
 		return nil, err
 	}
 
-	if res.GetCommandID() == CommandIDHelp {
+	if res.GetCommandID() == CommandIDPrintHelpInfo {
 		helpPrinter.PrintHelpInfo(appArgConfig)
 		return nil, nil
 	}

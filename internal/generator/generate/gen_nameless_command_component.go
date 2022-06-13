@@ -12,26 +12,52 @@ type NamelessCommandComponent string
 func GenNamelessCommandComponent(
 	namelessCommandDescription *configYaml.NamelessCommandDescription,
 	namelessCommandIDTemplateData *idTemplateDataCreator.IDTemplateData,
+	flagsIDTemplateData map[configYaml.Flag]*idTemplateDataCreator.IDTemplateData,
 ) NamelessCommandComponent {
 
 	if namelessCommandDescription == nil {
 		return "\t\tnil"
 	}
 
-	builder := new(strings.Builder)
+	var (
+		builder strings.Builder
+		flag    configYaml.Flag
+	)
 
-	builder.WriteString(fmt.Sprintf(`		&argParserConfig.NamelessCommandDescription{
-			ID: %s,
-			DescriptionHelpInfo: "%s",
+	builder.WriteString(fmt.Sprintf(`		argParserConfig.NewNamelessCommandDescription(
+			%s,
+			"%s",
 `,
 		namelessCommandIDTemplateData.GetID(),
 		namelessCommandDescription.GetDescriptionHelpInfo()))
 
-	if namelessCommandDescription.GetArgumentsDescription() != nil {
-		builder.WriteString(fmt.Sprintf("%s", GenArgDescriptionElement(namelessCommandDescription.GetArgumentsDescription(), "\t\t\t")))
+	if namelessCommandDescription.GetArgumentsDescription() == nil {
+		builder.WriteString("nil,\n")
+	} else {
+		builder.WriteString(fmt.Sprintf("%s",
+			GenArgDescriptionElement(namelessCommandDescription.GetArgumentsDescription(), "\t\t\t", false)))
 	}
 
-	builder.WriteString(`		},
-`)
+	if len(namelessCommandDescription.GetRequiredFlags()) == 0 {
+		builder.WriteString("nil,\n")
+	} else {
+		builder.WriteString("\t\t\tmap[argParserConfig.Flag]bool{\n")
+		for _, flag = range namelessCommandDescription.GetRequiredFlags() {
+			builder.WriteString(fmt.Sprintf("\t\t\t\t%s: true,\n", flagsIDTemplateData[flag].GetStringID()))
+		}
+		builder.WriteString("\t\t\t},\n")
+	}
+
+	if len(namelessCommandDescription.GetOptionalFlags()) == 0 {
+		builder.WriteString("nil,\n")
+	} else {
+		builder.WriteString("\t\t\tmap[argParserConfig.Flag]bool{\n")
+		for _, flag = range namelessCommandDescription.GetOptionalFlags() {
+			builder.WriteString(fmt.Sprintf("\t\t\t\t%s: true,\n", flagsIDTemplateData[flag].GetStringID()))
+		}
+		builder.WriteString("\t\t\t},\n")
+	}
+
+	builder.WriteString(`		)`)
 	return NamelessCommandComponent(builder.String())
 }

@@ -13,8 +13,8 @@ import (
 const (
 	// CommandIDNamelessCommand - runs example3
 	CommandIDNamelessCommand argParserConfig.CommandID = iota + 1
-	// CommandIDHelp - print help info
-	CommandIDHelp
+	// CommandIDPrintHelpInfo - print help info
+	CommandIDPrintHelpInfo
 )
 
 const (
@@ -38,27 +38,29 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 		// flagDescriptions
 		nil,
 		// commandDescriptions
-		[]*argParserConfig.CommandDescription{
-			{
-				ID: CommandIDHelp,
-				Commands: map[argParserConfig.Command]bool{
-					CommandHelp: true,
-					CommandH:    true,
-				},
+		nil,
+		// helpCommandDescription
+		argParserConfig.NewHelpCommandDescription(
+			CommandIDPrintHelpInfo,
+			map[argParserConfig.Command]bool{
+				"help": true,
+				"-h":   true,
 			},
-		},
+		),
 		// namelessCommandDescription
-		&argParserConfig.NamelessCommandDescription{
-			ID:                  CommandIDNamelessCommand,
-			DescriptionHelpInfo: "runs example3",
-		},
-	)
+		argParserConfig.NewNamelessCommandDescription(
+			CommandIDNamelessCommand,
+			"runs example3",
+			nil,
+			nil,
+			nil,
+		))
 
 	if res, err = argParserImpl.NewCmdArgParserImpl(appArgConfig).Parse(args); err != nil {
 		return nil, err
 	}
 
-	if res.GetCommandID() == CommandIDHelp {
+	if res.GetCommandID() == CommandIDPrintHelpInfo {
 		helpPrinter.PrintHelpInfo(appArgConfig)
 		return nil, nil
 	}

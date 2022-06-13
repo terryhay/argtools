@@ -47,7 +47,7 @@ func TestIDTemplateDataCreator(t *testing.T) {
 		})
 
 	expectedCommandID := creator.CreateID(PrefixCommandID, string(command))
-	expectedHelpCommandID := creator.CreateID(PrefixCommandID, string(helpCommand))
+	expectedHelpCommandID := "CommandIDPrintHelpInfo"
 	expectedCommandsIDTemplateData := map[configYaml.Command]*IDTemplateData{
 		command: {
 			id:       expectedCommandID,

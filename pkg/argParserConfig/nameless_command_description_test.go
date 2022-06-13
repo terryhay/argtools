@@ -9,29 +9,19 @@ import (
 func TestNamelessCommandDescriptionGetters(t *testing.T) {
 	t.Parallel()
 
-	var pointer *NamelessCommandDescription
+	namelessCommandDescription := NewNamelessCommandDescription(
+		CommandID(gofakeit.Uint32()),
+		gofakeit.Name(),
+		&ArgumentsDescription{},
+		map[Flag]bool{Flag(gofakeit.Name()): true},
+		map[Flag]bool{Flag(gofakeit.Name()): true},
+	)
 
-	t.Run("nil_pointer", func(t *testing.T) {
-		require.Equal(t, CommandIDUndefined, pointer.GetID())
-		require.Equal(t, "", pointer.GetDescriptionHelpInfo())
-		require.Nil(t, pointer.GetArgDescription())
-		require.Nil(t, pointer.GetRequiredFlags())
-		require.Nil(t, pointer.GetOptionalFlags())
-	})
+	commandDescription := namelessCommandDescription.(*CommandDescription)
 
-	t.Run("initialized_pointer", func(t *testing.T) {
-		pointer = &NamelessCommandDescription{
-			ID:                  CommandID(gofakeit.Uint32()),
-			DescriptionHelpInfo: gofakeit.Name(),
-			ArgDescription:      &ArgumentsDescription{},
-			RequiredFlags:       map[Flag]bool{Flag(gofakeit.Name()): true},
-			OptionalFlags:       map[Flag]bool{Flag(gofakeit.Name()): true},
-		}
-
-		require.Equal(t, pointer.ID, pointer.GetID())
-		require.Equal(t, pointer.DescriptionHelpInfo, pointer.GetDescriptionHelpInfo())
-		require.Equal(t, pointer.ArgDescription, pointer.GetArgDescription())
-		require.Equal(t, pointer.RequiredFlags, pointer.GetRequiredFlags())
-		require.Equal(t, pointer.OptionalFlags, pointer.GetOptionalFlags())
-	})
+	require.Equal(t, commandDescription.ID, namelessCommandDescription.GetID())
+	require.Equal(t, commandDescription.DescriptionHelpInfo, namelessCommandDescription.GetDescriptionHelpInfo())
+	require.Equal(t, commandDescription.ArgDescription, namelessCommandDescription.GetArgDescription())
+	require.Equal(t, commandDescription.RequiredFlags, namelessCommandDescription.GetRequiredFlags())
+	require.Equal(t, commandDescription.OptionalFlags, namelessCommandDescription.GetOptionalFlags())
 }

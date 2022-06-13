@@ -33,7 +33,10 @@ func (i byStringID) Swap(left, right int) {
 	i[left], i[right] = i[right], i[left]
 }
 
-func GenCommandStringIDConstants(commandsTemplateData map[configYaml.Command]*idTemplateDataCreator.IDTemplateData) CommandStringIDListComponent {
+func GenCommandStringIDConstants(
+	commandsTemplateData map[configYaml.Command]*idTemplateDataCreator.IDTemplateData,
+) CommandStringIDListComponent {
+
 	sortedCommandsTemplateData := make([]*idTemplateDataCreator.IDTemplateData, 0, len(commandsTemplateData))
 	for _, data := range commandsTemplateData {
 		sortedCommandsTemplateData = append(sortedCommandsTemplateData, data)

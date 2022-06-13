@@ -18,8 +18,10 @@ func TestCreateDescriptionChapter(t *testing.T) {
 	testData := []struct {
 		caseName string
 
-		descriptionHelpInfo []string
-		flagDescriptions    map[argParserConfig.Flag]*argParserConfig.FlagDescription
+		descriptionHelpInfo        []string
+		namelessCommandDescription argParserConfig.NamelessCommandDescription
+		commandDescriptions        []*argParserConfig.CommandDescription
+		flagDescriptions           map[argParserConfig.Flag]*argParserConfig.FlagDescription
 
 		expected string
 	}{
@@ -39,16 +41,20 @@ func TestCreateDescriptionChapter(t *testing.T) {
 				},
 			},
 
-			expected: fmt.Sprintf("%s%s",
+			expected: fmt.Sprintf("%s\nThe flags are as follows:%s",
 				fmt.Sprintf(descriptionChapterTitle, randomDescriptionHelpInfo),
-				fmt.Sprintf(descriptionChapterLine, randomFlag, randomFlagDescriptionHelpInfo),
+				fmt.Sprintf(descriptionTwoLines, randomFlag, randomFlagDescriptionHelpInfo),
 			),
 		},
 	}
 
 	for _, td := range testData {
 		t.Run(td.caseName, func(t *testing.T) {
-			require.Equal(t, td.expected, CreateDescriptionChapter(td.descriptionHelpInfo, td.flagDescriptions))
+			require.Equal(t, td.expected, CreateDescriptionChapter(
+				td.descriptionHelpInfo,
+				td.namelessCommandDescription,
+				td.commandDescriptions,
+				td.flagDescriptions))
 		})
 	}
 }

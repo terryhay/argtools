@@ -3,7 +3,6 @@ package helpPrinter
 import (
 	"fmt"
 	"github.com/terryhay/argtools/pkg/argParserConfig"
-	"sort"
 	"strings"
 )
 
@@ -14,7 +13,7 @@ const (
 // CreateSynopsisChapter - creates synopsis help chapter
 func CreateSynopsisChapter(
 	appName string,
-	nullCommandDescription *argParserConfig.NamelessCommandDescription,
+	namelessCommandDescription argParserConfig.NamelessCommandDescription,
 	commandDescriptions []*argParserConfig.CommandDescription,
 	flagDescriptions map[argParserConfig.Flag]*argParserConfig.FlagDescription,
 ) string {
@@ -28,12 +27,12 @@ func CreateSynopsisChapter(
 
 	builder.WriteString(synopsisChapterTitle)
 
-	if nullCommandDescription != nil {
+	if namelessCommandDescription != nil {
 		// app name part
 		builder.WriteString(fmt.Sprintf(`	[1m%s [0m`, appName))
 
 		// required flags part
-		for _, flagStr = range getSortedFlags(nullCommandDescription.GetRequiredFlags()) {
+		for _, flagStr = range getSortedFlags(namelessCommandDescription.GetRequiredFlags()) {
 			flagDescription = flagDescriptions[argParserConfig.Flag(flagStr)]
 
 			builder.WriteString(fmt.Sprintf(" \u001B[1m%s\u001B[0m", flagStr))
@@ -41,7 +40,7 @@ func CreateSynopsisChapter(
 		}
 
 		// optional flags part
-		for _, flagStr = range getSortedFlags(nullCommandDescription.GetOptionalFlags()) {
+		for _, flagStr = range getSortedFlags(namelessCommandDescription.GetOptionalFlags()) {
 			flagDescription = flagDescriptions[argParserConfig.Flag(flagStr)]
 
 			builder.WriteString(fmt.Sprintf(" [\u001B[1m%s\u001B[0m", flagStr))
@@ -123,43 +122,4 @@ func fillUpArgumentsTemplatePart(argDescription *argParserConfig.ArgumentsDescri
 	}
 
 	return builder.String()
-}
-
-func getSortedCommands(commands map[argParserConfig.Command]bool) (res []string) {
-	if len(commands) == 0 {
-		return nil
-	}
-	res = make([]string, 0, len(commands))
-	for command := range commands {
-		res = append(res, string(command))
-	}
-	sort.Strings(res)
-
-	return res
-}
-
-func getSortedFlags(groupFlagNameMap map[argParserConfig.Flag]bool) (res []string) {
-	if len(groupFlagNameMap) == 0 {
-		return nil
-	}
-	res = make([]string, 0, len(groupFlagNameMap))
-	for flag := range groupFlagNameMap {
-		res = append(res, string(flag))
-	}
-	sort.Strings(res)
-
-	return res
-}
-
-func getSortedStrings(strings map[string]bool) (res []string) {
-	if len(strings) == 0 {
-		return nil
-	}
-	res = make([]string, 0, len(strings))
-	for s := range strings {
-		res = append(res, s)
-	}
-	sort.Strings(res)
-
-	return res
 }

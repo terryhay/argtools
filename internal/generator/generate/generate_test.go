@@ -2,65 +2,56 @@ package generate
 
 import (
 	"fmt"
-	"github.com/brianvoe/gofakeit"
 	"github.com/stretchr/testify/require"
 	"github.com/terryhay/argtools/internal/generator/configYaml"
 	"github.com/terryhay/argtools/pkg/argParserConfig"
-	"sort"
 	"testing"
 )
 
 func TestGenerate(t *testing.T) {
 	t.Parallel()
 
-	randNameCount := 9
-	sortedRandNames := make([]string, 0, randNameCount)
-	for i := 0; i < randNameCount; i++ {
-		sortedRandNames = append(sortedRandNames, gofakeit.Color())
-	}
-	sort.Strings(sortedRandNames)
+	command := configYaml.Command("cmd")
+	additionalCommand := configYaml.Command("addcmd")
+	commandDescriptionHelpInfo := "command description help info"
 
-	command := configYaml.Command(sortedRandNames[0])
-	additionalCommand := configYaml.Command(sortedRandNames[1])
-	commandDescriptionHelpInfo := sortedRandNames[2]
+	helpCommand := configYaml.Command("help")
+	additionalHelpCommand := configYaml.Command("addhelp")
 
-	helpCommand := configYaml.Command(sortedRandNames[3])
-	additionalHelpCommand := configYaml.Command(sortedRandNames[4])
-
-	requiredFlag1 := "-" + configYaml.Flag(sortedRandNames[5])
+	requiredFlag1 := "-" + configYaml.Flag("-rf1")
 	requiredFlag1Description := &configYaml.FlagDescription{
 		Flag: requiredFlag1,
 		ArgumentsDescription: &configYaml.ArgumentsDescription{
 			AmountType: argParserConfig.ArgAmountTypeSingle,
 			DefaultValues: []string{
-				gofakeit.Name(),
+				"f1DefValue",
 			},
 			AllowedValues: []string{
-				gofakeit.Name(),
+				"f1AllValue",
 			},
 		},
 	}
 
-	requiredFlag2 := "-" + configYaml.Flag(sortedRandNames[6])
+	requiredFlag2 := "-" + configYaml.Flag("-rf2")
 	requiredFlag2Description := &configYaml.FlagDescription{
 		Flag: requiredFlag2,
 		ArgumentsDescription: &configYaml.ArgumentsDescription{
 			AmountType: argParserConfig.ArgAmountTypeList,
 			DefaultValues: []string{
-				gofakeit.Name(),
+				"f2DefValue",
 			},
 			AllowedValues: []string{
-				gofakeit.Name(),
+				"f2AllValue",
 			},
 		},
 	}
 
-	optionalFlag1 := "-" + configYaml.Flag(sortedRandNames[7])
+	optionalFlag1 := "-" + configYaml.Flag("-of1")
 	optionalFlag1Description := &configYaml.FlagDescription{
 		Flag: optionalFlag1,
 	}
 
-	optionalFlag2 := "-" + configYaml.Flag(sortedRandNames[8])
+	optionalFlag2 := "-" + configYaml.Flag("-of2")
 	optionalFlag2Description := &configYaml.FlagDescription{
 		Flag: optionalFlag2,
 	}
@@ -94,10 +85,10 @@ func TestGenerate(t *testing.T) {
 				ArgumentsDescription: &configYaml.ArgumentsDescription{
 					AmountType: argParserConfig.ArgAmountTypeSingle,
 					DefaultValues: []string{
-						gofakeit.Name(),
+						"cmdDefValue",
 					},
 					AllowedValues: []string{
-						gofakeit.Name(),
+						"cmdAllValue",
 					},
 				},
 				RequiredFlags: []configYaml.Flag{
@@ -114,10 +105,10 @@ func TestGenerate(t *testing.T) {
 				ArgumentsDescription: &configYaml.ArgumentsDescription{
 					AmountType: argParserConfig.ArgAmountTypeList,
 					DefaultValues: []string{
-						gofakeit.Name(),
+						"fakeEmptyCommandDefValue",
 					},
 					AllowedValues: []string{
-						gofakeit.Name(),
+						"fakeEmptyCommandAllValue",
 					},
 				},
 			},
@@ -156,34 +147,34 @@ const (
 	CommandIDNamelessCommand argParserConfig.CommandID = iota + 1
 	//  - 
 	
-	// CommandID%[1]s - %[2]s
-	CommandID%[1]s
-	// CommandID%[3]s - print help info
-	CommandID%[3]s
+	// CommandIDCmd - command description help info
+	CommandIDCmd
+	// CommandIDPrintHelpInfo - print help info
+	CommandIDPrintHelpInfo
 )
 
 const (
 	//  - 
 	 argParserConfig.Command = ""
-	// Command%[1]s - %[2]s
-	Command%[1]s = "%[1]s"
-	// Command%[4]s - %[2]s
-	Command%[4]s = "%[4]s"
-	// Command%[5]s - print help info
-	Command%[5]s = "%[5]s"
-	// Command%[6]s - print help info
-	Command%[6]s = "%[6]s"
+	// CommandAddcmd - command description help info
+	CommandAddcmd = "addcmd"
+	// CommandAddhelp - print help info
+	CommandAddhelp = "addhelp"
+	// CommandCmd - command description help info
+	CommandCmd = "cmd"
+	// CommandHelp - print help info
+	CommandHelp = "help"
 )
 
 const (
-	// Flag%[7]s - 
-	Flag%[7]s argParserConfig.Flag = "-%[7]s"
-	// Flag%[8]s - 
-	Flag%[8]s = "-%[8]s"
-	// Flag%[9]s - 
-	Flag%[9]s = "-%[9]s"
-	// Flag%[10]s - 
-	Flag%[10]s = "-%[10]s"
+	// FlagOf1 - 
+	FlagOf1 argParserConfig.Flag = "--of1"
+	// FlagOf2 - 
+	FlagOf2 = "--of2"
+	// FlagRf1 - 
+	FlagRf1 = "--rf1"
+	// FlagRf2 - 
+	FlagRf2 = "--rf2"
 )
 
 // Parse - processes command line arguments
@@ -197,98 +188,103 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 		},
 		// flagDescriptions
 		map[argParserConfig.Flag]*argParserConfig.FlagDescription{
-			Flag%[7]s: {
+			FlagRf1: {
 				DescriptionHelpInfo:  "",
 				ArgDescription: &argParserConfig.ArgumentsDescription{
 					AmountType:              argParserConfig.ArgAmountTypeSingle,
 					SynopsisHelpDescription: "",
 					DefaultValues: []string{
-						"%[11]s",
+						"f1DefValue",
 					},
 					AllowedValues: map[string]bool{
-						"%[12]s": true,
+						"f1AllValue": true,
 					},
 				},
 			},
-			Flag%[8]s: {
+			FlagRf2: {
 				DescriptionHelpInfo:  "",
 				ArgDescription: &argParserConfig.ArgumentsDescription{
 					AmountType:              argParserConfig.ArgAmountTypeList,
 					SynopsisHelpDescription: "",
 					DefaultValues: []string{
-						"%[13]s",
+						"f2DefValue",
 					},
 					AllowedValues: map[string]bool{
-						"%[14]s": true,
+						"f2AllValue": true,
 					},
 				},
 			},
-			Flag%[9]s: {
+			FlagOf1: {
 				DescriptionHelpInfo:  "",
 			},
-			Flag%[10]s: {
+			FlagOf2: {
 				DescriptionHelpInfo:  "",
 			},
 		},
 		// commandDescriptions
 		[]*argParserConfig.CommandDescription{
 			{
-				ID: CommandID%[1]s,
+				ID:                  CommandIDCmd,
+				DescriptionHelpInfo: "command description help info",
 				Commands: map[argParserConfig.Command]bool{
-					Command%[1]s: true,
-					Command%[4]s: true,
+					CommandCmd: true,
+					CommandAddcmd: true,
 				},
 				RequiredFlags: map[argParserConfig.Flag]bool{
-					Flag%[7]s: true,
-					Flag%[8]s: true,
+					FlagRf1: true,
+					FlagRf2: true,
 				},
 				OptionalFlags: map[argParserConfig.Flag]bool{
-					Flag%[9]s: true,
-					Flag%[10]s: true,
+					FlagOf1: true,
+					FlagOf2: true,
 				},
 			},
 			{
-				ID: ,
+				ID:                  ,
+				DescriptionHelpInfo: "",
 				Commands: map[argParserConfig.Command]bool{
 					: true,
 				},
 			},
-			{
-				ID: CommandID%[3]s,
-				Commands: map[argParserConfig.Command]bool{
-					Command%[3]s: true,
-					Command%[6]s: true,
-				},
-			},
 		},
+		// helpCommandDescription
+		argParserConfig.NewHelpCommandDescription(
+			CommandIDPrintHelpInfo,
+			map[argParserConfig.Command]bool{
+				"help": true,
+				"addhelp": true,
+			},
+		),
 		// namelessCommandDescription
-		&argParserConfig.NamelessCommandDescription{
-			ID: CommandIDNamelessCommand,
-			DescriptionHelpInfo: "",
-			ArgDescription: &argParserConfig.ArgumentsDescription{
+		argParserConfig.NewNamelessCommandDescription(
+			CommandIDNamelessCommand,
+			"",
+			&argParserConfig.ArgumentsDescription{
 				AmountType:              argParserConfig.ArgAmountTypeNoArgs,
 				SynopsisHelpDescription: "",
 			},
-		},
-)
+			map[argParserConfig.Flag]bool{
+				FlagRf1: true,
+				FlagRf2: true,
+			},
+			map[argParserConfig.Flag]bool{
+				FlagOf1: true,
+				FlagOf2: true,
+			},
+		))
 
 	if res, err = argParserImpl.NewCmdArgParserImpl(appArgConfig).Parse(args); err != nil {
 		return nil, err
 	}
 
-	if res.GetCommandID() == CommandID%[3]s {
+	if res.GetCommandID() == CommandIDPrintHelpInfo {
 		helpPrinter.PrintHelpInfo(appArgConfig)
 		return nil, nil
 	}
 
 	return res, nil
 }
-`,
-		command, commandDescriptionHelpInfo, helpCommand, additionalCommand, helpCommand, additionalHelpCommand,
-		requiredFlag1[1:], requiredFlag2[1:], optionalFlag1[1:], optionalFlag2[1:],
-		requiredFlag1Description.GetArgumentsDescription().GetDefaultValues()[0], requiredFlag1Description.GetArgumentsDescription().GetAllowedValues()[0],
-		requiredFlag2Description.GetArgumentsDescription().GetDefaultValues()[0], requiredFlag2Description.GetArgumentsDescription().GetAllowedValues()[0],
-	)
+`)
 
 	require.Equal(t, expectedArgParserFileText, argParserFileText)
 }
@@ -296,19 +292,10 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 func TestGenerateWithoutNamelessCommand(t *testing.T) {
 	t.Parallel()
 
-	descriptionHelpInfo := gofakeit.Name()
+	descriptionHelpInfo := "command description help info"
 
-	randNameCount := 2
-	sortedRandNames := make([]string, 0, randNameCount)
-	for i := 0; i < randNameCount; i++ {
-		sortedRandNames = append(sortedRandNames, gofakeit.Color())
-	}
-	sort.Strings(sortedRandNames)
-
-	require.True(t, sortedRandNames[0] < sortedRandNames[1])
-
-	helpCommand := configYaml.Command(sortedRandNames[0])
-	additionalHelpCommand := configYaml.Command(sortedRandNames[1])
+	helpCommand := configYaml.Command("help")
+	additionalHelpCommand := configYaml.Command("addhelp")
 
 	argParserFileText := Generate(
 		&configYaml.Config{
@@ -326,7 +313,7 @@ func TestGenerateWithoutNamelessCommand(t *testing.T) {
 		},
 		nil)
 
-	require.Equal(t, fmt.Sprintf(`// This code was generated by argtools.generator. DO NOT EDIT
+	require.Equal(t, `// This code was generated by argtools.generator. DO NOT EDIT
 
 package argTools
 
@@ -339,15 +326,15 @@ import (
 )
 
 const (
-	// CommandID%[1]s - print help info
-	CommandID%[1]s argParserConfig.CommandID = iota + 1
+	// CommandIDPrintHelpInfo - print help info
+	CommandIDPrintHelpInfo argParserConfig.CommandID = iota + 1
 )
 
 const (
-	// Command%[1]s - print help info
-	Command%[1]s argParserConfig.Command = "%[1]s"
-	// Command%[2]s - print help info
-	Command%[2]s = "%[2]s"
+	// CommandAddhelp - print help info
+	CommandAddhelp argParserConfig.Command = "addhelp"
+	// CommandHelp - print help info
+	CommandHelp = "help"
 )
 
 // Parse - processes command line arguments
@@ -358,21 +345,21 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 			AppName: "",
 			NameHelpInfo: "",
 			DescriptionHelpInfo: []string{
-				"%[3]s",
+				"command description help info",
 			},
 		},
 		// flagDescriptions
 nil,
 		// commandDescriptions
-		[]*argParserConfig.CommandDescription{
-			{
-				ID: CommandID%[1]s,
-				Commands: map[argParserConfig.Command]bool{
-					Command%[1]s: true,
-					Command%[2]s: true,
-				},
+		nil,
+		// helpCommandDescription
+		argParserConfig.NewHelpCommandDescription(
+			CommandIDPrintHelpInfo,
+			map[argParserConfig.Command]bool{
+				"help": true,
+				"addhelp": true,
 			},
-		},
+		),
 		// namelessCommandDescription
 		nil)
 
@@ -380,12 +367,92 @@ nil,
 		return nil, err
 	}
 
-	if res.GetCommandID() == CommandID%[1]s {
+	if res.GetCommandID() == CommandIDPrintHelpInfo {
 		helpPrinter.PrintHelpInfo(appArgConfig)
 		return nil, nil
 	}
 
 	return res, nil
 }
-`, helpCommand, additionalHelpCommand, descriptionHelpInfo), argParserFileText)
+`, argParserFileText)
+}
+
+func TestGenerateWithoutHelpCommandDescription(t *testing.T) {
+	t.Parallel()
+
+	argParserFileText := Generate(
+		&configYaml.Config{
+			AppHelpDescription: &configYaml.AppHelpDescription{
+				DescriptionHelpInfo: []string{
+					"command description help info",
+				},
+			},
+			NamelessCommandDescription: &configYaml.NamelessCommandDescription{
+				DescriptionHelpInfo: "nameless command description help info",
+			},
+		},
+		nil)
+
+	require.Equal(t, `// This code was generated by argtools.generator. DO NOT EDIT
+
+package argTools
+
+import (
+	"github.com/terryhay/argtools/internal/argParserImpl"
+	"github.com/terryhay/argtools/pkg/argParserConfig"
+	"github.com/terryhay/argtools/pkg/argtoolsError"
+	"github.com/terryhay/argtools/pkg/helpPrinter"
+	"github.com/terryhay/argtools/pkg/parsedData"
+)
+
+const (
+	// CommandIDNamelessCommand - nameless command description help info
+	CommandIDNamelessCommand argParserConfig.CommandID = iota + 1
+	// CommandIDPrintHelpInfo - print help info
+	CommandIDPrintHelpInfo
+)
+
+const (
+	//  - print help info
+	 argParserConfig.Command = ""
+)
+
+// Parse - processes command line arguments
+func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error) {
+	appArgConfig := argParserConfig.NewArgParserConfig(
+		// appDescription
+		argParserConfig.ApplicationDescription{
+			AppName: "",
+			NameHelpInfo: "",
+			DescriptionHelpInfo: []string{
+				"command description help info",
+			},
+		},
+		// flagDescriptions
+nil,
+		// commandDescriptions
+		nil,
+		// helpCommandDescription
+nil
+		// namelessCommandDescription
+		argParserConfig.NewNamelessCommandDescription(
+			CommandIDNamelessCommand,
+			"nameless command description help info",
+nil,
+nil,
+nil,
+		))
+
+	if res, err = argParserImpl.NewCmdArgParserImpl(appArgConfig).Parse(args); err != nil {
+		return nil, err
+	}
+
+	if res.GetCommandID() == CommandIDPrintHelpInfo {
+		helpPrinter.PrintHelpInfo(appArgConfig)
+		return nil, nil
+	}
+
+	return res, nil
+}
+`, argParserFileText)
 }

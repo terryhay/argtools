@@ -4,10 +4,11 @@ version: 1.0.0
 # required
 app_help_description:
   # required fields:
-  app_name: "example1"
+  app_name: "example"
   name_help_info: "shows how argtools generator works"
   description_help_info:
     - "you can write more detailed description here"
+    - "and use several paragraphs"
 
 # required
 help_command_description:
@@ -30,10 +31,11 @@ flag_descriptions:
         amount_type: "single"
         synopsis_description: "log level"
         default_values:
-          - "s"
-        allowed_values:
-          - "s"
           - "i"
+        allowed_values:
+          - "d"
+          - "i"
+          - "e"
           - "f"
 
   - flag: &flagStringSingle "-s"

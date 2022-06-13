@@ -14,10 +14,10 @@ func TestParse(t *testing.T) {
 	t.Parallel()
 
 	var (
-		nullCommandID = argParserConfig.CommandID(gofakeit.Uint32())
-		requiredFlag  = argParserConfig.Flag("-" + gofakeit.Color())
-		optionalFlag  = argParserConfig.Flag("-" + gofakeit.Color())
-		arg           = gofakeit.Color()
+		namelessCommandID = argParserConfig.CommandID(gofakeit.Uint32())
+		requiredFlag      = argParserConfig.Flag("-" + gofakeit.Color())
+		optionalFlag      = argParserConfig.Flag("-" + gofakeit.Color())
+		arg               = gofakeit.Color()
 	)
 
 	testData := []struct {
@@ -57,35 +57,42 @@ func TestParse(t *testing.T) {
 		{
 			caseName: "no_args_for_nameless_command",
 			config: argParserConfig.ArgParserConfig{
-				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
-					ID: nullCommandID,
-				},
+				NamelessCommandDescription: argParserConfig.NewNamelessCommandDescription(
+					namelessCommandID,
+					"",
+					nil,
+					nil,
+					nil),
 			},
 			expectedParsedData: &parsedData.ParsedData{
-				CommandID: nullCommandID,
+				CommandID: namelessCommandID,
 			},
 		},
 		{
 			caseName: "no_args_for_nameless_command_with_required_flag",
 			config: argParserConfig.ArgParserConfig{
-				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
-					ID: nullCommandID,
-					RequiredFlags: map[argParserConfig.Flag]bool{
+				NamelessCommandDescription: argParserConfig.NewNamelessCommandDescription(
+					namelessCommandID,
+					"",
+					nil,
+					map[argParserConfig.Flag]bool{
 						requiredFlag: true,
 					},
-				},
+					nil),
 			},
 			expectedErr: fakeError(argtoolsError.CodeArgParserRequiredFlagIsNotSet),
 		},
 		{
 			caseName: "no_args_for_nameless_command_with_required_argument",
 			config: argParserConfig.ArgParserConfig{
-				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
-					ID: nullCommandID,
-					ArgDescription: &argParserConfig.ArgumentsDescription{
+				NamelessCommandDescription: argParserConfig.NewNamelessCommandDescription(
+					namelessCommandID,
+					"",
+					&argParserConfig.ArgumentsDescription{
 						AmountType: argParserConfig.ArgAmountTypeSingle,
 					},
-				},
+					nil,
+					nil),
 			},
 			expectedErr: fakeError(argtoolsError.CodeArgParserCommandDoesNotContainArgs),
 		},
@@ -93,9 +100,12 @@ func TestParse(t *testing.T) {
 			caseName: "waste_arg_for_nameless_command",
 			args:     []string{arg},
 			config: argParserConfig.ArgParserConfig{
-				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
-					ID: nullCommandID,
-				},
+				NamelessCommandDescription: argParserConfig.NewNamelessCommandDescription(
+					namelessCommandID,
+					"",
+					nil,
+					nil,
+					nil),
 			},
 			expectedErr: fakeError(argtoolsError.CodeArgParserUnexpectedArg),
 		},
@@ -103,15 +113,17 @@ func TestParse(t *testing.T) {
 			caseName: "arg_for_nameless_command_with_required_arg",
 			args:     []string{arg},
 			config: argParserConfig.ArgParserConfig{
-				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
-					ID: nullCommandID,
-					ArgDescription: &argParserConfig.ArgumentsDescription{
+				NamelessCommandDescription: argParserConfig.NewNamelessCommandDescription(
+					namelessCommandID,
+					"",
+					&argParserConfig.ArgumentsDescription{
 						AmountType: argParserConfig.ArgAmountTypeSingle,
 					},
-				},
+					nil,
+					nil),
 			},
 			expectedParsedData: &parsedData.ParsedData{
-				CommandID: nullCommandID,
+				CommandID: namelessCommandID,
 				ArgData: &parsedData.ParsedArgData{
 					ArgValues: []parsedData.ArgValue{parsedData.ArgValue(arg)},
 				},
@@ -124,12 +136,14 @@ func TestParse(t *testing.T) {
 				string(requiredFlag),
 			},
 			config: argParserConfig.ArgParserConfig{
-				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
-					ID: nullCommandID,
-					RequiredFlags: map[argParserConfig.Flag]bool{
+				NamelessCommandDescription: argParserConfig.NewNamelessCommandDescription(
+					namelessCommandID,
+					"",
+					nil,
+					map[argParserConfig.Flag]bool{
 						argParserConfig.Flag(arg): true,
 					},
-				},
+					nil),
 				FlagDescriptions: map[argParserConfig.Flag]*argParserConfig.FlagDescription{
 					requiredFlag: {},
 				},
@@ -143,12 +157,14 @@ func TestParse(t *testing.T) {
 				"-" + gofakeit.Color(),
 			},
 			config: argParserConfig.ArgParserConfig{
-				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
-					ID: nullCommandID,
-					RequiredFlags: map[argParserConfig.Flag]bool{
+				NamelessCommandDescription: argParserConfig.NewNamelessCommandDescription(
+					namelessCommandID,
+					"",
+					nil,
+					map[argParserConfig.Flag]bool{
 						argParserConfig.Flag(arg): true,
 					},
-				},
+					nil),
 				FlagDescriptions: map[argParserConfig.Flag]*argParserConfig.FlagDescription{
 					requiredFlag: {
 						ArgDescription: &argParserConfig.ArgumentsDescription{
@@ -166,12 +182,14 @@ func TestParse(t *testing.T) {
 				"-" + gofakeit.Color(),
 			},
 			config: argParserConfig.ArgParserConfig{
-				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
-					ID: nullCommandID,
-					RequiredFlags: map[argParserConfig.Flag]bool{
+				NamelessCommandDescription: argParserConfig.NewNamelessCommandDescription(
+					namelessCommandID,
+					"",
+					nil,
+					map[argParserConfig.Flag]bool{
 						argParserConfig.Flag(arg): true,
 					},
-				},
+					nil),
 				FlagDescriptions: map[argParserConfig.Flag]*argParserConfig.FlagDescription{
 					requiredFlag: {
 						ArgDescription: &argParserConfig.ArgumentsDescription{
@@ -190,12 +208,14 @@ func TestParse(t *testing.T) {
 				"-" + gofakeit.Color(),
 			},
 			config: argParserConfig.ArgParserConfig{
-				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
-					ID: nullCommandID,
-					RequiredFlags: map[argParserConfig.Flag]bool{
+				NamelessCommandDescription: argParserConfig.NewNamelessCommandDescription(
+					namelessCommandID,
+					"",
+					nil,
+					map[argParserConfig.Flag]bool{
 						argParserConfig.Flag(arg): true,
 					},
-				},
+					nil),
 				FlagDescriptions: map[argParserConfig.Flag]*argParserConfig.FlagDescription{
 					requiredFlag: {
 						ArgDescription: &argParserConfig.ArgumentsDescription{
@@ -203,6 +223,11 @@ func TestParse(t *testing.T) {
 						},
 					},
 				},
+				HelpCommandDescription: argParserConfig.NewHelpCommandDescription(
+					argParserConfig.CommandID(gofakeit.Uint32()),
+					map[argParserConfig.Command]bool{
+						argParserConfig.Command(gofakeit.Color()): true,
+					}),
 			},
 			expectedErr: fakeError(argtoolsError.CodeArgParserUnexpectedFlag),
 		},
@@ -214,12 +239,14 @@ func TestParse(t *testing.T) {
 				string(requiredFlag),
 			},
 			config: argParserConfig.ArgParserConfig{
-				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
-					ID: nullCommandID,
-					RequiredFlags: map[argParserConfig.Flag]bool{
+				NamelessCommandDescription: argParserConfig.NewNamelessCommandDescription(
+					namelessCommandID,
+					"",
+					nil,
+					map[argParserConfig.Flag]bool{
 						requiredFlag: true,
 					},
-				},
+					nil),
 				FlagDescriptions: map[argParserConfig.Flag]*argParserConfig.FlagDescription{
 					requiredFlag: {
 						ArgDescription: &argParserConfig.ArgumentsDescription{
@@ -238,15 +265,16 @@ func TestParse(t *testing.T) {
 				string(optionalFlag),
 			},
 			config: argParserConfig.ArgParserConfig{
-				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
-					ID: nullCommandID,
-					RequiredFlags: map[argParserConfig.Flag]bool{
+				NamelessCommandDescription: argParserConfig.NewNamelessCommandDescription(
+					namelessCommandID,
+					"",
+					nil,
+					map[argParserConfig.Flag]bool{
 						requiredFlag: true,
 					},
-					OptionalFlags: map[argParserConfig.Flag]bool{
+					map[argParserConfig.Flag]bool{
 						optionalFlag: true,
-					},
-				},
+					}),
 				FlagDescriptions: map[argParserConfig.Flag]*argParserConfig.FlagDescription{
 					requiredFlag: {
 						ArgDescription: &argParserConfig.ArgumentsDescription{
@@ -257,7 +285,7 @@ func TestParse(t *testing.T) {
 				},
 			},
 			expectedParsedData: &parsedData.ParsedData{
-				CommandID: nullCommandID,
+				CommandID: namelessCommandID,
 				FlagData: map[argParserConfig.Flag]*parsedData.ParsedFlagData{
 					requiredFlag: {
 						Flag: requiredFlag,
@@ -277,15 +305,16 @@ func TestParse(t *testing.T) {
 			caseName: "failed_final_parsed_data_checking",
 			args:     []string{arg},
 			config: argParserConfig.ArgParserConfig{
-				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
-					ID: nullCommandID,
-					ArgDescription: &argParserConfig.ArgumentsDescription{
+				NamelessCommandDescription: argParserConfig.NewNamelessCommandDescription(
+					namelessCommandID,
+					"",
+					&argParserConfig.ArgumentsDescription{
 						AmountType: argParserConfig.ArgAmountTypeSingle,
 					},
-					RequiredFlags: map[argParserConfig.Flag]bool{
+					map[argParserConfig.Flag]bool{
 						requiredFlag: true,
 					},
-				},
+					nil),
 			},
 			expectedErr: fakeError(argtoolsError.CodeArgParserRequiredFlagIsNotSet),
 		},
@@ -293,15 +322,16 @@ func TestParse(t *testing.T) {
 			caseName: "arg_and_no_default_value",
 			args:     []string{string(requiredFlag)},
 			config: argParserConfig.ArgParserConfig{
-				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
-					ID: nullCommandID,
-					ArgDescription: &argParserConfig.ArgumentsDescription{
+				NamelessCommandDescription: argParserConfig.NewNamelessCommandDescription(
+					namelessCommandID,
+					"",
+					&argParserConfig.ArgumentsDescription{
 						AmountType: argParserConfig.ArgAmountTypeSingle,
 					},
-					RequiredFlags: map[argParserConfig.Flag]bool{
+					map[argParserConfig.Flag]bool{
 						requiredFlag: true,
 					},
-				},
+					nil),
 				FlagDescriptions: map[argParserConfig.Flag]*argParserConfig.FlagDescription{
 					requiredFlag: {},
 				},
@@ -312,9 +342,10 @@ func TestParse(t *testing.T) {
 			caseName: "succcess_using_default_value",
 			args:     []string{string(requiredFlag)},
 			config: argParserConfig.ArgParserConfig{
-				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
-					ID: nullCommandID,
-					ArgDescription: &argParserConfig.ArgumentsDescription{
+				NamelessCommandDescription: argParserConfig.NewNamelessCommandDescription(
+					namelessCommandID,
+					"",
+					&argParserConfig.ArgumentsDescription{
 						AmountType: argParserConfig.ArgAmountTypeSingle,
 						DefaultValues: []string{
 							arg,
@@ -323,16 +354,16 @@ func TestParse(t *testing.T) {
 							gofakeit.Color(): true,
 						},
 					},
-					RequiredFlags: map[argParserConfig.Flag]bool{
+					map[argParserConfig.Flag]bool{
 						requiredFlag: true,
 					},
-				},
+					nil),
 				FlagDescriptions: map[argParserConfig.Flag]*argParserConfig.FlagDescription{
 					requiredFlag: {},
 				},
 			},
 			expectedParsedData: &parsedData.ParsedData{
-				CommandID: nullCommandID,
+				CommandID: namelessCommandID,
 				ArgData: &parsedData.ParsedArgData{
 					ArgValues: []parsedData.ArgValue{
 						parsedData.ArgValue(arg),
@@ -349,18 +380,19 @@ func TestParse(t *testing.T) {
 			caseName: "not_allowed_value",
 			args:     []string{gofakeit.Color(), string(requiredFlag)},
 			config: argParserConfig.ArgParserConfig{
-				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
-					ID: nullCommandID,
-					ArgDescription: &argParserConfig.ArgumentsDescription{
+				NamelessCommandDescription: argParserConfig.NewNamelessCommandDescription(
+					namelessCommandID,
+					"",
+					&argParserConfig.ArgumentsDescription{
 						AmountType: argParserConfig.ArgAmountTypeSingle,
 						AllowedValues: map[string]bool{
 							gofakeit.Color(): true,
 						},
 					},
-					RequiredFlags: map[argParserConfig.Flag]bool{
+					map[argParserConfig.Flag]bool{
 						requiredFlag: true,
 					},
-				},
+					nil),
 				FlagDescriptions: map[argParserConfig.Flag]*argParserConfig.FlagDescription{
 					requiredFlag: {},
 				},
@@ -371,24 +403,25 @@ func TestParse(t *testing.T) {
 			caseName: "success_allowed_value_checking",
 			args:     []string{arg, string(requiredFlag)},
 			config: argParserConfig.ArgParserConfig{
-				NamelessCommandDescription: &argParserConfig.NamelessCommandDescription{
-					ID: nullCommandID,
-					ArgDescription: &argParserConfig.ArgumentsDescription{
+				NamelessCommandDescription: argParserConfig.NewNamelessCommandDescription(
+					namelessCommandID,
+					"",
+					&argParserConfig.ArgumentsDescription{
 						AmountType: argParserConfig.ArgAmountTypeSingle,
 						AllowedValues: map[string]bool{
 							arg: true,
 						},
 					},
-					RequiredFlags: map[argParserConfig.Flag]bool{
+					map[argParserConfig.Flag]bool{
 						requiredFlag: true,
 					},
-				},
+					nil),
 				FlagDescriptions: map[argParserConfig.Flag]*argParserConfig.FlagDescription{
 					requiredFlag: {},
 				},
 			},
 			expectedParsedData: &parsedData.ParsedData{
-				CommandID: nullCommandID,
+				CommandID: namelessCommandID,
 				ArgData: &parsedData.ParsedArgData{
 					ArgValues: []parsedData.ArgValue{
 						parsedData.ArgValue(arg),

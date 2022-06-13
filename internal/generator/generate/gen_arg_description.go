@@ -8,9 +8,9 @@ import (
 )
 
 const (
-	argumentsDescriptionPrefix = `%[1]sArgDescription: &argParserConfig.ArgumentsDescription{
-%[1]s	AmountType:              %[2]s,
-%[1]s	SynopsisHelpDescription: "%[3]s",
+	argumentsDescriptionPrefix = `%[1]s%[2]s&argParserConfig.ArgumentsDescription{
+%[1]s	AmountType:              %[3]s,
+%[1]s	SynopsisHelpDescription: "%[4]s",
 `
 	argumentsDescriptionDefaultValuesPrefix = `%s	DefaultValues: []string{
 `
@@ -31,11 +31,17 @@ type ArgDescriptionElement string
 func GenArgDescriptionElement(
 	argumentsDescription *configYaml.ArgumentsDescription,
 	indent string,
+	pasteArgDescriptionPrefix bool,
 ) ArgDescriptionElement {
-	builder := new(strings.Builder)
+	builder := strings.Builder{}
 
+	prefix := ""
+	if pasteArgDescriptionPrefix {
+		prefix = "ArgDescription: "
+	}
 	builder.WriteString(fmt.Sprintf(argumentsDescriptionPrefix,
 		indent,
+		prefix,
 		getArgAmountTypeElement(argumentsDescription.GetAmountType()),
 		argumentsDescription.GetSynopsisHelpDescription()))
 

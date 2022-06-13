@@ -29,7 +29,6 @@ const (
 
 func GenCommandSliceElements(
 	commandDescriptions []*configYaml.CommandDescription,
-	helpCommandDescription *configYaml.HelpCommandDescription,
 	commandsIDTemplateData map[configYaml.Command]*idTemplateDataCreator.IDTemplateData,
 	flagsIDTemplateData map[configYaml.Flag]*idTemplateDataCreator.IDTemplateData) CommandSliceElement {
 

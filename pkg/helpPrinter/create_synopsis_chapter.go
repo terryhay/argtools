@@ -10,7 +10,7 @@ const (
 	synopsisChapterTitle = "\u001B[1mSYNOPSIS\u001B[0m\n"
 )
 
-// CreateSynopsisChapter - creates synopsis help chapter
+// CreateSynopsisChapter creates synopsis help chapter
 func CreateSynopsisChapter(
 	appName string,
 	namelessCommandDescription argParserConfig.NamelessCommandDescription,

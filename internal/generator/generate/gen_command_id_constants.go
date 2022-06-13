@@ -11,7 +11,6 @@ const (
 	commandIDFirstConstTemplate = `	// %s - %s
 	%s argParserConfig.CommandID = iota + 1
 `
-
 	commandIDConstTemplate = `	// %s - %s
 	%s
 `

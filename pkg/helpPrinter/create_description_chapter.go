@@ -20,8 +20,7 @@ const (
 
 const tabLen = 7
 
-// CreateDescriptionChapter - create
-//s description help chapter
+// CreateDescriptionChapter - create s description help chapter
 func CreateDescriptionChapter(
 	descriptionHelpInfo []string,
 	namelessCommandDescription argParserConfig.NamelessCommandDescription,

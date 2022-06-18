@@ -7,7 +7,9 @@ import (
 )
 
 const (
-	descriptionChapterTitle = "\u001B[1mDESCRIPTION\u001B[0m\n\t%s\n"
+	descriptionChapterTitle = "\u001B[1mDESCRIPTION\u001B[0m\n"
+
+	commonDescriptionParagraphs = "\n\t%s\n"
 
 	commandDescriptionsSubtitle = "\nThe commands are as follows:"
 	descriptionLine             = "\n\t\u001B[1m%s\u001B[0m\t%s\n"
@@ -35,7 +37,10 @@ func CreateDescriptionChapter(
 		usingPattern    string
 	)
 
-	builder.WriteString(fmt.Sprintf(descriptionChapterTitle, strings.Join(descriptionHelpInfo, "\n\n\t")))
+	builder.WriteString(descriptionChapterTitle)
+	if len(descriptionHelpInfo) > 0 {
+		builder.WriteString(fmt.Sprintf(commonDescriptionParagraphs, strings.Join(descriptionHelpInfo, "\n\n\t")))
+	}
 
 	if len(commandDescriptions) > 0 {
 		builder.WriteString(commandDescriptionsSubtitle)

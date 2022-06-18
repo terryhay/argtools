@@ -13,7 +13,7 @@ const (
 	maxFlagLen = 12
 )
 
-// Check - checks command and flag descriptions for duplicates
+// Check checks command and flag descriptions for duplicates
 func Check(
 	namelessCommandDescription *configYaml.NamelessCommandDescription,
 	commandDescriptions map[configYaml.Command]*configYaml.CommandDescription,
@@ -52,7 +52,7 @@ func Check(
 	return nil
 }
 
-// CheckFlag - checks if flag has dash in front and is not too long
+// CheckFlag checks if flag has dash in front and is not too long
 func CheckFlag(checkFlagCharsFunc func(s string) bool, flag configYaml.Flag) *argtoolsError.Error {
 	if !checkFlagCharsFunc(string(flag)) {
 		return argtoolsError.NewError(

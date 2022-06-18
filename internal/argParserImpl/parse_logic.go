@@ -7,7 +7,7 @@ import (
 	"github.com/terryhay/argtools/pkg/parsedData"
 )
 
-// Parse - processes command line arguments
+// Parse processes command line arguments
 func (i *ArgParserImpl) Parse(args []string) (*parsedData.ParsedData, *argtoolsError.Error) {
 	_ = i // check if pointer is nil here and check no further
 

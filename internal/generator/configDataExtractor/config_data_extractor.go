@@ -6,7 +6,7 @@ import (
 	"github.com/terryhay/argtools/pkg/argtoolsError"
 )
 
-// ExtractFlagDescriptionMap - extracts flag descriptions by flags from config object
+// ExtractFlagDescriptionMap extracts flag descriptions by flags from config object
 func ExtractFlagDescriptionMap(flagDescriptions []*configYaml.FlagDescription) (flagDescriptionMap map[configYaml.Flag]*configYaml.FlagDescription, error *argtoolsError.Error) {
 	descriptionCount := len(flagDescriptions)
 	if descriptionCount == 0 {
@@ -36,7 +36,7 @@ func ExtractFlagDescriptionMap(flagDescriptions []*configYaml.FlagDescription) (
 	return flagDescriptionMap, nil
 }
 
-// ExtractCommandDescriptionMap - extracts command descriptions by commands from config object
+// ExtractCommandDescriptionMap extracts command descriptions by commands from config object
 func ExtractCommandDescriptionMap(commandDescriptions []*configYaml.CommandDescription) (commandDescriptionMap map[configYaml.Command]*configYaml.CommandDescription, error *argtoolsError.Error) {
 	descriptionCount := len(commandDescriptions)
 	if descriptionCount == 0 {

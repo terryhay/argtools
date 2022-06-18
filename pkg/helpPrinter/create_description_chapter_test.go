@@ -30,7 +30,7 @@ func TestCreateDescriptionChapter(t *testing.T) {
 			descriptionHelpInfo: nil,
 			flagDescriptions:    nil,
 
-			expected: fmt.Sprintf(descriptionChapterTitle, ""),
+			expected: descriptionChapterTitle,
 		},
 		{
 			caseName:            "two_flags",
@@ -41,9 +41,16 @@ func TestCreateDescriptionChapter(t *testing.T) {
 				},
 			},
 
-			expected: fmt.Sprintf("%s\nThe flags are as follows:%s",
-				fmt.Sprintf(descriptionChapterTitle, randomDescriptionHelpInfo),
-				fmt.Sprintf(descriptionTwoLines, randomFlag, randomFlagDescriptionHelpInfo),
+			expected: fmt.Sprintf(`[1mDESCRIPTION[0m
+
+	%s
+
+The flags are as follows:
+	[1m%s[0m
+		Nickolas Emard
+`,
+				randomDescriptionHelpInfo,
+				randomFlag,
 			),
 		},
 	}

@@ -339,7 +339,7 @@ func TestParse(t *testing.T) {
 			expectedErr: fakeError(argtoolsError.CodeArgParserFlagMustHaveArg),
 		},
 		{
-			caseName: "succcess_using_default_value",
+			caseName: "success_using_default_value",
 			args:     []string{string(requiredFlag)},
 			config: argParserConfig.ArgParserConfig{
 				NamelessCommandDescription: argParserConfig.NewNamelessCommandDescription(

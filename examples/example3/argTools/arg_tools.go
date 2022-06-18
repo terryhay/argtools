@@ -3,7 +3,7 @@
 package argTools
 
 import (
-	"github.com/terryhay/argtools/internal/argParserImpl"
+	"github.com/terryhay/argtools/pkg/argParser"
 	"github.com/terryhay/argtools/pkg/argParserConfig"
 	"github.com/terryhay/argtools/pkg/argtoolsError"
 	"github.com/terryhay/argtools/pkg/helpPrinter"
@@ -56,7 +56,7 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 			nil,
 		))
 
-	if res, err = argParserImpl.NewCmdArgParserImpl(appArgConfig).Parse(args); err != nil {
+	if res, err = argParser.Parse(appArgConfig, args); err != nil {
 		return nil, err
 	}
 

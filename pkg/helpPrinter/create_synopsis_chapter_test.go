@@ -2,7 +2,6 @@ package helpPrinter
 
 import (
 	"fmt"
-	"github.com/brianvoe/gofakeit"
 	"github.com/stretchr/testify/require"
 	"github.com/terryhay/argtools/pkg/argParserConfig"
 	"testing"
@@ -12,7 +11,7 @@ func TestCreateSynopsisChapter(t *testing.T) {
 	t.Parallel()
 
 	var (
-		appName = gofakeit.Name()
+		appName = "appname"
 		chapter string
 
 		expectedChapter string
@@ -20,24 +19,24 @@ func TestCreateSynopsisChapter(t *testing.T) {
 
 	t.Run("full_data", func(t *testing.T) {
 
-		nullCommandRequiredFlag := argParserConfig.Flag(gofakeit.Name())
-		nullCommandOptionalFlag := argParserConfig.Flag(gofakeit.Name())
+		nullCommandRequiredFlag := argParserConfig.Flag("-rf")
+		nullCommandOptionalFlag := argParserConfig.Flag("-of")
 
-		commandFlagWithSingleArgument := argParserConfig.Flag(gofakeit.Name())
+		commandFlagWithSingleArgument := argParserConfig.Flag("-sa")
 		commandFlagDescriptionWithSingleArgument := &argParserConfig.FlagDescription{
 			ArgDescription: &argParserConfig.ArgumentsDescription{
 				AmountType:              argParserConfig.ArgAmountTypeSingle,
-				SynopsisHelpDescription: gofakeit.Name(),
+				SynopsisHelpDescription: "arg",
 			},
 		}
 
-		commandFlagWithListArgument := argParserConfig.Flag(gofakeit.Name())
-		commandFlagDescriptionWithListArgumentDefaultValue := gofakeit.Name()
-		commandFlagDescriptionWithListArgumentAllowedValue := gofakeit.Name()
+		commandFlagWithListArgument := argParserConfig.Flag("-la")
+		commandFlagDescriptionWithListArgumentDefaultValue := "val1"
+		commandFlagDescriptionWithListArgumentAllowedValue := "val2"
 		commandFlagDescriptionWithListArgument := &argParserConfig.FlagDescription{
 			ArgDescription: &argParserConfig.ArgumentsDescription{
 				AmountType:              argParserConfig.ArgAmountTypeList,
-				SynopsisHelpDescription: gofakeit.Name(),
+				SynopsisHelpDescription: "str",
 				DefaultValues: []string{
 					commandFlagDescriptionWithListArgumentDefaultValue,
 				},
@@ -47,13 +46,13 @@ func TestCreateSynopsisChapter(t *testing.T) {
 			},
 		}
 
-		command := argParserConfig.Command(gofakeit.Name())
+		command := argParserConfig.Command("command")
 
 		namelessCommandDescription := argParserConfig.NewNamelessCommandDescription(
 			0,
-			"",
+			"nameless command description",
 			&argParserConfig.ArgumentsDescription{
-				SynopsisHelpDescription: gofakeit.Name(),
+				SynopsisHelpDescription: "args",
 			},
 			map[argParserConfig.Flag]bool{
 				nullCommandRequiredFlag: true,
@@ -78,36 +77,23 @@ func TestCreateSynopsisChapter(t *testing.T) {
 		flagDescriptions := map[argParserConfig.Flag]*argParserConfig.FlagDescription{
 			nullCommandRequiredFlag: {
 				ArgDescription: &argParserConfig.ArgumentsDescription{
-					SynopsisHelpDescription: gofakeit.Name(),
+					SynopsisHelpDescription: "arg1",
 				},
 			},
 			commandFlagWithSingleArgument: commandFlagDescriptionWithSingleArgument,
 			commandFlagWithListArgument:   commandFlagDescriptionWithListArgument,
 		}
 
-		expectedChapter = fmt.Sprintf(`[1mSYNOPSIS[0m
-	[1m%s [0m [1m%s[0m [[1m%s[0m]
-	[1m%s [0m[1m%s[0m [1m%s[0m [4m%s[0m [[1m%s[0m [4m%s[0m=%s [%s] [4m...[0m]
+		chapter = CreateSynopsisChapter(appName, namelessCommandDescription, commandDescriptions, flagDescriptions)
+		fmt.Println(chapter)
+		require.Equal(t,
+			`[1mSYNOPSIS[0m
+
+	[1mappname[0m  [1m-rf[0m [[1m-of[0m]
+
+	[1mappname command[0m  [1m-sa[0m [4marg[0m [[1m-la[0m [4mstr[0m=val1 [val2] [4m...[0m]
 
 `,
-			// first line
-			appName,
-			nullCommandRequiredFlag,
-			nullCommandOptionalFlag,
-
-			// second line
-			appName,
-			command,
-			commandFlagWithSingleArgument,
-			commandFlagDescriptionWithSingleArgument.GetArgDescription().GetSynopsisHelpDescription(),
-			commandFlagWithListArgument,
-			commandFlagDescriptionWithListArgument.GetArgDescription().GetSynopsisHelpDescription(),
-			commandFlagDescriptionWithListArgumentDefaultValue,
-			commandFlagDescriptionWithListArgumentAllowedValue,
-		)
-		chapter = CreateSynopsisChapter(appName, namelessCommandDescription, commandDescriptions, flagDescriptions)
-		require.Equal(t,
-			expectedChapter,
 			chapter)
 	})
 
@@ -117,7 +103,8 @@ func TestCreateSynopsisChapter(t *testing.T) {
 		}
 
 		expectedChapter = fmt.Sprintf(`[1mSYNOPSIS[0m
-	[1m%s [0m
+
+	[1m%s[0m 
 
 `, appName)
 		chapter = CreateSynopsisChapter(appName, nil, commandDescriptions, nil)

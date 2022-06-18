@@ -16,11 +16,9 @@ import (
 	"github.com/terryhay/argtools/pkg/parsedData"
 )
 
-const (
-%s)
+%s
 
-const (
-%s)
+%s
 
 %s// Parse - processes command line arguments
 func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error) {
@@ -52,28 +50,28 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 
 // GenArgParserFileBody applies data to argParserFileTemplate
 func GenArgParserFileBody(
-	commandIDConstList CommandIDListComponent,
-	commandStringIDConstList CommandStringIDListComponent,
-	flagStringIDConstComponent FlagStringIDListComponent,
-	appDescriptionComponent AppDescriptionComponent,
-	flagMapComponents FlagMapElements,
-	commandMapElement CommandSliceElement,
-	helpCommandComponent HelpCommandComponent,
-	nullCommandComponent NamelessCommandComponent,
+	commandIDListSection CommandIDListSection,
+	commandNameIDListSection CommandListSection,
+	flagStringIDListSection FlagStringIDListSection,
+	appDescriptionSection AppDescriptionSection,
+	flagDescriptionsSection FlagDescriptionsSection,
+	commandDescriptionsSection CommandDescriptionsSection,
+	helpCommandDescriptionSection HelpCommandDescriptionSection,
+	namelessCommandDescriptionSection NamelessCommandDescriptionSection,
 	helpCommandID string) string {
 
 	return fmt.Sprintf(
 		argParserFileTemplate,
 
-		commandIDConstList,
-		commandStringIDConstList,
-		flagStringIDConstComponent,
+		commandIDListSection,
+		commandNameIDListSection,
+		flagStringIDListSection,
 
-		appDescriptionComponent,
-		flagMapComponents,
-		commandMapElement,
-		helpCommandComponent,
-		nullCommandComponent,
+		appDescriptionSection,
+		flagDescriptionsSection,
+		commandDescriptionsSection,
+		helpCommandDescriptionSection,
+		namelessCommandDescriptionSection,
 
 		helpCommandID,
 	)

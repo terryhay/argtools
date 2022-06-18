@@ -23,9 +23,9 @@ const (
 `
 )
 
-type FlagStringIDListComponent string
+type FlagStringIDListSection string
 
-func GenFlagStringIDConstants(flagsTemplateData map[configYaml.Flag]*idTemplateDataCreator.IDTemplateData) FlagStringIDListComponent {
+func GenFlagStringIDConstants(flagsTemplateData map[configYaml.Flag]*idTemplateDataCreator.IDTemplateData) FlagStringIDListSection {
 	dataCount := len(flagsTemplateData)
 	if dataCount == 0 {
 		return ""
@@ -38,20 +38,20 @@ func GenFlagStringIDConstants(flagsTemplateData map[configYaml.Flag]*idTemplateD
 	for _, data := range flagsTemplateData {
 		sortedFlagsTemplateData = append(sortedFlagsTemplateData, data)
 	}
-	sort.Sort(byStringID(sortedFlagsTemplateData))
+	sort.Sort(byNameID(sortedFlagsTemplateData))
 
 	templateData := sortedFlagsTemplateData[0]
 	builder.WriteString(fmt.Sprintf(flagStringIDFirstConstTemplate,
-		templateData.GetStringID(),
+		templateData.GetNameID(),
 		templateData.GetComment(),
-		templateData.GetStringID(),
+		templateData.GetNameID(),
 		templateData.GetCallName()))
 
 	for i := 1; i < len(sortedFlagsTemplateData); i++ {
 		templateData = sortedFlagsTemplateData[i]
-		builder.WriteString(fmt.Sprintf(flagStringIDConstTemplate, templateData.GetStringID(), templateData.GetComment(), templateData.GetStringID(), templateData.GetCallName()))
+		builder.WriteString(fmt.Sprintf(flagStringIDConstTemplate, templateData.GetNameID(), templateData.GetComment(), templateData.GetNameID(), templateData.GetCallName()))
 	}
 
 	builder.WriteString(flagStringIDConstPostfixTemplate)
-	return FlagStringIDListComponent(builder.String())
+	return FlagStringIDListSection(builder.String())
 }

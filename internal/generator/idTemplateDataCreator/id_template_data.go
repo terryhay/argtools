@@ -3,7 +3,7 @@ package idTemplateDataCreator
 // IDTemplateData - data for fill up templates
 type IDTemplateData struct {
 	id       string
-	stringID string
+	nameID   string
 	callName string
 	comment  string
 }
@@ -12,7 +12,7 @@ type IDTemplateData struct {
 func NewIDTemplateData(id, stringID, callName, comment string) *IDTemplateData {
 	return &IDTemplateData{
 		id:       id,
-		stringID: stringID,
+		nameID:   stringID,
 		callName: callName,
 		comment:  comment,
 	}
@@ -26,12 +26,12 @@ func (i *IDTemplateData) GetID() string {
 	return i.id
 }
 
-// GetStringID - stringID field getter
-func (i *IDTemplateData) GetStringID() string {
+// GetNameID - nameID field getter
+func (i *IDTemplateData) GetNameID() string {
 	if i == nil {
 		return ""
 	}
-	return i.stringID
+	return i.nameID
 }
 
 // GetCallName - field callName getter

@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-type FlagMapElements string
+type FlagDescriptionsSection string
 
 const (
 	flagMapElementPrefix = `			%s: {
@@ -20,7 +20,7 @@ const (
 
 func GenFlagMapElements(
 	flagDescriptions []*configYaml.FlagDescription,
-	flagsIDTemplateData map[configYaml.Flag]*idTemplateDataCreator.IDTemplateData) FlagMapElements {
+	flagsIDTemplateData map[configYaml.Flag]*idTemplateDataCreator.IDTemplateData) FlagDescriptionsSection {
 
 	if len(flagDescriptions) == 0 {
 		return "nil,"
@@ -38,7 +38,7 @@ func GenFlagMapElements(
 	for i := range flagDescriptions {
 		flagDescription = flagDescriptions[i]
 
-		builder.WriteString(fmt.Sprintf(flagMapElementPrefix, flagsIDTemplateData[flagDescription.GetFlag()].GetStringID()))
+		builder.WriteString(fmt.Sprintf(flagMapElementPrefix, flagsIDTemplateData[flagDescription.GetFlag()].GetNameID()))
 		builder.WriteString(fmt.Sprintf(flagMapElementDescriptionHelpInfo, flagDescription.GetDescriptionHelpInfo()))
 
 		if argumentsDescription = flagDescription.GetArgumentsDescription(); argumentsDescription != nil {
@@ -49,5 +49,5 @@ func GenFlagMapElements(
 	}
 	builder.WriteString(`		},`)
 
-	return FlagMapElements(builder.String())
+	return FlagDescriptionsSection(builder.String())
 }

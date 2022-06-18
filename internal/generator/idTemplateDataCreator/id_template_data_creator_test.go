@@ -51,25 +51,25 @@ func TestIDTemplateDataCreator(t *testing.T) {
 	expectedCommandsIDTemplateData := map[configYaml.Command]*IDTemplateData{
 		command: {
 			id:       expectedCommandID,
-			stringID: creator.CreateID(PrefixCommandStringID, string(command)),
+			nameID:   creator.CreateID(PrefixCommandStringID, string(command)),
 			callName: string(command),
 			comment:  commandDescriptionHelpInfo,
 		},
 		additionalCommand: {
 			id:       expectedCommandID,
-			stringID: creator.CreateID(PrefixCommandStringID, string(additionalCommand)),
+			nameID:   creator.CreateID(PrefixCommandStringID, string(additionalCommand)),
 			callName: string(additionalCommand),
 			comment:  commandDescriptionHelpInfo,
 		},
 		helpCommand: {
 			id:       expectedHelpCommandID,
-			stringID: creator.CreateID(PrefixCommandStringID, string(helpCommand)),
+			nameID:   creator.CreateID(PrefixCommandStringID, string(helpCommand)),
 			callName: string(helpCommand),
 			comment:  helpCommandComment,
 		},
 		additionalHelpCommand: {
 			id:       expectedHelpCommandID,
-			stringID: creator.CreateID(PrefixCommandStringID, string(additionalHelpCommand)),
+			nameID:   creator.CreateID(PrefixCommandStringID, string(additionalHelpCommand)),
 			callName: string(additionalHelpCommand),
 			comment:  helpCommandComment,
 		},
@@ -90,7 +90,7 @@ func TestIDTemplateDataCreator(t *testing.T) {
 	require.True(t, ok)
 	require.Equal(t, &IDTemplateData{
 		id:       "",
-		stringID: creator.CreateID(PrefixFlagStringID, string(flag)),
+		nameID:   creator.CreateID(PrefixFlagStringID, string(flag)),
 		callName: string(flag),
 	}, flagIDTemplateData)
 }

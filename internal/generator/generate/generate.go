@@ -19,8 +19,8 @@ func Generate(
 		flagDescriptionMap)
 
 	return GenArgParserFileBody(
-		GenCommandIDConstants(commandsIDTemplateData, namelessCommandIDTemplateData),
-		GenCommandStringIDConstants(commandsIDTemplateData),
+		GenCommandIDListSection(commandsIDTemplateData, namelessCommandIDTemplateData),
+		GenCommandListSection(commandsIDTemplateData),
 		GenFlagStringIDConstants(flagsIDTemplateData),
 		GenAppDescription(config.GetAppHelpDescription()),
 		GenFlagMapElements(config.GetFlagDescriptions(), flagsIDTemplateData),

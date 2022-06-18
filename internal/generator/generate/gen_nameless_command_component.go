@@ -7,13 +7,13 @@ import (
 	"strings"
 )
 
-type NamelessCommandComponent string
+type NamelessCommandDescriptionSection string
 
 func GenNamelessCommandComponent(
 	namelessCommandDescription *configYaml.NamelessCommandDescription,
 	namelessCommandIDTemplateData *idTemplateDataCreator.IDTemplateData,
 	flagsIDTemplateData map[configYaml.Flag]*idTemplateDataCreator.IDTemplateData,
-) NamelessCommandComponent {
+) NamelessCommandDescriptionSection {
 
 	if namelessCommandDescription == nil {
 		return "\t\tnil"
@@ -42,7 +42,7 @@ func GenNamelessCommandComponent(
 	} else {
 		builder.WriteString("\t\t\tmap[argParserConfig.Flag]bool{\n")
 		for _, flag = range namelessCommandDescription.GetRequiredFlags() {
-			builder.WriteString(fmt.Sprintf("\t\t\t\t%s: true,\n", flagsIDTemplateData[flag].GetStringID()))
+			builder.WriteString(fmt.Sprintf("\t\t\t\t%s: true,\n", flagsIDTemplateData[flag].GetNameID()))
 		}
 		builder.WriteString("\t\t\t},\n")
 	}
@@ -52,11 +52,11 @@ func GenNamelessCommandComponent(
 	} else {
 		builder.WriteString("\t\t\tmap[argParserConfig.Flag]bool{\n")
 		for _, flag = range namelessCommandDescription.GetOptionalFlags() {
-			builder.WriteString(fmt.Sprintf("\t\t\t\t%s: true,\n", flagsIDTemplateData[flag].GetStringID()))
+			builder.WriteString(fmt.Sprintf("\t\t\t\t%s: true,\n", flagsIDTemplateData[flag].GetNameID()))
 		}
 		builder.WriteString("\t\t\t},\n")
 	}
 
 	builder.WriteString(`		)`)
-	return NamelessCommandComponent(builder.String())
+	return NamelessCommandDescriptionSection(builder.String())
 }

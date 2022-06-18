@@ -11,9 +11,9 @@ const appDescriptionTemplate = `			AppName: "%s",
 			DescriptionHelpInfo: %s,
 `
 
-type AppDescriptionComponent string
+type AppDescriptionSection string
 
-func GenAppDescription(appDescription *configYaml.AppHelpDescription) AppDescriptionComponent {
+func GenAppDescription(appDescription *configYaml.AppHelpDescription) AppDescriptionSection {
 	descriptionHelpInfo := "nil"
 	if len(appDescription.GetDescriptionHelpInfo()) > 0 {
 		builder := strings.Builder{}
@@ -24,7 +24,7 @@ func GenAppDescription(appDescription *configYaml.AppHelpDescription) AppDescrip
 		builder.WriteString("\n\t\t\t}")
 		descriptionHelpInfo = builder.String()
 	}
-	return AppDescriptionComponent(fmt.Sprintf(appDescriptionTemplate,
+	return AppDescriptionSection(fmt.Sprintf(appDescriptionTemplate,
 		appDescription.GetApplicationName(),
 		appDescription.GetNameHelpInfo(),
 		descriptionHelpInfo))

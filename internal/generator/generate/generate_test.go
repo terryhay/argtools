@@ -141,7 +141,7 @@ import (
 	"github.com/terryhay/argtools/pkg/parsedData"
 )
 
-const (
+const(
 	// CommandIDNamelessCommand - 
 	CommandIDNamelessCommand argParserConfig.CommandID = iota + 1
 	//  - 
@@ -323,7 +323,7 @@ import (
 	"github.com/terryhay/argtools/pkg/parsedData"
 )
 
-const (
+const(
 	// CommandIDPrintHelpInfo - print help info
 	CommandIDPrintHelpInfo argParserConfig.CommandID = iota + 1
 )
@@ -403,7 +403,7 @@ import (
 	"github.com/terryhay/argtools/pkg/parsedData"
 )
 
-const (
+const(
 	// CommandIDNamelessCommand - nameless command description help info
 	CommandIDNamelessCommand argParserConfig.CommandID = iota + 1
 	// CommandIDPrintHelpInfo - print help info

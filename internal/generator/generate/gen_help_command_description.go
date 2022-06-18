@@ -5,7 +5,7 @@ import (
 	"github.com/terryhay/argtools/internal/generator/configYaml"
 )
 
-type HelpCommandComponent string
+type HelpCommandDescriptionSection string
 
 const (
 	helpCommandComponentPattern = `		argParserConfig.NewHelpCommandDescription(
@@ -16,7 +16,7 @@ const (
 		),`
 )
 
-func GenHelpCommandComponent(helpCommandDescription *configYaml.HelpCommandDescription) HelpCommandComponent {
+func GenHelpCommandComponent(helpCommandDescription *configYaml.HelpCommandDescription) HelpCommandDescriptionSection {
 	if helpCommandDescription == nil {
 		return "nil"
 	}
@@ -26,7 +26,7 @@ func GenHelpCommandComponent(helpCommandDescription *configYaml.HelpCommandDescr
 		commandList += fmt.Sprintf("\n\t\t\t\t\"%s\": true,", command)
 	}
 
-	return HelpCommandComponent(fmt.Sprintf(helpCommandComponentPattern,
+	return HelpCommandDescriptionSection(fmt.Sprintf(helpCommandComponentPattern,
 		commandList,
 	))
 }

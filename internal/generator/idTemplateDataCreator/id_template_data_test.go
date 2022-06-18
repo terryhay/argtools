@@ -13,7 +13,7 @@ func TestIDTemplateDataGetters(t *testing.T) {
 
 	t.Run("nil_pointer", func(t *testing.T) {
 		require.Equal(t, "", pointer.GetID())
-		require.Equal(t, "", pointer.GetStringID())
+		require.Equal(t, "", pointer.GetNameID())
 		require.Equal(t, "", pointer.GetCallName())
 		require.Equal(t, "", pointer.GetComment())
 	})
@@ -27,7 +27,7 @@ func TestIDTemplateDataGetters(t *testing.T) {
 		pointer = NewIDTemplateData(id, stringID, callName, comment)
 
 		require.Equal(t, id, pointer.GetID())
-		require.Equal(t, stringID, pointer.GetStringID())
+		require.Equal(t, stringID, pointer.GetNameID())
 		require.Equal(t, callName, pointer.GetCallName())
 		require.Equal(t, comment, pointer.GetComment())
 	})

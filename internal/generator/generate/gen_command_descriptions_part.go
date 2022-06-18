@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-type CommandSliceElement string
+type CommandDescriptionsSection string
 
 const (
 	commandSliceElementPrefix = `			{
@@ -30,7 +30,7 @@ const (
 func GenCommandSliceElements(
 	commandDescriptions []*configYaml.CommandDescription,
 	commandsIDTemplateData map[configYaml.Command]*idTemplateDataCreator.IDTemplateData,
-	flagsIDTemplateData map[configYaml.Flag]*idTemplateDataCreator.IDTemplateData) CommandSliceElement {
+	flagsIDTemplateData map[configYaml.Flag]*idTemplateDataCreator.IDTemplateData) CommandDescriptionsSection {
 
 	if len(commandDescriptions) == 0 {
 		return "\t\tnil,"
@@ -81,12 +81,12 @@ func GenCommandSliceElements(
 
 	builder.WriteString(`		},`)
 
-	return CommandSliceElement(builder.String())
+	return CommandDescriptionsSection(builder.String())
 }
 
 func joinCallNames(nameAndIDSlice []*idTemplateDataCreator.IDTemplateData) (res string) {
 	for i := range nameAndIDSlice {
-		res += fmt.Sprintf("\n\t\t\t\t\t%s: true,", nameAndIDSlice[i].GetStringID())
+		res += fmt.Sprintf("\n\t\t\t\t\t%s: true,", nameAndIDSlice[i].GetNameID())
 	}
 
 	return res

@@ -10,14 +10,14 @@ import (
 func TestGenerate(t *testing.T) {
 	t.Parallel()
 
-	command := configYaml.Command("cmd")
-	additionalCommand := configYaml.Command("addcmd")
+	command := "cmd"
+	additionalCommand := "addcmd"
 	commandDescriptionHelpInfo := "command description help info"
 
-	helpCommand := configYaml.Command("help")
-	additionalHelpCommand := configYaml.Command("addhelp")
+	helpCommand := "help"
+	additionalHelpCommand := "addhelp"
 
-	requiredFlag1 := "-" + configYaml.Flag("-rf1")
+	requiredFlag1 := "-" + "-rf1"
 	requiredFlag1Description := &configYaml.FlagDescription{
 		Flag: requiredFlag1,
 		ArgumentsDescription: &configYaml.ArgumentsDescription{
@@ -31,7 +31,7 @@ func TestGenerate(t *testing.T) {
 		},
 	}
 
-	requiredFlag2 := "-" + configYaml.Flag("-rf2")
+	requiredFlag2 := "-" + "-rf2"
 	requiredFlag2Description := &configYaml.FlagDescription{
 		Flag: requiredFlag2,
 		ArgumentsDescription: &configYaml.ArgumentsDescription{
@@ -45,12 +45,12 @@ func TestGenerate(t *testing.T) {
 		},
 	}
 
-	optionalFlag1 := "-" + configYaml.Flag("-of1")
+	optionalFlag1 := "-" + "-of1"
 	optionalFlag1Description := &configYaml.FlagDescription{
 		Flag: optionalFlag1,
 	}
 
-	optionalFlag2 := "-" + configYaml.Flag("-of2")
+	optionalFlag2 := "-" + "-of2"
 	optionalFlag2Description := &configYaml.FlagDescription{
 		Flag: optionalFlag2,
 	}
@@ -59,17 +59,17 @@ func TestGenerate(t *testing.T) {
 		AppHelpDescription: &configYaml.AppHelpDescription{},
 		HelpCommandDescription: &configYaml.HelpCommandDescription{
 			Command: helpCommand,
-			AdditionalCommands: []configYaml.Command{
+			AdditionalCommands: []string{
 				additionalHelpCommand,
 			},
 		},
 		NamelessCommandDescription: &configYaml.NamelessCommandDescription{
 			ArgumentsDescription: &configYaml.ArgumentsDescription{},
-			RequiredFlags: []configYaml.Flag{
+			RequiredFlags: []string{
 				requiredFlag1,
 				requiredFlag2,
 			},
-			OptionalFlags: []configYaml.Flag{
+			OptionalFlags: []string{
 				optionalFlag1,
 				optionalFlag2,
 			},
@@ -77,7 +77,7 @@ func TestGenerate(t *testing.T) {
 		CommandDescriptions: []*configYaml.CommandDescription{
 			{
 				Command: command,
-				AdditionalCommands: []configYaml.Command{
+				AdditionalCommands: []string{
 					additionalCommand,
 				},
 				DescriptionHelpInfo: commandDescriptionHelpInfo,
@@ -90,11 +90,11 @@ func TestGenerate(t *testing.T) {
 						"cmdAllValue",
 					},
 				},
-				RequiredFlags: []configYaml.Flag{
+				RequiredFlags: []string{
 					requiredFlag1,
 					requiredFlag2,
 				},
-				OptionalFlags: []configYaml.Flag{
+				OptionalFlags: []string{
 					optionalFlag1,
 					optionalFlag2,
 				},
@@ -122,7 +122,7 @@ func TestGenerate(t *testing.T) {
 
 	argParserFileText := Generate(
 		config,
-		map[configYaml.Flag]*configYaml.FlagDescription{
+		map[string]*configYaml.FlagDescription{
 			requiredFlag1: requiredFlag1Description,
 			requiredFlag2: requiredFlag2Description,
 			optionalFlag1: optionalFlag1Description,
@@ -141,7 +141,7 @@ import (
 	"github.com/terryhay/argtools/pkg/parsedData"
 )
 
-const(
+const (
 	// CommandIDNamelessCommand - 
 	CommandIDNamelessCommand argParserConfig.CommandID = iota + 1
 	//  - 
@@ -189,6 +189,7 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 		map[argParserConfig.Flag]*argParserConfig.FlagDescription{
 			FlagRf1: {
 				DescriptionHelpInfo:  "",
+
 				ArgDescription: &argParserConfig.ArgumentsDescription{
 					AmountType:              argParserConfig.ArgAmountTypeSingle,
 					SynopsisHelpDescription: "",
@@ -202,6 +203,7 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 			},
 			FlagRf2: {
 				DescriptionHelpInfo:  "",
+
 				ArgDescription: &argParserConfig.ArgumentsDescription{
 					AmountType:              argParserConfig.ArgAmountTypeList,
 					SynopsisHelpDescription: "",
@@ -258,15 +260,16 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 		argParserConfig.NewNamelessCommandDescription(
 			CommandIDNamelessCommand,
 			"",
+			
 			&argParserConfig.ArgumentsDescription{
 				AmountType:              argParserConfig.ArgAmountTypeNoArgs,
 				SynopsisHelpDescription: "",
 			},
-			map[argParserConfig.Flag]bool{
+						map[argParserConfig.Flag]bool{
 				FlagRf1: true,
 				FlagRf2: true,
 			},
-			map[argParserConfig.Flag]bool{
+						map[argParserConfig.Flag]bool{
 				FlagOf1: true,
 				FlagOf2: true,
 			},
@@ -292,8 +295,8 @@ func TestGenerateWithoutNamelessCommand(t *testing.T) {
 
 	descriptionHelpInfo := "command description help info"
 
-	helpCommand := configYaml.Command("help")
-	additionalHelpCommand := configYaml.Command("addhelp")
+	helpCommand := "help"
+	additionalHelpCommand := "addhelp"
 
 	argParserFileText := Generate(
 		&configYaml.Config{
@@ -304,7 +307,7 @@ func TestGenerateWithoutNamelessCommand(t *testing.T) {
 			},
 			HelpCommandDescription: &configYaml.HelpCommandDescription{
 				Command: helpCommand,
-				AdditionalCommands: []configYaml.Command{
+				AdditionalCommands: []string{
 					additionalHelpCommand,
 				},
 			},
@@ -323,7 +326,7 @@ import (
 	"github.com/terryhay/argtools/pkg/parsedData"
 )
 
-const(
+const (
 	// CommandIDPrintHelpInfo - print help info
 	CommandIDPrintHelpInfo argParserConfig.CommandID = iota + 1
 )
@@ -334,6 +337,7 @@ const (
 	// CommandHelp - print help info
 	CommandHelp = "help"
 )
+
 
 // Parse - processes command line arguments
 func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error) {
@@ -347,7 +351,7 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 			},
 		},
 		// flagDescriptions
-nil,
+		nil,
 		// commandDescriptions
 		nil,
 		// helpCommandDescription
@@ -403,7 +407,7 @@ import (
 	"github.com/terryhay/argtools/pkg/parsedData"
 )
 
-const(
+const (
 	// CommandIDNamelessCommand - nameless command description help info
 	CommandIDNamelessCommand argParserConfig.CommandID = iota + 1
 	// CommandIDPrintHelpInfo - print help info
@@ -414,6 +418,7 @@ const (
 	//  - print help info
 	 argParserConfig.Command = ""
 )
+
 
 // Parse - processes command line arguments
 func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error) {
@@ -427,18 +432,18 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 			},
 		},
 		// flagDescriptions
-nil,
+		nil,
 		// commandDescriptions
 		nil,
 		// helpCommandDescription
-nil
+		nil,
 		// namelessCommandDescription
 		argParserConfig.NewNamelessCommandDescription(
 			CommandIDNamelessCommand,
 			"nameless command description help info",
-nil,
-nil,
-nil,
+			nil,
+			nil,
+			nil,
 		))
 
 	if res, err = argParser.Parse(appArgConfig, args); err != nil {

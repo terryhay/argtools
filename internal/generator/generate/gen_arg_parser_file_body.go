@@ -15,25 +15,13 @@ import (
 	"github.com/terryhay/argtools/pkg/helpPrinter"
 	"github.com/terryhay/argtools/pkg/parsedData"
 )
-
+%s
+%s
 %s
 
-%s
-
-%s// Parse - processes command line arguments
+// Parse - processes command line arguments
 func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error) {
-	appArgConfig := argParserConfig.NewArgParserConfig(
-		// appDescription
-		argParserConfig.ApplicationDescription{
-%s		},
-		// flagDescriptions
-%s
-		// commandDescriptions
-%s
-		// helpCommandDescription
-%s
-		// namelessCommandDescription
-%s)
+	appArgConfig := argParserConfig.NewArgParserConfig(%s,%s,%s,%s,%s)
 
 	if res, err = argParser.Parse(appArgConfig, args); err != nil {
 		return nil, err

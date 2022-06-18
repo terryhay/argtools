@@ -16,8 +16,8 @@ const (
 // Check checks command and flag descriptions for duplicates
 func Check(
 	namelessCommandDescription *configYaml.NamelessCommandDescription,
-	commandDescriptions map[configYaml.Command]*configYaml.CommandDescription,
-	flagDescriptions map[configYaml.Flag]*configYaml.FlagDescription,
+	commandDescriptions map[string]*configYaml.CommandDescription,
+	flagDescriptions map[string]*configYaml.FlagDescription,
 ) *argtoolsError.Error {
 
 	var (
@@ -28,7 +28,7 @@ func Check(
 		return err
 	}
 
-	var allUsingFlags map[configYaml.Flag]configYaml.Command
+	var allUsingFlags map[string]string
 	allUsingFlags, err = getAllFlagsFromCommandDescriptions(namelessCommandDescription, commandDescriptions)
 	if err != nil {
 		return err
@@ -53,8 +53,8 @@ func Check(
 }
 
 // CheckFlag checks if flag has dash in front and is not too long
-func CheckFlag(checkFlagCharsFunc func(s string) bool, flag configYaml.Flag) *argtoolsError.Error {
-	if !checkFlagCharsFunc(string(flag)) {
+func CheckFlag(checkFlagCharsFunc func(s string) bool, flag string) *argtoolsError.Error {
+	if !checkFlagCharsFunc(flag) {
 		return argtoolsError.NewError(
 			argtoolsError.CodeConfigIncorrectCharacterInFlagName,
 			fmt.Errorf("configChecker.CheckFlag: flag \"%s\" must contain a dash in front and latin chars", flag))
@@ -124,20 +124,20 @@ func checkArgumentDescription(argDescription *configYaml.ArgumentsDescription) *
 
 func getAllFlagsFromCommandDescriptions(
 	namelessCommandDescription *configYaml.NamelessCommandDescription,
-	commandDescriptionMap map[configYaml.Command]*configYaml.CommandDescription,
-) (allUsingFlagMap map[configYaml.Flag]configYaml.Command, err *argtoolsError.Error) {
+	commandDescriptionMap map[string]*configYaml.CommandDescription,
+) (allUsingFlagMap map[string]string, err *argtoolsError.Error) {
 
 	checkFlagCharsFunc := regexp.MustCompile(`^[a-zA-Z-]+$`).MatchString
-	allUsingFlagMap = make(map[configYaml.Flag]configYaml.Command, 2*len(commandDescriptionMap))
-	checkDuplicateFlagMap := make(map[configYaml.Flag]bool, 2*len(commandDescriptionMap))
+	allUsingFlagMap = make(map[string]string, 2*len(commandDescriptionMap))
+	checkDuplicateFlagMap := make(map[string]bool, 2*len(commandDescriptionMap))
 
 	var (
 		contain bool
-		flag    configYaml.Flag
+		flag    string
 	)
 
 	// checking for nameless command
-	const namelessCommand configYaml.Command = "NamelessCommand"
+	const namelessCommand string = "NamelessCommand"
 	for _, flag = range namelessCommandDescription.GetRequiredFlags() {
 		if err = CheckFlag(checkFlagCharsFunc, flag); err != nil {
 			return nil, err
@@ -165,7 +165,7 @@ func getAllFlagsFromCommandDescriptions(
 
 	// checking for commands
 	for _, commandDescription := range commandDescriptionMap {
-		checkDuplicateFlagMap = map[configYaml.Flag]bool{}
+		checkDuplicateFlagMap = map[string]bool{}
 
 		if err = checkArgumentDescription(commandDescription.GetArgumentsDescription()); err != nil {
 			return nil, err

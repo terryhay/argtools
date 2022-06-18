@@ -1,24 +1,9 @@
 package generate
 
 import (
-	"fmt"
-	"github.com/terryhay/argtools/internal/generator/configYaml"
 	"github.com/terryhay/argtools/internal/generator/idTemplateDataCreator"
 	"sort"
-	"strings"
 )
-
-const (
-	commandIDFirstConstPattern = `
-	// %s - %s
-	%s argParserConfig.CommandID = iota + 1`
-	commandIDConstPattern = `
-	// %s - %s
-	%s`
-)
-
-// CommandIDListSection - string with command id constant definitions list
-type CommandIDListSection string
 
 // byID - type for sorting IDTemplateData pointers by id
 type byID []*idTemplateDataCreator.IDTemplateData
@@ -38,33 +23,8 @@ func (i byID) Swap(left, right int) {
 	i[left], i[right] = i[right], i[left]
 }
 
-// GenCommandIDListSection creates a paste section with command ids
-func GenCommandIDListSection(
-	commandsTemplateData map[configYaml.Command]*idTemplateDataCreator.IDTemplateData,
-	nullCommandIDTemplateData *idTemplateDataCreator.IDTemplateData,
-) CommandIDListSection {
-
-	sortedCommandsTemplateData := sortCommandsTemplateData(commandsTemplateData, nullCommandIDTemplateData)
-
-	builder := strings.Builder{}
-	builder.WriteString("const(")
-
-	templateData := sortedCommandsTemplateData[0]
-	builder.WriteString(fmt.Sprintf(commandIDFirstConstPattern,
-		templateData.GetID(), templateData.GetComment(), templateData.GetID()))
-
-	for i := 1; i < len(sortedCommandsTemplateData); i++ {
-		templateData = sortedCommandsTemplateData[i]
-		builder.WriteString(fmt.Sprintf(commandIDConstPattern,
-			templateData.GetID(), templateData.GetComment(), templateData.GetID()))
-	}
-	builder.WriteString("\n)")
-
-	return CommandIDListSection(builder.String())
-}
-
 func sortCommandsTemplateData(
-	commandsTemplateData map[configYaml.Command]*idTemplateDataCreator.IDTemplateData,
+	commandsTemplateData map[string]*idTemplateDataCreator.IDTemplateData,
 	nullCommandIDTemplateData *idTemplateDataCreator.IDTemplateData,
 ) []*idTemplateDataCreator.IDTemplateData {
 
@@ -94,4 +54,34 @@ func sortCommandsTemplateData(
 	sort.Sort(byID(sortedCommandsTemplateData))
 
 	return sortedCommandsTemplateData
+}
+
+// byNameID - type for sorting IDTemplateData pointers by name id
+type byNameID []*idTemplateDataCreator.IDTemplateData
+
+// Len - implementation of Len sort interface method
+func (i byNameID) Len() int {
+	return len(i)
+}
+
+// Less - implementation of Less sort interface method
+func (i byNameID) Less(left, right int) bool {
+	return i[left].GetNameID() < i[right].GetNameID()
+}
+
+// Swap - implementation of Swap sort interface method
+func (i byNameID) Swap(left, right int) {
+	i[left], i[right] = i[right], i[left]
+}
+
+func sortByNameID(
+	idTemplateDataMap map[string]*idTemplateDataCreator.IDTemplateData,
+) []*idTemplateDataCreator.IDTemplateData {
+	sorted := make([]*idTemplateDataCreator.IDTemplateData, 0, len(idTemplateDataMap))
+	for _, data := range idTemplateDataMap {
+		sorted = append(sorted, data)
+	}
+	sort.Sort(byNameID(sorted))
+
+	return sorted
 }

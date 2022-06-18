@@ -47,13 +47,13 @@ func logic(
 		return err
 	}
 
-	var flagDescriptions map[configYaml.Flag]*configYaml.FlagDescription
+	var flagDescriptions map[string]*configYaml.FlagDescription
 	flagDescriptions, err = configDataExtractor.ExtractFlagDescriptionMap(config.GetFlagDescriptions())
 	if err != nil {
 		return err
 	}
 
-	var commandDescriptions map[configYaml.Command]*configYaml.CommandDescription
+	var commandDescriptions map[string]*configYaml.CommandDescription
 	commandDescriptions, err = configDataExtractor.ExtractCommandDescriptionMap(config.GetCommandDescriptions())
 	if err != nil {
 		return err

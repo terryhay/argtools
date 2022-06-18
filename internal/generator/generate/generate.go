@@ -8,7 +8,7 @@ import (
 // Generate creates argParser.go file text body
 func Generate(
 	config *configYaml.Config,
-	flagDescriptionMap map[configYaml.Flag]*configYaml.FlagDescription,
+	flagDescriptionMap map[string]*configYaml.FlagDescription,
 ) string {
 
 	creator := idTemplateDataCreator.NewIDTemplateCreator()
@@ -21,11 +21,11 @@ func Generate(
 	return GenArgParserFileBody(
 		GenCommandIDListSection(commandsIDTemplateData, namelessCommandIDTemplateData),
 		GenCommandListSection(commandsIDTemplateData),
-		GenFlagStringIDConstants(flagsIDTemplateData),
-		GenAppDescription(config.GetAppHelpDescription()),
-		GenFlagMapElements(config.GetFlagDescriptions(), flagsIDTemplateData),
-		GenCommandSliceElements(config.GetCommandDescriptions(), commandsIDTemplateData, flagsIDTemplateData),
-		GenHelpCommandComponent(config.GetHelpCommandDescription()),
+		GenFlagIDConstantsSection(flagsIDTemplateData),
+		GenAppDescriptionSection(config.GetAppHelpDescription()),
+		GenFlagDescriptionsSection(config.GetFlagDescriptions(), flagsIDTemplateData),
+		GenCommandDescriptionsSection(config.GetCommandDescriptions(), commandsIDTemplateData, flagsIDTemplateData),
+		GenHelpCommandDescriptionSection(config.GetHelpCommandDescription()),
 		GenNamelessCommandComponent(config.GetNamelessCommandDescription(), namelessCommandIDTemplateData, flagsIDTemplateData),
 		commandsIDTemplateData[config.GetHelpCommandDescription().GetCommand()].GetID())
 }

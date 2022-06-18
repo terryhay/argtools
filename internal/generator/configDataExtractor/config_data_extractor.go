@@ -7,12 +7,12 @@ import (
 )
 
 // ExtractFlagDescriptionMap extracts flag descriptions by flags from config object
-func ExtractFlagDescriptionMap(flagDescriptions []*configYaml.FlagDescription) (flagDescriptionMap map[configYaml.Flag]*configYaml.FlagDescription, error *argtoolsError.Error) {
+func ExtractFlagDescriptionMap(flagDescriptions []*configYaml.FlagDescription) (flagDescriptionMap map[string]*configYaml.FlagDescription, error *argtoolsError.Error) {
 	descriptionCount := len(flagDescriptions)
 	if descriptionCount == 0 {
 		return nil, nil
 	}
-	flagDescriptionMap = make(map[configYaml.Flag]*configYaml.FlagDescription, descriptionCount)
+	flagDescriptionMap = make(map[string]*configYaml.FlagDescription, descriptionCount)
 
 	var contain bool
 	for _, flagDescription := range flagDescriptions {
@@ -37,13 +37,13 @@ func ExtractFlagDescriptionMap(flagDescriptions []*configYaml.FlagDescription) (
 }
 
 // ExtractCommandDescriptionMap extracts command descriptions by commands from config object
-func ExtractCommandDescriptionMap(commandDescriptions []*configYaml.CommandDescription) (commandDescriptionMap map[configYaml.Command]*configYaml.CommandDescription, error *argtoolsError.Error) {
+func ExtractCommandDescriptionMap(commandDescriptions []*configYaml.CommandDescription) (commandDescriptionMap map[string]*configYaml.CommandDescription, error *argtoolsError.Error) {
 	descriptionCount := len(commandDescriptions)
 	if descriptionCount == 0 {
 		return nil, nil
 	}
-	commandDescriptionMap = make(map[configYaml.Command]*configYaml.CommandDescription, descriptionCount)
-	checkDuplicationsMap := make(map[configYaml.Command]bool, descriptionCount)
+	commandDescriptionMap = make(map[string]*configYaml.CommandDescription, descriptionCount)
+	checkDuplicationsMap := make(map[string]bool, descriptionCount)
 
 	var contain bool
 	for _, commandDescription := range commandDescriptions {

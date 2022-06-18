@@ -45,7 +45,7 @@ func TestExtractCommandDescriptionMapErrors(t *testing.T) {
 			commandDescriptions: []*configYaml.CommandDescription{
 				{
 					Command: "command",
-					AdditionalCommands: []configYaml.Command{
+					AdditionalCommands: []string{
 						"command",
 					},
 				},
@@ -57,7 +57,7 @@ func TestExtractCommandDescriptionMapErrors(t *testing.T) {
 			commandDescriptions: []*configYaml.CommandDescription{
 				{
 					Command: "command",
-					AdditionalCommands: []configYaml.Command{
+					AdditionalCommands: []string{
 						"command",
 						"command1",
 					},
@@ -70,7 +70,7 @@ func TestExtractCommandDescriptionMapErrors(t *testing.T) {
 			commandDescriptions: []*configYaml.CommandDescription{
 				{
 					Command: "command",
-					AdditionalCommands: []configYaml.Command{
+					AdditionalCommands: []string{
 						"command1",
 						"command",
 					},
@@ -108,7 +108,7 @@ func TestExtractCommandDescriptionMap(t *testing.T) {
 	testData := []struct {
 		caseName            string
 		commandDescriptions []*configYaml.CommandDescription
-		expectedMap         map[configYaml.Command]*configYaml.CommandDescription
+		expectedMap         map[string]*configYaml.CommandDescription
 	}{
 		{
 			caseName:            "no_flag_description",
@@ -122,7 +122,7 @@ func TestExtractCommandDescriptionMap(t *testing.T) {
 					Command: "command",
 				},
 			},
-			expectedMap: map[configYaml.Command]*configYaml.CommandDescription{
+			expectedMap: map[string]*configYaml.CommandDescription{
 				"command": {
 					Command: "command",
 				},
@@ -133,15 +133,15 @@ func TestExtractCommandDescriptionMap(t *testing.T) {
 			commandDescriptions: []*configYaml.CommandDescription{
 				{
 					Command: "command",
-					AdditionalCommands: []configYaml.Command{
+					AdditionalCommands: []string{
 						"command1",
 					},
 				},
 			},
-			expectedMap: map[configYaml.Command]*configYaml.CommandDescription{
+			expectedMap: map[string]*configYaml.CommandDescription{
 				"command": {
 					Command: "command",
-					AdditionalCommands: []configYaml.Command{
+					AdditionalCommands: []string{
 						"command1",
 					},
 				},
@@ -158,7 +158,7 @@ func TestExtractCommandDescriptionMap(t *testing.T) {
 					Command: "command2",
 				},
 			},
-			expectedMap: map[configYaml.Command]*configYaml.CommandDescription{
+			expectedMap: map[string]*configYaml.CommandDescription{
 				"command1": {
 					Command: "command1",
 				},

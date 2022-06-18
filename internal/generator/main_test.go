@@ -222,9 +222,9 @@ func TestLogic(t *testing.T) {
 				return &configYaml.Config{
 						CommandDescriptions: []*configYaml.CommandDescription{
 							{
-								Command: configYaml.Command(gofakeit.Name()),
-								RequiredFlags: []configYaml.Flag{
-									configYaml.Flag(gofakeit.Color()),
+								Command: gofakeit.Name(),
+								RequiredFlags: []string{
+									gofakeit.Color(),
 								},
 							},
 						},

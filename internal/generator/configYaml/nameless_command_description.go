@@ -7,8 +7,8 @@ type NamelessCommandDescription struct {
 	DescriptionHelpInfo string
 
 	// optional
-	RequiredFlags        []Flag
-	OptionalFlags        []Flag
+	RequiredFlags        []string
+	OptionalFlags        []string
 	ArgumentsDescription *ArgumentsDescription
 }
 
@@ -21,7 +21,7 @@ func (i *NamelessCommandDescription) GetDescriptionHelpInfo() string {
 }
 
 // GetRequiredFlags - RequiredFlags field getter
-func (i *NamelessCommandDescription) GetRequiredFlags() []Flag {
+func (i *NamelessCommandDescription) GetRequiredFlags() []string {
 	if i == nil {
 		return nil
 	}
@@ -29,7 +29,7 @@ func (i *NamelessCommandDescription) GetRequiredFlags() []Flag {
 }
 
 // GetOptionalFlags - OptionalFlags field getter
-func (i *NamelessCommandDescription) GetOptionalFlags() []Flag {
+func (i *NamelessCommandDescription) GetOptionalFlags() []string {
 	if i == nil {
 		return nil
 	}
@@ -48,8 +48,8 @@ type nullCommandDescriptionSource struct {
 	DescriptionHelpInfo string `yaml:"description_help_info"`
 
 	// optional
-	RequiredFlags        []Flag                `yaml:"required_flags"`
-	OptionalFlags        []Flag                `yaml:"optional_flags"`
+	RequiredFlags        []string              `yaml:"required_flags"`
+	OptionalFlags        []string              `yaml:"optional_flags"`
 	ArgumentsDescription *ArgumentsDescription `yaml:"arguments_description"`
 }
 

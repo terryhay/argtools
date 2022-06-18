@@ -15,7 +15,7 @@ func TestConfigGetters(t *testing.T) {
 	var pointer *Config
 
 	t.Run("nil_pointer", func(t *testing.T) {
-		require.Equal(t, Version(""), pointer.GetVersion())
+		require.Equal(t, "", pointer.GetVersion())
 		require.Nil(t, pointer.GetAppHelpDescription())
 		require.Nil(t, pointer.GetHelpCommandDescription())
 		require.Nil(t, pointer.GetNamelessCommandDescription())
@@ -25,7 +25,7 @@ func TestConfigGetters(t *testing.T) {
 
 	t.Run("initialized_pointer", func(t *testing.T) {
 		pointer = &Config{
-			Version:                    Version(gofakeit.Name()),
+			Version:                    gofakeit.Name(),
 			AppHelpDescription:         &AppHelpDescription{},
 			HelpCommandDescription:     &HelpCommandDescription{},
 			NamelessCommandDescription: &NamelessCommandDescription{},

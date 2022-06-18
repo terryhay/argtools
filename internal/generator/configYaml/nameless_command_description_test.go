@@ -23,8 +23,8 @@ func TestNamelessCommandDescriptionGetters(t *testing.T) {
 	t.Run("initialized_pointer", func(t *testing.T) {
 		pointer = &NamelessCommandDescription{
 			DescriptionHelpInfo:  gofakeit.Name(),
-			RequiredFlags:        []Flag{Flag(gofakeit.Name())},
-			OptionalFlags:        []Flag{Flag(gofakeit.Name())},
+			RequiredFlags:        []string{gofakeit.Name()},
+			OptionalFlags:        []string{gofakeit.Name()},
 			ArgumentsDescription: &ArgumentsDescription{},
 		}
 

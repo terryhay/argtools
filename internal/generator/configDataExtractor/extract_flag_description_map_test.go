@@ -70,7 +70,7 @@ func TestExtractFlagDescriptionMap(t *testing.T) {
 	testData := []struct {
 		caseName         string
 		flagDescriptions []*configYaml.FlagDescription
-		expectedMap      map[configYaml.Flag]*configYaml.FlagDescription
+		expectedMap      map[string]*configYaml.FlagDescription
 	}{
 		{
 			caseName:         "no_flag_description",
@@ -84,7 +84,7 @@ func TestExtractFlagDescriptionMap(t *testing.T) {
 					Flag: "flag",
 				},
 			},
-			expectedMap: map[configYaml.Flag]*configYaml.FlagDescription{
+			expectedMap: map[string]*configYaml.FlagDescription{
 				"flag": {
 					Flag: "flag",
 				},
@@ -100,7 +100,7 @@ func TestExtractFlagDescriptionMap(t *testing.T) {
 					Flag: "flag2",
 				},
 			},
-			expectedMap: map[configYaml.Flag]*configYaml.FlagDescription{
+			expectedMap: map[string]*configYaml.FlagDescription{
 				"flag1": {
 					Flag: "flag1",
 				},

@@ -21,7 +21,7 @@ func TestConfigCheckerErrors(t *testing.T) {
 
 	value := gofakeit.Color()
 
-	flag := "-" + configYaml.Flag(gofakeit.Color())
+	flag := "-" + gofakeit.Color()
 	if len(flag) >= maxFlagLen {
 		flag = flag[:maxFlagLen]
 	}
@@ -29,8 +29,8 @@ func TestConfigCheckerErrors(t *testing.T) {
 	testData := []struct {
 		caseName                   string
 		namelessCommandDescription *configYaml.NamelessCommandDescription
-		commandDescriptionMap      map[configYaml.Command]*configYaml.CommandDescription
-		flagDescriptionMap         map[configYaml.Flag]*configYaml.FlagDescription
+		commandDescriptionMap      map[string]*configYaml.CommandDescription
+		flagDescriptionMap         map[string]*configYaml.FlagDescription
 		expectedErrorCode          argtoolsError.Code
 	}{
 		{
@@ -44,8 +44,8 @@ func TestConfigCheckerErrors(t *testing.T) {
 		},
 		{
 			caseName: "default_value_with_no_args_amount_type_in_command",
-			commandDescriptionMap: map[configYaml.Command]*configYaml.CommandDescription{
-				configYaml.Command(gofakeit.Name()): {
+			commandDescriptionMap: map[string]*configYaml.CommandDescription{
+				gofakeit.Name(): {
 					ArgumentsDescription: &configYaml.ArgumentsDescription{
 						DefaultValues: []string{value},
 					},
@@ -84,11 +84,11 @@ func TestConfigCheckerErrors(t *testing.T) {
 		{
 			caseName: "flag_with_check_arg_error",
 			namelessCommandDescription: &configYaml.NamelessCommandDescription{
-				RequiredFlags: []configYaml.Flag{
+				RequiredFlags: []string{
 					flag,
 				},
 			},
-			flagDescriptionMap: map[configYaml.Flag]*configYaml.FlagDescription{
+			flagDescriptionMap: map[string]*configYaml.FlagDescription{
 				flag: {
 					Flag: flag,
 					ArgumentsDescription: &configYaml.ArgumentsDescription{
@@ -100,13 +100,13 @@ func TestConfigCheckerErrors(t *testing.T) {
 		},
 		{
 			caseName: "duplicate_flag_in_required_list",
-			commandDescriptionMap: map[configYaml.Command]*configYaml.CommandDescription{
-				configYaml.Command(gofakeit.Name()): {
+			commandDescriptionMap: map[string]*configYaml.CommandDescription{
+				gofakeit.Name(): {
 					ArgumentsDescription: &configYaml.ArgumentsDescription{
 						AmountType:    argParserConfig.ArgAmountTypeSingle,
 						DefaultValues: []string{gofakeit.Color()},
 					},
-					RequiredFlags: []configYaml.Flag{
+					RequiredFlags: []string{
 						flag,
 						flag,
 					},
@@ -116,8 +116,8 @@ func TestConfigCheckerErrors(t *testing.T) {
 		},
 		{
 			caseName: "duplicate_flag_in_optional_list",
-			commandDescriptionMap: map[configYaml.Command]*configYaml.CommandDescription{
-				configYaml.Command(gofakeit.Name()): {
+			commandDescriptionMap: map[string]*configYaml.CommandDescription{
+				gofakeit.Name(): {
 					ArgumentsDescription: &configYaml.ArgumentsDescription{
 						AmountType: argParserConfig.ArgAmountTypeSingle,
 						DefaultValues: []string{
@@ -127,7 +127,7 @@ func TestConfigCheckerErrors(t *testing.T) {
 							value,
 						},
 					},
-					OptionalFlags: []configYaml.Flag{
+					OptionalFlags: []string{
 						flag,
 						flag,
 					},
@@ -137,12 +137,12 @@ func TestConfigCheckerErrors(t *testing.T) {
 		},
 		{
 			caseName: "duplicate_flag_in_required_and_optional_lists",
-			commandDescriptionMap: map[configYaml.Command]*configYaml.CommandDescription{
-				configYaml.Command(gofakeit.Name()): {
-					RequiredFlags: []configYaml.Flag{
+			commandDescriptionMap: map[string]*configYaml.CommandDescription{
+				gofakeit.Name(): {
+					RequiredFlags: []string{
 						flag,
 					},
-					OptionalFlags: []configYaml.Flag{
+					OptionalFlags: []string{
 						flag,
 					},
 				},
@@ -152,10 +152,10 @@ func TestConfigCheckerErrors(t *testing.T) {
 
 		{
 			caseName: "unused_flag",
-			commandDescriptionMap: map[configYaml.Command]*configYaml.CommandDescription{
-				configYaml.Command(gofakeit.Name()): {},
+			commandDescriptionMap: map[string]*configYaml.CommandDescription{
+				gofakeit.Name(): {},
 			},
-			flagDescriptionMap: map[configYaml.Flag]*configYaml.FlagDescription{
+			flagDescriptionMap: map[string]*configYaml.FlagDescription{
 				flag: {
 					Flag: flag,
 				},
@@ -165,9 +165,9 @@ func TestConfigCheckerErrors(t *testing.T) {
 
 		{
 			caseName: "undefined_required_flag",
-			commandDescriptionMap: map[configYaml.Command]*configYaml.CommandDescription{
-				configYaml.Command(gofakeit.Name()): {
-					RequiredFlags: []configYaml.Flag{
+			commandDescriptionMap: map[string]*configYaml.CommandDescription{
+				gofakeit.Name(): {
+					RequiredFlags: []string{
 						flag,
 					},
 				},
@@ -176,9 +176,9 @@ func TestConfigCheckerErrors(t *testing.T) {
 		},
 		{
 			caseName: "undefined_optional_flag",
-			commandDescriptionMap: map[configYaml.Command]*configYaml.CommandDescription{
-				configYaml.Command(gofakeit.Name()): {
-					OptionalFlags: []configYaml.Flag{
+			commandDescriptionMap: map[string]*configYaml.CommandDescription{
+				gofakeit.Name(): {
+					OptionalFlags: []string{
 						flag,
 					},
 				},
@@ -189,7 +189,7 @@ func TestConfigCheckerErrors(t *testing.T) {
 		{
 			caseName: "nameless_command_description_with_duplicate_required_flags",
 			namelessCommandDescription: &configYaml.NamelessCommandDescription{
-				RequiredFlags: []configYaml.Flag{
+				RequiredFlags: []string{
 					flag,
 					flag,
 				},
@@ -200,7 +200,7 @@ func TestConfigCheckerErrors(t *testing.T) {
 		{
 			caseName: "nameless_command_description_with_duplicate_optional_flags",
 			namelessCommandDescription: &configYaml.NamelessCommandDescription{
-				OptionalFlags: []configYaml.Flag{
+				OptionalFlags: []string{
 					flag,
 					flag,
 				},
@@ -211,10 +211,10 @@ func TestConfigCheckerErrors(t *testing.T) {
 		{
 			caseName: "nameless_command_description_with_duplicate_required_and_optional_flags",
 			namelessCommandDescription: &configYaml.NamelessCommandDescription{
-				RequiredFlags: []configYaml.Flag{
+				RequiredFlags: []string{
 					flag,
 				},
-				OptionalFlags: []configYaml.Flag{
+				OptionalFlags: []string{
 					flag,
 				},
 			},
@@ -224,10 +224,10 @@ func TestConfigCheckerErrors(t *testing.T) {
 		{
 			caseName: "nameless_command_required_flag_does_not_have_dash_in_front",
 			namelessCommandDescription: &configYaml.NamelessCommandDescription{
-				RequiredFlags: []configYaml.Flag{
+				RequiredFlags: []string{
 					flag[1:],
 				},
-				OptionalFlags: []configYaml.Flag{
+				OptionalFlags: []string{
 					flag,
 				},
 			},
@@ -237,10 +237,10 @@ func TestConfigCheckerErrors(t *testing.T) {
 		{
 			caseName: "nameless_command_optional_flag_has_russian_char",
 			namelessCommandDescription: &configYaml.NamelessCommandDescription{
-				RequiredFlags: []configYaml.Flag{
+				RequiredFlags: []string{
 					flag,
 				},
-				OptionalFlags: []configYaml.Flag{
+				OptionalFlags: []string{
 					"-йцукен",
 				},
 			},
@@ -249,9 +249,9 @@ func TestConfigCheckerErrors(t *testing.T) {
 		},
 		{
 			caseName: "command_with_too_long_required_flag",
-			commandDescriptionMap: map[configYaml.Command]*configYaml.CommandDescription{
-				configYaml.Command(gofakeit.Color()): {
-					RequiredFlags: []configYaml.Flag{
+			commandDescriptionMap: map[string]*configYaml.CommandDescription{
+				gofakeit.Color(): {
+					RequiredFlags: []string{
 						flag + "d",
 					},
 				},
@@ -261,9 +261,9 @@ func TestConfigCheckerErrors(t *testing.T) {
 		},
 		{
 			caseName: "command_with_empty_optional_flag",
-			commandDescriptionMap: map[configYaml.Command]*configYaml.CommandDescription{
-				configYaml.Command(gofakeit.Color()): {
-					OptionalFlags: []configYaml.Flag{
+			commandDescriptionMap: map[string]*configYaml.CommandDescription{
+				gofakeit.Color(): {
+					OptionalFlags: []string{
 						"",
 					},
 				},

@@ -4,18 +4,18 @@ import "fmt"
 
 // CommandDescription - description of a command line command (which can contain flags and arguments)
 type CommandDescription struct {
-	Command             Command
+	Command             string
 	DescriptionHelpInfo string
 
 	// optional
-	RequiredFlags        []Flag
-	OptionalFlags        []Flag
-	AdditionalCommands   []Command
+	RequiredFlags        []string
+	OptionalFlags        []string
+	AdditionalCommands   []string
 	ArgumentsDescription *ArgumentsDescription
 }
 
 // GetCommand - Command field getter
-func (i *CommandDescription) GetCommand() Command {
+func (i *CommandDescription) GetCommand() string {
 	if i == nil {
 		return ""
 	}
@@ -23,7 +23,7 @@ func (i *CommandDescription) GetCommand() Command {
 }
 
 // GetAdditionalCommands - AdditionalCommands field getter
-func (i *CommandDescription) GetAdditionalCommands() []Command {
+func (i *CommandDescription) GetAdditionalCommands() []string {
 	if i == nil {
 		return nil
 	}
@@ -47,7 +47,7 @@ func (i *CommandDescription) GetArgumentsDescription() *ArgumentsDescription {
 }
 
 // GetRequiredFlags - RequiredFlags field getter
-func (i *CommandDescription) GetRequiredFlags() []Flag {
+func (i *CommandDescription) GetRequiredFlags() []string {
 	if i == nil {
 		return nil
 	}
@@ -55,7 +55,7 @@ func (i *CommandDescription) GetRequiredFlags() []Flag {
 }
 
 // GetOptionalFlags - OptionalFlags field getter
-func (i *CommandDescription) GetOptionalFlags() []Flag {
+func (i *CommandDescription) GetOptionalFlags() []string {
 	if i == nil {
 		return nil
 	}
@@ -63,13 +63,13 @@ func (i *CommandDescription) GetOptionalFlags() []Flag {
 }
 
 type commandDescriptionSource struct {
-	Command             Command `yaml:"command"`
-	DescriptionHelpInfo string  `yaml:"description_help_info"`
+	Command             string `yaml:"command"`
+	DescriptionHelpInfo string `yaml:"description_help_info"`
 
 	// optional
-	RequiredFlags        []Flag                `yaml:"required_flags"`
-	OptionalFlags        []Flag                `yaml:"optional_flags"`
-	AdditionalCommands   []Command             `yaml:"additional_names"`
+	RequiredFlags        []string              `yaml:"required_flags"`
+	OptionalFlags        []string              `yaml:"optional_flags"`
+	AdditionalCommands   []string              `yaml:"additional_names"`
 	ArgumentsDescription *ArgumentsDescription `yaml:"arguments_description"`
 }
 

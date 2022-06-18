@@ -15,14 +15,14 @@ func TestHelpCommandDescriptionGetters(t *testing.T) {
 	var pointer *HelpCommandDescription
 
 	t.Run("nil_pointer", func(t *testing.T) {
-		require.Equal(t, Command(""), pointer.GetCommand())
+		require.Equal(t, "", pointer.GetCommand())
 		require.Nil(t, pointer.GetAdditionalCommands())
 	})
 
 	t.Run("initialized_pointer", func(t *testing.T) {
 		pointer = &HelpCommandDescription{
-			Command:            Command(gofakeit.Name()),
-			AdditionalCommands: []Command{Command(gofakeit.Name())},
+			Command:            gofakeit.Name(),
+			AdditionalCommands: []string{gofakeit.Name()},
 		}
 
 		require.Equal(t, pointer.Command, pointer.GetCommand())

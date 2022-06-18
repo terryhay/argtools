@@ -4,14 +4,14 @@ import "fmt"
 
 // HelpCommandDescription - special description of a help command
 type HelpCommandDescription struct {
-	Command Command
+	Command string
 
 	// optional
-	AdditionalCommands []Command
+	AdditionalCommands []string
 }
 
 // GetCommand - Command field getter
-func (i *HelpCommandDescription) GetCommand() Command {
+func (i *HelpCommandDescription) GetCommand() string {
 	if i == nil {
 		return ""
 	}
@@ -19,7 +19,7 @@ func (i *HelpCommandDescription) GetCommand() Command {
 }
 
 // GetAdditionalCommands - AdditionalCommands field getter
-func (i *HelpCommandDescription) GetAdditionalCommands() []Command {
+func (i *HelpCommandDescription) GetAdditionalCommands() []string {
 	if i == nil {
 		return nil
 	}
@@ -27,8 +27,8 @@ func (i *HelpCommandDescription) GetAdditionalCommands() []Command {
 }
 
 type helpCommandDescriptionSource struct {
-	Command            Command   `yaml:"command"`
-	AdditionalCommands []Command `yaml:"additional_commands"`
+	Command            string   `yaml:"command"`
+	AdditionalCommands []string `yaml:"additional_commands"`
 }
 
 // UnmarshalYAML - custom unmarshal logic with checking required fields

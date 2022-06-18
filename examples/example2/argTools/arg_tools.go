@@ -44,6 +44,7 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 		map[argParserConfig.Flag]*argParserConfig.FlagDescription{
 			FlagCheck: {
 				DescriptionHelpInfo: "check command arguments types",
+
 				ArgDescription: &argParserConfig.ArgumentsDescription{
 					AmountType:              argParserConfig.ArgAmountTypeSingle,
 					SynopsisHelpDescription: "str",
@@ -64,6 +65,7 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 		argParserConfig.NewNamelessCommandDescription(
 			CommandIDNamelessCommand,
 			"checks arguments types",
+
 			&argParserConfig.ArgumentsDescription{
 				AmountType:              argParserConfig.ArgAmountTypeList,
 				SynopsisHelpDescription: "str list",

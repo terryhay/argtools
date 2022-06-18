@@ -15,7 +15,7 @@ func TestCommandDescriptionGetters(t *testing.T) {
 	var pointer *CommandDescription
 
 	t.Run("nil_pointer", func(t *testing.T) {
-		require.Equal(t, Command(""), pointer.GetCommand())
+		require.Equal(t, "", pointer.GetCommand())
 		require.Equal(t, "", pointer.GetDescriptionHelpInfo())
 		require.Nil(t, pointer.GetRequiredFlags())
 		require.Nil(t, pointer.GetOptionalFlags())
@@ -25,11 +25,11 @@ func TestCommandDescriptionGetters(t *testing.T) {
 
 	t.Run("initialized_pointer", func(t *testing.T) {
 		pointer = &CommandDescription{
-			Command:              Command(gofakeit.Name()),
+			Command:              gofakeit.Name(),
 			DescriptionHelpInfo:  gofakeit.Name(),
-			RequiredFlags:        []Flag{Flag(gofakeit.Name())},
-			OptionalFlags:        []Flag{Flag(gofakeit.Name())},
-			AdditionalCommands:   []Command{Command(gofakeit.Name())},
+			RequiredFlags:        []string{gofakeit.Name()},
+			OptionalFlags:        []string{gofakeit.Name()},
+			AdditionalCommands:   []string{gofakeit.Name()},
 			ArgumentsDescription: &ArgumentsDescription{},
 		}
 

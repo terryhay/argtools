@@ -15,7 +15,7 @@ func TestFlagDescriptionGetters(t *testing.T) {
 	var pointer *FlagDescription
 
 	t.Run("nil_pointer", func(t *testing.T) {
-		require.Equal(t, Flag(""), pointer.GetFlag())
+		require.Equal(t, "", pointer.GetFlag())
 		require.Equal(t, "", pointer.GetDescriptionHelpInfo())
 		require.Equal(t, "", pointer.GetSynopsisDescription())
 		require.Nil(t, pointer.GetArgumentsDescription())
@@ -23,7 +23,7 @@ func TestFlagDescriptionGetters(t *testing.T) {
 
 	t.Run("initialized_pointer", func(t *testing.T) {
 		pointer = &FlagDescription{
-			Flag:                 Flag(gofakeit.Name()),
+			Flag:                 gofakeit.Name(),
 			DescriptionHelpInfo:  gofakeit.Name(),
 			SynopsisDescription:  gofakeit.Name(),
 			ArgumentsDescription: &ArgumentsDescription{},

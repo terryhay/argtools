@@ -8,31 +8,34 @@ import (
 )
 
 const (
-	argumentsDescriptionPrefix = `%[1]s%[2]s&argParserConfig.ArgumentsDescription{
+	argumentsDescriptionPrefix = `
+%[1]s%[2]s&argParserConfig.ArgumentsDescription{
 %[1]s	AmountType:              %[3]s,
-%[1]s	SynopsisHelpDescription: "%[4]s",
-`
-	argumentsDescriptionDefaultValuesPrefix = `%s	DefaultValues: []string{
-`
-	argumentsDescriptionAllowedValuesPrefix = `%s	AllowedValues: map[string]bool{
-`
-	argumentsDescriptionVariantValue = `%s		"%s",
-`
-	argumentsDescriptionMapVariantValue = `%s		"%s": true,
-`
-	argumentsDescriptionVariantValuesPostfix = `%s	},
-`
-	argumentsDescriptionPostfix = `%s},
-`
+%[1]s	SynopsisHelpDescription: "%[4]s",`
+	argumentsDescriptionDefaultValuesPrefix = `
+%[1]s	DefaultValues: []string{`
+	argumentsDescriptionAllowedValuesPrefix = `
+%[1]s	AllowedValues: map[string]bool{`
+	argumentsDescriptionVariantValue = `
+%[1]s		"%[2]s",`
+	argumentsDescriptionMapVariantValue = `
+%[1]s		"%[2]s": true,`
+	argumentsDescriptionVariantValuesPostfix = `
+%[1]s	},`
+	argumentsDescriptionPostfix = `
+%[1]s}`
 )
 
-type ArgDescriptionElement string
+// ArgDescriptionPart - string with argument description
+type ArgDescriptionPart string
 
-func GenArgDescriptionElement(
+// GenArgDescriptionPart - creates a paste part with argument description
+func GenArgDescriptionPart(
 	argumentsDescription *configYaml.ArgumentsDescription,
 	indent string,
 	pasteArgDescriptionPrefix bool,
-) ArgDescriptionElement {
+) ArgDescriptionPart {
+
 	builder := strings.Builder{}
 
 	prefix := ""
@@ -63,7 +66,7 @@ func GenArgDescriptionElement(
 
 	builder.WriteString(fmt.Sprintf(argumentsDescriptionPostfix, indent))
 
-	return ArgDescriptionElement(builder.String())
+	return ArgDescriptionPart(builder.String())
 }
 
 func getArgAmountTypeElement(argAmountType argParserConfig.ArgAmountType) string {

@@ -2,18 +2,9 @@ package configYaml
 
 import "fmt"
 
-// Version - yaml file format version
-type Version string
-
-// Flag - command flag name type
-type Flag string
-
-// Command - application command (which contains flags and arguments) type
-type Command string
-
 // Config - code struct of a config yaml file
 type Config struct {
-	Version                Version
+	Version                string
 	AppHelpDescription     *AppHelpDescription
 	HelpCommandDescription *HelpCommandDescription
 
@@ -26,7 +17,7 @@ type Config struct {
 }
 
 // GetVersion - Version field getter
-func (i *Config) GetVersion() Version {
+func (i *Config) GetVersion() string {
 	if i == nil {
 		return ""
 	}
@@ -96,7 +87,7 @@ func (i *Config) UnmarshalYAML(unmarshal func(interface{}) error) (err error) {
 	if len(source.Version) == 0 {
 		return fmt.Errorf(`config unmarshal error: no required field "version"`)
 	}
-	i.Version = Version(source.Version)
+	i.Version = source.Version
 
 	if source.AppHelpDescription == nil {
 		return fmt.Errorf(`config unmarshal error: no required field "app_help_description"`)

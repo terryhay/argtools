@@ -6,14 +6,24 @@ import (
 	"strings"
 )
 
-const appDescriptionTemplate = `			AppName: "%s",
+const (
+	appDescriptionPattern = `
+		// appDescription
+		argParserConfig.ApplicationDescription{
+			AppName: "%s",
 			NameHelpInfo: "%s",
 			DescriptionHelpInfo: %s,
-`
+		}`
+)
 
+// AppDescriptionSection - string with application description paste section
 type AppDescriptionSection string
 
-func GenAppDescription(appDescription *configYaml.AppHelpDescription) AppDescriptionSection {
+// GenAppDescriptionSection creates a paste section with application description
+func GenAppDescriptionSection(
+	appDescription *configYaml.AppHelpDescription,
+) AppDescriptionSection {
+
 	descriptionHelpInfo := "nil"
 	if len(appDescription.GetDescriptionHelpInfo()) > 0 {
 		builder := strings.Builder{}
@@ -24,7 +34,8 @@ func GenAppDescription(appDescription *configYaml.AppHelpDescription) AppDescrip
 		builder.WriteString("\n\t\t\t}")
 		descriptionHelpInfo = builder.String()
 	}
-	return AppDescriptionSection(fmt.Sprintf(appDescriptionTemplate,
+
+	return AppDescriptionSection(fmt.Sprintf(appDescriptionPattern,
 		appDescription.GetApplicationName(),
 		appDescription.GetNameHelpInfo(),
 		descriptionHelpInfo))

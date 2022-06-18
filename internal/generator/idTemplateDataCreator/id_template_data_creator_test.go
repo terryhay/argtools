@@ -10,21 +10,21 @@ import (
 func TestIDTemplateDataCreator(t *testing.T) {
 	t.Parallel()
 
-	command := configYaml.Command(gofakeit.Color())
-	additionalCommand := configYaml.Command(gofakeit.Color())
+	command := gofakeit.Color()
+	additionalCommand := gofakeit.Color()
 	commandDescriptionHelpInfo := gofakeit.Name()
 
-	helpCommand := configYaml.Command(gofakeit.Color())
-	additionalHelpCommand := configYaml.Command(gofakeit.Color())
+	helpCommand := gofakeit.Color()
+	additionalHelpCommand := gofakeit.Color()
 
-	flag := configYaml.Flag(gofakeit.Color())
+	flag := gofakeit.Color()
 
 	creator := NewIDTemplateCreator()
 	commandsIDTemplateData, nullCommandIDTemplateData, flagsIDTemplateData := creator.CreateIDTemplateData(
 		[]*configYaml.CommandDescription{
 			{
 				Command: command,
-				AdditionalCommands: []configYaml.Command{
+				AdditionalCommands: []string{
 					additionalCommand,
 				},
 				DescriptionHelpInfo: commandDescriptionHelpInfo,
@@ -35,42 +35,42 @@ func TestIDTemplateDataCreator(t *testing.T) {
 		},
 		&configYaml.HelpCommandDescription{
 			Command: helpCommand,
-			AdditionalCommands: []configYaml.Command{
+			AdditionalCommands: []string{
 				additionalHelpCommand,
 			},
 		},
 		&configYaml.NamelessCommandDescription{},
-		map[configYaml.Flag]*configYaml.FlagDescription{
+		map[string]*configYaml.FlagDescription{
 			flag: {
 				Flag: flag,
 			},
 		})
 
-	expectedCommandID := creator.CreateID(PrefixCommandID, string(command))
+	expectedCommandID := creator.CreateID(PrefixCommandID, command)
 	expectedHelpCommandID := "CommandIDPrintHelpInfo"
-	expectedCommandsIDTemplateData := map[configYaml.Command]*IDTemplateData{
+	expectedCommandsIDTemplateData := map[string]*IDTemplateData{
 		command: {
 			id:       expectedCommandID,
-			nameID:   creator.CreateID(PrefixCommandStringID, string(command)),
-			callName: string(command),
+			nameID:   creator.CreateID(PrefixCommandStringID, command),
+			callName: command,
 			comment:  commandDescriptionHelpInfo,
 		},
 		additionalCommand: {
 			id:       expectedCommandID,
-			nameID:   creator.CreateID(PrefixCommandStringID, string(additionalCommand)),
-			callName: string(additionalCommand),
+			nameID:   creator.CreateID(PrefixCommandStringID, additionalCommand),
+			callName: additionalCommand,
 			comment:  commandDescriptionHelpInfo,
 		},
 		helpCommand: {
 			id:       expectedHelpCommandID,
-			nameID:   creator.CreateID(PrefixCommandStringID, string(helpCommand)),
-			callName: string(helpCommand),
+			nameID:   creator.CreateID(PrefixCommandStringID, helpCommand),
+			callName: helpCommand,
 			comment:  helpCommandComment,
 		},
 		additionalHelpCommand: {
 			id:       expectedHelpCommandID,
-			nameID:   creator.CreateID(PrefixCommandStringID, string(additionalHelpCommand)),
-			callName: string(additionalHelpCommand),
+			nameID:   creator.CreateID(PrefixCommandStringID, additionalHelpCommand),
+			callName: additionalHelpCommand,
 			comment:  helpCommandComment,
 		},
 		"": {},
@@ -90,7 +90,7 @@ func TestIDTemplateDataCreator(t *testing.T) {
 	require.True(t, ok)
 	require.Equal(t, &IDTemplateData{
 		id:       "",
-		nameID:   creator.CreateID(PrefixFlagStringID, string(flag)),
-		callName: string(flag),
+		nameID:   creator.CreateID(PrefixFlagStringID, flag),
+		callName: flag,
 	}, flagIDTemplateData)
 }

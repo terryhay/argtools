@@ -4,7 +4,7 @@ import "fmt"
 
 // FlagDescription - description of a command line flag
 type FlagDescription struct {
-	Flag                Flag
+	Flag                string
 	DescriptionHelpInfo string
 	SynopsisDescription string
 
@@ -13,7 +13,7 @@ type FlagDescription struct {
 }
 
 // GetFlag - Flag getter
-func (i *FlagDescription) GetFlag() Flag {
+func (i *FlagDescription) GetFlag() string {
 	if i == nil {
 		return ""
 	}
@@ -61,7 +61,7 @@ func (i *FlagDescription) UnmarshalYAML(unmarshal func(interface{}) error) (err 
 	if len(source.Flag) == 0 {
 		return fmt.Errorf(`flagDescription unmarshal error: no required field "flag"`)
 	}
-	i.Flag = Flag(source.Flag)
+	i.Flag = source.Flag
 
 	if len(source.DescriptionHelpInfo) == 0 {
 		return fmt.Errorf(`flagDescription unmarshal error: no required field "description_help_info"`)

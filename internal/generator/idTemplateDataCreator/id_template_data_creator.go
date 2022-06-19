@@ -98,22 +98,24 @@ func (i IDTemplateDataCreator) CreateIDTemplateData(
 	}
 
 	// help command
-	commandId = i.CreateID(PrefixCommandID, helpCommandIDStr)
-	callName = helpCommandDescription.GetCommand()
+	if helpCommandDescription != nil {
+		commandId = i.CreateID(PrefixCommandID, helpCommandIDStr)
+		callName = helpCommandDescription.GetCommand()
 
-	commandsIDTemplateData[helpCommandDescription.GetCommand()] = NewIDTemplateData(
-		commandId,
-		i.CreateID(PrefixCommandStringID, callName),
-		callName,
-		helpCommandComment)
-
-	for k = range helpCommandDescription.GetAdditionalCommands() {
-		callName = helpCommandDescription.GetAdditionalCommands()[k]
-		commandsIDTemplateData[helpCommandDescription.GetAdditionalCommands()[k]] = NewIDTemplateData(
+		commandsIDTemplateData[helpCommandDescription.GetCommand()] = NewIDTemplateData(
 			commandId,
 			i.CreateID(PrefixCommandStringID, callName),
 			callName,
 			helpCommandComment)
+
+		for k = range helpCommandDescription.GetAdditionalCommands() {
+			callName = helpCommandDescription.GetAdditionalCommands()[k]
+			commandsIDTemplateData[helpCommandDescription.GetAdditionalCommands()[k]] = NewIDTemplateData(
+				commandId,
+				i.CreateID(PrefixCommandStringID, callName),
+				callName,
+				helpCommandComment)
+		}
 	}
 
 	// null command

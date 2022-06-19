@@ -25,7 +25,7 @@ func Generate(
 		GenAppDescriptionSection(config.GetAppHelpDescription()),
 		GenFlagDescriptionsSection(config.GetFlagDescriptions(), flagsIDTemplateData),
 		GenCommandDescriptionsSection(config.GetCommandDescriptions(), commandsIDTemplateData, flagsIDTemplateData),
-		GenHelpCommandDescriptionSection(config.GetHelpCommandDescription()),
+		GenHelpCommandDescriptionSection(config.GetHelpCommandDescription(), commandsIDTemplateData),
 		GenNamelessCommandComponent(config.GetNamelessCommandDescription(), namelessCommandIDTemplateData, flagsIDTemplateData),
 		commandsIDTemplateData[config.GetHelpCommandDescription().GetCommand()].GetID())
 }

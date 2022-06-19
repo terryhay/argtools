@@ -63,7 +63,6 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 		map[argParserConfig.Flag]*argParserConfig.FlagDescription{
 			FlagCheck: {
 				DescriptionHelpInfo: "check command arguments types",
-
 				ArgDescription: &argParserConfig.ArgumentsDescription{
 					AmountType:              argParserConfig.ArgAmountTypeSingle,
 					SynopsisHelpDescription: "str",
@@ -71,7 +70,6 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 			},
 			FlagS: {
 				DescriptionHelpInfo: "single string",
-
 				ArgDescription: &argParserConfig.ArgumentsDescription{
 					AmountType:              argParserConfig.ArgAmountTypeSingle,
 					SynopsisHelpDescription: "str",
@@ -79,7 +77,6 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 			},
 			FlagSl: {
 				DescriptionHelpInfo: "string list",
-
 				ArgDescription: &argParserConfig.ArgumentsDescription{
 					AmountType:              argParserConfig.ArgAmountTypeList,
 					SynopsisHelpDescription: "str",
@@ -87,7 +84,6 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 			},
 			FlagI: {
 				DescriptionHelpInfo: "int string",
-
 				ArgDescription: &argParserConfig.ArgumentsDescription{
 					AmountType:              argParserConfig.ArgAmountTypeSingle,
 					SynopsisHelpDescription: "str",
@@ -95,7 +91,6 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 			},
 			FlagIl: {
 				DescriptionHelpInfo: "int list",
-
 				ArgDescription: &argParserConfig.ArgumentsDescription{
 					AmountType:              argParserConfig.ArgAmountTypeList,
 					SynopsisHelpDescription: "str",
@@ -103,7 +98,6 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 			},
 			FlagF: {
 				DescriptionHelpInfo: "single float",
-
 				ArgDescription: &argParserConfig.ArgumentsDescription{
 					AmountType:              argParserConfig.ArgAmountTypeSingle,
 					SynopsisHelpDescription: "str",
@@ -111,7 +105,6 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 			},
 			FlagFl: {
 				DescriptionHelpInfo: "float list",
-
 				ArgDescription: &argParserConfig.ArgumentsDescription{
 					AmountType:              argParserConfig.ArgAmountTypeList,
 					SynopsisHelpDescription: "str",
@@ -144,15 +137,14 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 		argParserConfig.NewHelpCommandDescription(
 			CommandIDPrintHelpInfo,
 			map[argParserConfig.Command]bool{
-				"help": true,
-				"-h":   true,
+				CommandH:    true,
+				CommandHelp: true,
 			},
 		),
 		// namelessCommandDescription
 		argParserConfig.NewNamelessCommandDescription(
 			CommandIDNamelessCommand,
 			"checks arguments types",
-
 			&argParserConfig.ArgumentsDescription{
 				AmountType:              argParserConfig.ArgAmountTypeList,
 				SynopsisHelpDescription: "str list",

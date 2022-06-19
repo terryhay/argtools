@@ -57,15 +57,14 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 		argParserConfig.NewHelpCommandDescription(
 			CommandIDPrintHelpInfo,
 			map[argParserConfig.Command]bool{
-				"help": true,
-				"-h":   true,
+				CommandH:    true,
+				CommandHelp: true,
 			},
 		),
 		// namelessCommandDescription
 		argParserConfig.NewNamelessCommandDescription(
 			CommandIDNamelessCommand,
 			"checks arguments types",
-
 			&argParserConfig.ArgumentsDescription{
 				AmountType:              argParserConfig.ArgAmountTypeList,
 				SynopsisHelpDescription: "str list",

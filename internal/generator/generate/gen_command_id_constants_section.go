@@ -29,6 +29,9 @@ func GenCommandIDListSection(
 ) CommandIDListSection {
 
 	sortedCommandsTemplateData := sortCommandsTemplateData(commandsTemplateData, nullCommandIDTemplateData)
+	if len(sortedCommandsTemplateData) == 0 {
+		return ""
+	}
 
 	builder := strings.Builder{}
 	builder.WriteString(commandIDConstantsPrefixPart)

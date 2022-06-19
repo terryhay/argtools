@@ -54,7 +54,6 @@ func GenFlagDescriptionsSection(
 			flagDescription.GetDescriptionHelpInfo()))
 
 		if argumentsDescription = flagDescription.GetArgumentsDescription(); argumentsDescription != nil {
-			builder.WriteString("\n")
 			builder.WriteString(string(GenArgDescriptionPart(argumentsDescription, "\t\t\t\t", true)))
 			builder.WriteString(",")
 		}

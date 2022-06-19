@@ -12,14 +12,22 @@ const (
 		// namelessCommandDescription
 		nil`
 
-	namelessCommandDescriptionSectionPattern = `
+	namelessCommandDescriptionPrefixPart = `
 		// namelessCommandDescription
-		argParserConfig.NewNamelessCommandDescription(
-			%s,
-			"%s",
-			%s,
-			%s,
-			%s,
+		argParserConfig.NewNamelessCommandDescription(`
+	namelessCommandDescriptionCommandIDPart = `
+			%s,`
+	namelessCommandDescriptionDescriptionHelpInfoPart = `
+			"%s",`
+	namelessCommandDescriptionFlagMapNilPart = `
+			nil,`
+	namelessCommandDescriptionFlagMapPrefixPart = `
+			map[argParserConfig.Flag]bool{`
+	namelessCommandDescriptionFlagMapLinePart = `
+				%s: true,`
+	namelessCommandDescriptionFlagMapPostfixPart = `
+			},`
+	namelessCommandDescriptionPostfixPart = `
 		)`
 )
 
@@ -37,43 +45,42 @@ func GenNamelessCommandComponent(
 		return namelessCommandDescriptionNilPart
 	}
 
-	var (
-		builder strings.Builder
-		flag    string
-	)
+	builder := strings.Builder{}
+	builder.WriteString(
+		namelessCommandDescriptionPrefixPart)
+	builder.WriteString(
+		fmt.Sprintf(namelessCommandDescriptionCommandIDPart, namelessCommandIDTemplateData.GetID()))
+	builder.WriteString(
+		fmt.Sprintf(namelessCommandDescriptionDescriptionHelpInfoPart, namelessCommandDescription.GetDescriptionHelpInfo()))
+	builder.WriteString(
+		GenArgDescriptionPart(namelessCommandDescription.GetArgumentsDescription(), "\t\t\t", false) + ",")
+	builder.WriteString(
+		createNamelessCommandDescriptionFlagsPart(namelessCommandDescription.GetRequiredFlags(), flagsIDTemplateData))
+	builder.WriteString(
+		createNamelessCommandDescriptionFlagsPart(namelessCommandDescription.GetOptionalFlags(), flagsIDTemplateData))
+	builder.WriteString(
+		namelessCommandDescriptionPostfixPart)
 
-	argumentsDescriptionPart := "nil"
-	if namelessCommandDescription.GetArgumentsDescription() != nil {
-		argumentsDescriptionPart = string(GenArgDescriptionPart(namelessCommandDescription.GetArgumentsDescription(), "\t\t\t", false))
+	return NamelessCommandDescriptionSection(builder.String())
+}
+
+func createNamelessCommandDescriptionFlagsPart(
+	flags []string,
+	flagsIDTemplateData map[string]*idTemplateDataCreator.IDTemplateData,
+) string {
+
+	if len(flags) == 0 {
+		return namelessCommandDescriptionFlagMapNilPart
 	}
 
-	requiredFlagsPart := "nil"
-	if len(namelessCommandDescription.GetRequiredFlags()) != 0 {
-		builder.WriteString("\t\t\tmap[argParserConfig.Flag]bool{\n")
-		for _, flag = range namelessCommandDescription.GetRequiredFlags() {
-			builder.WriteString(fmt.Sprintf("\t\t\t\t%s: true,\n", flagsIDTemplateData[flag].GetNameID()))
-		}
-		builder.WriteString("\t\t\t}")
-		requiredFlagsPart = builder.String()
+	builder := strings.Builder{}
+	builder.WriteString(namelessCommandDescriptionFlagMapPrefixPart)
+
+	for _, flag := range flags {
+		builder.WriteString(
+			fmt.Sprintf(namelessCommandDescriptionFlagMapLinePart, flagsIDTemplateData[flag].GetNameID()))
 	}
+	builder.WriteString(namelessCommandDescriptionFlagMapPostfixPart)
 
-	optionalFlagsPart := "nil"
-	if len(namelessCommandDescription.GetOptionalFlags()) != 0 {
-		builder.Reset()
-
-		builder.WriteString("\t\t\tmap[argParserConfig.Flag]bool{\n")
-		for _, flag = range namelessCommandDescription.GetOptionalFlags() {
-			builder.WriteString(fmt.Sprintf("\t\t\t\t%s: true,\n", flagsIDTemplateData[flag].GetNameID()))
-		}
-		builder.WriteString("\t\t\t}")
-		optionalFlagsPart = builder.String()
-	}
-
-	return NamelessCommandDescriptionSection(fmt.Sprintf(namelessCommandDescriptionSectionPattern,
-		namelessCommandIDTemplateData.GetID(),
-		namelessCommandDescription.GetDescriptionHelpInfo(),
-		argumentsDescriptionPart,
-		requiredFlagsPart,
-		optionalFlagsPart,
-	))
+	return builder.String()
 }

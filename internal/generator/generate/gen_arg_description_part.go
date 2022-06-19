@@ -8,6 +8,9 @@ import (
 )
 
 const (
+	argumentsDescriptionNilPart = `
+%[1]s%[2]s nil`
+
 	argumentsDescriptionPrefix = `
 %[1]s%[2]s&argParserConfig.ArgumentsDescription{
 %[1]s	AmountType:              %[3]s,
@@ -26,22 +29,24 @@ const (
 %[1]s}`
 )
 
-// ArgDescriptionPart - string with argument description
-type ArgDescriptionPart string
-
 // GenArgDescriptionPart - creates a paste part with argument description
 func GenArgDescriptionPart(
 	argumentsDescription *configYaml.ArgumentsDescription,
 	indent string,
 	pasteArgDescriptionPrefix bool,
-) ArgDescriptionPart {
-
-	builder := strings.Builder{}
+) string {
 
 	prefix := ""
 	if pasteArgDescriptionPrefix {
 		prefix = "ArgDescription: "
 	}
+
+	if argumentsDescription == nil {
+		return fmt.Sprintf(fmt.Sprintf(argumentsDescriptionNilPart, indent, prefix))
+	}
+
+	builder := strings.Builder{}
+
 	builder.WriteString(fmt.Sprintf(argumentsDescriptionPrefix,
 		indent,
 		prefix,
@@ -66,7 +71,7 @@ func GenArgDescriptionPart(
 
 	builder.WriteString(fmt.Sprintf(argumentsDescriptionPostfix, indent))
 
-	return ArgDescriptionPart(builder.String())
+	return builder.String()
 }
 
 func getArgAmountTypeElement(argAmountType argParserConfig.ArgAmountType) string {

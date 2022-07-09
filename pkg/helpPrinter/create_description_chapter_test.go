@@ -30,7 +30,7 @@ func TestCreateDescriptionChapter(t *testing.T) {
 			descriptionHelpInfo: nil,
 			flagDescriptions:    nil,
 
-			expected: descriptionChapterTitle,
+			expected: descriptionChapterTitle + "\n",
 		},
 		{
 			caseName:            "two_flags",
@@ -42,7 +42,6 @@ func TestCreateDescriptionChapter(t *testing.T) {
 			},
 
 			expected: fmt.Sprintf(`[1mDESCRIPTION[0m
-
 	%s
 
 The flags are as follows:
@@ -57,11 +56,12 @@ The flags are as follows:
 
 	for _, td := range testData {
 		t.Run(td.caseName, func(t *testing.T) {
-			require.Equal(t, td.expected, CreateDescriptionChapter(
+			actual := CreateDescriptionChapter(
 				td.descriptionHelpInfo,
 				td.namelessCommandDescription,
 				td.commandDescriptions,
-				td.flagDescriptions))
+				td.flagDescriptions)
+			require.Equal(t, td.expected, actual)
 		})
 	}
 }

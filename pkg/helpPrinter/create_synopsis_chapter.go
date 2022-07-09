@@ -8,8 +8,8 @@ import (
 
 const (
 	synopsisChapterTitle            = "\u001B[1mSYNOPSIS\u001B[0m\n"
-	synopsisLineCommandPart         = "\n\t\u001B[1m%s %s\u001B[0m %s"
-	synopsisLineNamelessCommandPart = "\n\t\u001B[1m%s\u001B[0m %s"
+	synopsisLineCommandPart         = "\t\u001B[1m%s %s\u001B[0m%s"
+	synopsisLineNamelessCommandPart = "\t\u001B[1m%s\u001B[0m%s"
 )
 
 // CreateSynopsisChapter creates synopsis help chapter

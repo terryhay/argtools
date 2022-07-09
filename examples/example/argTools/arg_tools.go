@@ -29,10 +29,8 @@ const (
 )
 
 const (
-	// FlagCheck - check command arguments types
-	FlagCheck argParserConfig.Flag = "-check"
 	// FlagCheckargs - do arguments checking
-	FlagCheckargs = "-checkargs"
+	FlagCheckargs argParserConfig.Flag = "-checkargs"
 	// FlagF - single float
 	FlagF = "-f"
 	// FlagFl - float list
@@ -61,13 +59,6 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 		},
 		// flagDescriptions
 		map[argParserConfig.Flag]*argParserConfig.FlagDescription{
-			FlagCheck: {
-				DescriptionHelpInfo: "check command arguments types",
-				ArgDescription: &argParserConfig.ArgumentsDescription{
-					AmountType:              argParserConfig.ArgAmountTypeSingle,
-					SynopsisHelpDescription: "str",
-				},
-			},
 			FlagS: {
 				DescriptionHelpInfo: "single string",
 				ArgDescription: &argParserConfig.ArgumentsDescription{
@@ -145,14 +136,13 @@ func Parse(args []string) (res *parsedData.ParsedData, err *argtoolsError.Error)
 		argParserConfig.NewNamelessCommandDescription(
 			CommandIDNamelessCommand,
 			"checks arguments types",
-			&argParserConfig.ArgumentsDescription{
-				AmountType:              argParserConfig.ArgAmountTypeList,
-				SynopsisHelpDescription: "str list",
-			},
-			map[argParserConfig.Flag]bool{
-				FlagCheck: true,
-			},
 			nil,
+			nil,
+			map[argParserConfig.Flag]bool{
+				FlagSl: true,
+				FlagIl: true,
+				FlagFl: true,
+			},
 		))
 
 	if res, err = argParser.Parse(appArgConfig, args); err != nil {

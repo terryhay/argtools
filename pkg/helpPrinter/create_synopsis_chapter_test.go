@@ -85,13 +85,10 @@ func TestCreateSynopsisChapter(t *testing.T) {
 		}
 
 		chapter = CreateSynopsisChapter(appName, namelessCommandDescription, commandDescriptions, flagDescriptions)
-		fmt.Println(chapter)
 		require.Equal(t,
 			`[1mSYNOPSIS[0m
-
-	[1mappname[0m  [1m-rf[0m [[1m-of[0m]
-
-	[1mappname command[0m  [1m-sa[0m [4marg[0m [[1m-la[0m [4mstr[0m=val1 [val2] [4m...[0m]
+	[1mappname[0m [1m-rf[0m [[1m-of[0m]
+	[1mappname command[0m [1m-sa[0m [4marg[0m [[1m-la[0m [4mstr[0m=val1 [val2] [4m...[0m]
 
 `,
 			chapter)
@@ -103,8 +100,7 @@ func TestCreateSynopsisChapter(t *testing.T) {
 		}
 
 		expectedChapter = fmt.Sprintf(`[1mSYNOPSIS[0m
-
-	[1m%s[0m 
+	[1m%s[0m
 
 `, appName)
 		chapter = CreateSynopsisChapter(appName, nil, commandDescriptions, nil)

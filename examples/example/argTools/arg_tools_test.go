@@ -1,0 +1,62 @@
+package argTools
+
+import (
+	"github.com/brianvoe/gofakeit"
+	"github.com/stretchr/testify/require"
+	"github.com/terryhay/argtools/internal/test_tools"
+	"testing"
+)
+
+func TestArgToolsError(t *testing.T) {
+	t.Parallel()
+
+	res, err := Parse([]string{gofakeit.Color()})
+	require.Nil(t, res)
+	require.NotNil(t, err)
+}
+
+func TestPrintHelpInfo(t *testing.T) {
+	t.Parallel()
+
+	out := test_tools.CatchStdOut(func() {
+		res, err := Parse([]string{"-h"})
+		require.Nil(t, res)
+		require.Nil(t, err)
+	})
+
+	require.Equal(t, `[1mNAME[0m
+	[1mexample[0m – shows how argtools generator works
+
+[1mSYNOPSIS[0m
+	[1mexample[0m [[1m-fl[0m [4mstr[0m [4m...[0m] [[1m-il[0m [4mstr[0m [4m...[0m] [[1m-sl[0m [4mstr[0m [4m...[0m]
+	[1mexample print[0m [[1m-checkargs[0m] [[1m-f[0m [4mstr[0m] [[1m-fl[0m [4mstr[0m [4m...[0m] [[1m-i[0m [4mstr[0m] [[1m-il[0m [4mstr[0m [4m...[0m] [[1m-s[0m [4mstr[0m] [[1m-sl[0m [4mstr[0m [4m...[0m]
+
+[1mDESCRIPTION[0m
+	you can write more detailed description here
+
+	and use several paragraphs
+
+The commands are as follows:
+	[1m<empty>[0m	checks arguments types
+
+	[1mprint[0m	print command line arguments with optional checking
+
+The flags are as follows:
+	[1m-checkargs[0m
+		do arguments checking
+
+	[1m-f[0m	single float
+
+	[1m-fl[0m	float list
+
+	[1m-i[0m	int string
+
+	[1m-il[0m	int list
+
+	[1m-s[0m	single string
+
+	[1m-sl[0m	string list
+
+`,
+		out)
+}

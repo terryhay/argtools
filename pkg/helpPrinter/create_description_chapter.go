@@ -9,13 +9,13 @@ import (
 const (
 	descriptionChapterTitle = "\u001B[1mDESCRIPTION\u001B[0m\n"
 
-	commonDescriptionParagraphs = "\n\t%s\n"
+	commonDescriptionParagraphs = "\t%s\n\n"
 
-	commandDescriptionsSubtitle = "\nThe commands are as follows:"
+	commandDescriptionsSubtitle = "The commands are as follows:"
 	descriptionLine             = "\n\t\u001B[1m%s\u001B[0m\t%s\n"
 	descriptionTwoLines         = "\n\t\u001B[1m%s\u001B[0m\n\t\t%s\n"
 
-	flagDescriptionsSubtitle = "\nThe flags are as follows:"
+	flagDescriptionsSubtitle = "The flags are as follows:"
 
 	namelessCommandDescriptionName = "<empty>"
 )
@@ -38,9 +38,12 @@ func CreateDescriptionChapter(
 	)
 
 	builder.WriteString(descriptionChapterTitle)
+
+	commonParagraphPart := "\n"
 	if len(descriptionHelpInfo) > 0 {
-		builder.WriteString(fmt.Sprintf(commonDescriptionParagraphs, strings.Join(descriptionHelpInfo, "\n\n\t")))
+		commonParagraphPart = fmt.Sprintf(commonDescriptionParagraphs, strings.Join(descriptionHelpInfo, "\n\n\t"))
 	}
+	builder.WriteString(commonParagraphPart)
 
 	if len(commandDescriptions) > 0 {
 		builder.WriteString(commandDescriptionsSubtitle)
@@ -66,6 +69,10 @@ func CreateDescriptionChapter(
 	}
 
 	if len(flagDescriptions) > 0 {
+		if len(commandDescriptions) > 0 {
+			builder.WriteString("\n")
+		}
+
 		builder.WriteString(flagDescriptionsSubtitle)
 
 		for _, callNames = range getSortedFlagsForDescription(flagDescriptions) {

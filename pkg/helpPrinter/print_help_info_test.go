@@ -2,7 +2,7 @@ package helpPrinter
 
 import (
 	"github.com/stretchr/testify/require"
-	"github.com/terryhay/argtools/internal/test_tools"
+	"github.com/terryhay/argtools/internal/testTools"
 	"github.com/terryhay/argtools/pkg/argParserConfig"
 	"testing"
 )
@@ -11,9 +11,12 @@ func TestPrintHelpInfo(t *testing.T) {
 	t.Parallel()
 
 	t.Run("empty_config", func(t *testing.T) {
-		out := test_tools.CatchStdOut(func() {
+		out := testTools.CatchStdOut(func() {
 			PrintHelpInfo(argParserConfig.ArgParserConfig{})
 		})
+
+		ok, msg := testTools.CheckSpaces(out)
+		require.True(t, ok, msg)
 
 		require.Equal(t, `[1mNAME[0m
 	[1m[0m – 
@@ -22,12 +25,11 @@ func TestPrintHelpInfo(t *testing.T) {
 
 [1mDESCRIPTION[0m
 
-
 `, out)
 	})
 
 	t.Run("simple_case", func(t *testing.T) {
-		out := test_tools.CatchStdOut(func() {
+		out := testTools.CatchStdOut(func() {
 			PrintHelpInfo(argParserConfig.NewArgParserConfig(
 				argParserConfig.ApplicationDescription{
 					AppName:      "appname",
@@ -70,6 +72,9 @@ func TestPrintHelpInfo(t *testing.T) {
 				),
 			))
 		})
+
+		ok, msg := testTools.CheckSpaces(out)
+		require.True(t, ok, msg)
 
 		require.Equal(t, `[1mNAME[0m
 	[1mappname[0m – name help info

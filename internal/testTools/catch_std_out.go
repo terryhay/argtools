@@ -1,4 +1,4 @@
-package test_tools
+package testTools
 
 import (
 	"io/ioutil"
@@ -8,7 +8,9 @@ import (
 // CatchStdOut returns output to "os.Stdout" from "runnable" as string
 func CatchStdOut(runnable func()) string {
 	realStdout := os.Stdout
-	defer func() { os.Stdout = realStdout }()
+	defer func() {
+		os.Stdout = realStdout
+	}()
 
 	r, fakeStdout, err := os.Pipe()
 	mustBeNoError(err)

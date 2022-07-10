@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/brianvoe/gofakeit"
 	"github.com/stretchr/testify/require"
+	"github.com/terryhay/argtools/internal/testTools"
 	"github.com/terryhay/argtools/pkg/argParserConfig"
 	"testing"
 )
@@ -31,7 +32,7 @@ func TestCreateDescriptionChapter(t *testing.T) {
 			descriptionHelpInfo: nil,
 			flagDescriptions:    nil,
 
-			expected: descriptionChapterTitle + "\n",
+			expected: descriptionChapterTitle,
 		},
 		{
 			caseName:            "two_flags",
@@ -74,7 +75,6 @@ The flags are as follows:
 The commands are as follows:
 	[1m%s[0m
 		
-
 The flags are as follows:
 	[1m%s[0m
 		%s
@@ -89,6 +89,10 @@ The flags are as follows:
 				td.namelessCommandDescription,
 				td.commandDescriptions,
 				td.flagDescriptions)
+
+			ok, msg := testTools.CheckSpaces(actual)
+			require.True(t, ok, msg)
+
 			require.Equal(t, td.expected, actual)
 		})
 	}

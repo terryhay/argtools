@@ -4,7 +4,7 @@ import (
 	"github.com/brianvoe/gofakeit"
 	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/require"
-	"github.com/terryhay/argtools/internal/test_tools"
+	"github.com/terryhay/argtools/internal/testTools"
 	"github.com/terryhay/argtools/pkg/parsedData"
 	"testing"
 )
@@ -25,11 +25,14 @@ func TestArgTools(t *testing.T) {
 	})
 
 	t.Run("print_help_info", func(t *testing.T) {
-		out := test_tools.CatchStdOut(func() {
+		out := testTools.CatchStdOut(func() {
 			res, err := Parse([]string{"-h"})
 			require.Nil(t, res)
 			require.Nil(t, err)
 		})
+
+		ok, msg := testTools.CheckSpaces(out)
+		require.True(t, ok, msg)
 
 		require.Equal(t, `[1mNAME[0m
 	[1mexample[0m – shows how argtools generator works
@@ -47,7 +50,6 @@ The commands are as follows:
 	[1m<empty>[0m	checks arguments types
 
 	[1mprint[0m	print command line arguments with optional checking
-
 The flags are as follows:
 	[1m-checkargs[0m
 		do arguments checking

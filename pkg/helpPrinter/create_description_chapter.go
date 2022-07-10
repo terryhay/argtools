@@ -38,6 +38,13 @@ func CreateDescriptionChapter(
 	)
 
 	builder.WriteString(descriptionChapterTitle)
+	if len(descriptionHelpInfo) == 0 &&
+		namelessCommandDescription == nil &&
+		len(commandDescriptions) == 0 &&
+		len(flagDescriptions) == 0 {
+
+		return builder.String()
+	}
 
 	commonParagraphPart := "\n"
 	if len(descriptionHelpInfo) > 0 {
@@ -69,10 +76,6 @@ func CreateDescriptionChapter(
 	}
 
 	if len(flagDescriptions) > 0 {
-		if len(commandDescriptions) > 0 {
-			builder.WriteString("\n")
-		}
-
 		builder.WriteString(flagDescriptionsSubtitle)
 
 		for _, callNames = range getSortedFlagsForDescription(flagDescriptions) {

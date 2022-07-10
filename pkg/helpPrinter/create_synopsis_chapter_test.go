@@ -3,6 +3,7 @@ package helpPrinter
 import (
 	"fmt"
 	"github.com/stretchr/testify/require"
+	"github.com/terryhay/argtools/internal/testTools"
 	"github.com/terryhay/argtools/pkg/argParserConfig"
 	"testing"
 )
@@ -85,6 +86,10 @@ func TestCreateSynopsisChapter(t *testing.T) {
 		}
 
 		chapter = CreateSynopsisChapter(appName, namelessCommandDescription, commandDescriptions, flagDescriptions)
+
+		ok, msg := testTools.CheckSpaces(chapter)
+		require.True(t, ok, msg)
+
 		require.Equal(t,
 			`[1mSYNOPSIS[0m
 	[1mappname[0m [1m-rf[0m [[1m-of[0m]
@@ -103,9 +108,11 @@ func TestCreateSynopsisChapter(t *testing.T) {
 	[1m%s[0m
 
 `, appName)
+
 		chapter = CreateSynopsisChapter(appName, nil, commandDescriptions, nil)
-		require.Equal(t,
-			expectedChapter,
-			chapter)
+		ok, msg := testTools.CheckSpaces(chapter)
+		require.True(t, ok, msg)
+
+		require.Equal(t, expectedChapter, chapter)
 	})
 }

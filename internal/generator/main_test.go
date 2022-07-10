@@ -8,8 +8,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/terryhay/argtools/internal/generator/argTools"
 	"github.com/terryhay/argtools/internal/generator/configYaml"
-	"github.com/terryhay/argtools/internal/generator/osDecorator"
-	"github.com/terryhay/argtools/internal/generator/osDecorator/osDecoratorMock"
+	"github.com/terryhay/argtools/internal/osDecorator"
+	"github.com/terryhay/argtools/internal/osDecorator/osDecoratorMock"
 	"github.com/terryhay/argtools/pkg/argParserConfig"
 	"github.com/terryhay/argtools/pkg/argtoolsError"
 	"github.com/terryhay/argtools/pkg/parsedData"
@@ -56,14 +56,14 @@ func TestLogic(t *testing.T) {
 					Args: []string{},
 				},
 			),
-			expectedErrCode: argtoolsError.CodeParsedDataNilPointer,
+			expectedErrCode: argtoolsError.CodeGeneratorNoRequiredFlag,
 		},
 		{
 			caseName: "get_generate_dir_path_arg_error",
 
 			argToolsParseFunc: func(arg []string) (res *parsedData.ParsedData, err *argtoolsError.Error) {
 				return &parsedData.ParsedData{
-						FlagData: map[argParserConfig.Flag]*parsedData.ParsedFlagData{
+						FlagDataMap: map[argParserConfig.Flag]*parsedData.ParsedFlagData{
 							argTools.FlagC: {
 								ArgData: &parsedData.ParsedArgData{
 									ArgValues: []parsedData.ArgValue{
@@ -80,14 +80,14 @@ func TestLogic(t *testing.T) {
 					Args: []string{},
 				},
 			),
-			expectedErrCode: argtoolsError.CodeParsedDataFlagDoesNotContainArgs,
+			expectedErrCode: argtoolsError.CodeGeneratorNoRequiredFlag,
 		},
 		{
 			caseName: "get_yaml_config_error",
 
 			argToolsParseFunc: func(arg []string) (res *parsedData.ParsedData, err *argtoolsError.Error) {
 				return &parsedData.ParsedData{
-						FlagData: map[argParserConfig.Flag]*parsedData.ParsedFlagData{
+						FlagDataMap: map[argParserConfig.Flag]*parsedData.ParsedFlagData{
 							argTools.FlagC: {
 								ArgData: &parsedData.ParsedArgData{
 									ArgValues: []parsedData.ArgValue{
@@ -121,7 +121,7 @@ func TestLogic(t *testing.T) {
 
 			argToolsParseFunc: func(arg []string) (res *parsedData.ParsedData, err *argtoolsError.Error) {
 				return &parsedData.ParsedData{
-						FlagData: map[argParserConfig.Flag]*parsedData.ParsedFlagData{
+						FlagDataMap: map[argParserConfig.Flag]*parsedData.ParsedFlagData{
 							argTools.FlagC: {
 								ArgData: &parsedData.ParsedArgData{
 									ArgValues: []parsedData.ArgValue{
@@ -160,7 +160,7 @@ func TestLogic(t *testing.T) {
 
 			argToolsParseFunc: func(arg []string) (res *parsedData.ParsedData, err *argtoolsError.Error) {
 				return &parsedData.ParsedData{
-						FlagData: map[argParserConfig.Flag]*parsedData.ParsedFlagData{
+						FlagDataMap: map[argParserConfig.Flag]*parsedData.ParsedFlagData{
 							argTools.FlagC: {
 								ArgData: &parsedData.ParsedArgData{
 									ArgValues: []parsedData.ArgValue{
@@ -199,7 +199,7 @@ func TestLogic(t *testing.T) {
 
 			argToolsParseFunc: func(arg []string) (res *parsedData.ParsedData, err *argtoolsError.Error) {
 				return &parsedData.ParsedData{
-						FlagData: map[argParserConfig.Flag]*parsedData.ParsedFlagData{
+						FlagDataMap: map[argParserConfig.Flag]*parsedData.ParsedFlagData{
 							argTools.FlagC: {
 								ArgData: &parsedData.ParsedArgData{
 									ArgValues: []parsedData.ArgValue{
@@ -243,7 +243,7 @@ func TestLogic(t *testing.T) {
 
 			argToolsParseFunc: func(arg []string) (res *parsedData.ParsedData, err *argtoolsError.Error) {
 				return &parsedData.ParsedData{
-						FlagData: map[argParserConfig.Flag]*parsedData.ParsedFlagData{
+						FlagDataMap: map[argParserConfig.Flag]*parsedData.ParsedFlagData{
 							argTools.FlagC: {
 								ArgData: &parsedData.ParsedArgData{
 									ArgValues: []parsedData.ArgValue{
@@ -281,8 +281,13 @@ func TestLogic(t *testing.T) {
 
 	for _, td := range testData {
 		t.Run(td.caseName, func(t *testing.T) {
-			err := logic(td.argToolsParseFunc, td.getYAMLConfigFunc, td.osd)
-			require.Equal(t, td.expectedErrCode, err.Code())
+			err, code := logic(td.argToolsParseFunc, td.getYAMLConfigFunc, td.osd)
+			require.Equal(t, uint(td.expectedErrCode), code)
+			if code == 0 {
+				require.NoError(t, err)
+				return
+			}
+			require.Error(t, err)
 		})
 	}
 }

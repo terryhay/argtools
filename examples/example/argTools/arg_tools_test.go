@@ -2,29 +2,36 @@ package argTools
 
 import (
 	"github.com/brianvoe/gofakeit"
+	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/require"
 	"github.com/terryhay/argtools/internal/test_tools"
+	"github.com/terryhay/argtools/pkg/parsedData"
 	"testing"
 )
 
-func TestArgToolsError(t *testing.T) {
+func TestArgTools(t *testing.T) {
 	t.Parallel()
 
-	res, err := Parse([]string{gofakeit.Color()})
-	require.Nil(t, res)
-	require.NotNil(t, err)
-}
-
-func TestPrintHelpInfo(t *testing.T) {
-	t.Parallel()
-
-	out := test_tools.CatchStdOut(func() {
-		res, err := Parse([]string{"-h"})
-		require.Nil(t, res)
+	t.Run("simple", func(t *testing.T) {
+		res, err := Parse(nil)
 		require.Nil(t, err)
+		require.True(t, cmp.Equal(&parsedData.ParsedData{CommandID: CommandIDNamelessCommand}, res))
 	})
 
-	require.Equal(t, `[1mNAME[0m
+	t.Run("incorrect_argument", func(t *testing.T) {
+		res, err := Parse([]string{gofakeit.Color()})
+		require.Nil(t, res)
+		require.NotNil(t, err)
+	})
+
+	t.Run("print_help_info", func(t *testing.T) {
+		out := test_tools.CatchStdOut(func() {
+			res, err := Parse([]string{"-h"})
+			require.Nil(t, res)
+			require.Nil(t, err)
+		})
+
+		require.Equal(t, `[1mNAME[0m
 	[1mexample[0m – shows how argtools generator works
 
 [1mSYNOPSIS[0m
@@ -58,5 +65,6 @@ The flags are as follows:
 	[1m-sl[0m	string list
 
 `,
-		out)
+			out)
+	})
 }

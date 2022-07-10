@@ -1,7 +1,7 @@
 package osDecoratorMock
 
 import (
-	"github.com/terryhay/argtools/internal/generator/osDecorator"
+	"github.com/terryhay/argtools/internal/osDecorator"
 )
 
 // NewMockFileDecorator - mocked file decorator instance constructor

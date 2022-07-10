@@ -1,23 +1,22 @@
 package osDecoratorMock
 
 import (
-	"github.com/terryhay/argtools/internal/generator/osDecorator"
-	"github.com/terryhay/argtools/pkg/argtoolsError"
+	osDecorator2 "github.com/terryhay/argtools/internal/osDecorator"
 	"os"
 )
 
 // MockOSDecoratorInit - init struct
 type MockOSDecoratorInit struct {
 	Args           []string
-	CreateFunc     func(path string) (osDecorator.FileDecorator, error)
-	ExitFunc       func(err *argtoolsError.Error)
+	CreateFunc     func(path string) (osDecorator2.FileDecorator, error)
+	ExitFunc       func(err error, code uint)
 	IsNotExistFunc func(err error) bool
 	MkdirAllFunc   func(path string, perm os.FileMode) error
 	StatFunc       func(path string) (os.FileInfo, error)
 }
 
 // NewMockOSDecorator - mocked os decorator instance constructor
-func NewMockOSDecorator(init MockOSDecoratorInit) osDecorator.OSDecorator {
+func NewMockOSDecorator(init MockOSDecoratorInit) osDecorator2.OSDecorator {
 	return &osDecoratorMockImpl{
 		mockArgs:           init.Args,
 		mockCreateFunc:     init.CreateFunc,
@@ -30,8 +29,8 @@ func NewMockOSDecorator(init MockOSDecoratorInit) osDecorator.OSDecorator {
 
 type osDecoratorMockImpl struct {
 	mockArgs           []string
-	mockCreateFunc     func(path string) (osDecorator.FileDecorator, error)
-	mockExit           func(err *argtoolsError.Error)
+	mockCreateFunc     func(path string) (osDecorator2.FileDecorator, error)
+	mockExit           func(err error, code uint)
 	mockIsNotExistFunc func(err error) bool
 	mockMkdirAll       func(path string, perm os.FileMode) error
 	mockStatFunc       func(name string) (os.FileInfo, error)
@@ -43,13 +42,13 @@ func (i *osDecoratorMockImpl) GetArgs() []string {
 }
 
 // Create - creates or truncates the named file
-func (i *osDecoratorMockImpl) Create(path string) (osDecorator.FileDecorator, error) {
+func (i *osDecoratorMockImpl) Create(path string) (osDecorator2.FileDecorator, error) {
 	return i.mockCreateFunc(path)
 }
 
 // Exit - causes the current program to exit with the given error
-func (i *osDecoratorMockImpl) Exit(err *argtoolsError.Error) {
-	i.mockExit(err)
+func (i *osDecoratorMockImpl) Exit(err error, code uint) {
+	i.mockExit(err, code)
 }
 
 // IsNotExist - checks if error is "not exist"

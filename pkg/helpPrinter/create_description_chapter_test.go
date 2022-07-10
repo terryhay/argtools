@@ -11,9 +11,10 @@ import (
 func TestCreateDescriptionChapter(t *testing.T) {
 	t.Parallel()
 
-	randomDescriptionHelpInfo := gofakeit.Name()
-	randomFlag := argParserConfig.Flag(gofakeit.Name())
-	randomFlagDescriptionHelpInfo := gofakeit.Name()
+	randDescriptionHelpInfo := gofakeit.Name()
+	randCommand := argParserConfig.Command(gofakeit.Color())
+	randFlag := argParserConfig.Flag(gofakeit.Color())
+	randFlagDescriptionHelpInfo := gofakeit.Name()
 
 	testData := []struct {
 		caseName string
@@ -34,10 +35,10 @@ func TestCreateDescriptionChapter(t *testing.T) {
 		},
 		{
 			caseName:            "two_flags",
-			descriptionHelpInfo: []string{randomDescriptionHelpInfo},
+			descriptionHelpInfo: []string{randDescriptionHelpInfo},
 			flagDescriptions: map[argParserConfig.Flag]*argParserConfig.FlagDescription{
-				randomFlag: {
-					DescriptionHelpInfo: randomFlagDescriptionHelpInfo,
+				randFlag: {
+					DescriptionHelpInfo: randFlagDescriptionHelpInfo,
 				},
 			},
 
@@ -46,11 +47,38 @@ func TestCreateDescriptionChapter(t *testing.T) {
 
 The flags are as follows:
 	[1m%s[0m
-		Nickolas Emard
+		%s
 `,
-				randomDescriptionHelpInfo,
-				randomFlag,
+				randDescriptionHelpInfo,
+				randFlag,
+				randFlagDescriptionHelpInfo,
 			),
+		},
+		{
+			caseName:            "command_and_flag_descriptions",
+			descriptionHelpInfo: []string{randDescriptionHelpInfo},
+			commandDescriptions: []*argParserConfig.CommandDescription{
+				{
+					Commands: map[argParserConfig.Command]bool{randCommand: true},
+				},
+			},
+			flagDescriptions: map[argParserConfig.Flag]*argParserConfig.FlagDescription{
+				randFlag: {
+					DescriptionHelpInfo: randFlagDescriptionHelpInfo,
+				},
+			},
+
+			expected: fmt.Sprintf(`[1mDESCRIPTION[0m
+	%s
+
+The commands are as follows:
+	[1m%s[0m
+		
+
+The flags are as follows:
+	[1m%s[0m
+		%s
+`, randDescriptionHelpInfo, randCommand, randFlag, randFlagDescriptionHelpInfo),
 		},
 	}
 

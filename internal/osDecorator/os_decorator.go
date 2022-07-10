@@ -2,7 +2,6 @@ package osDecorator
 
 import (
 	"fmt"
-	"github.com/terryhay/argtools/pkg/argtoolsError"
 	"os"
 )
 
@@ -15,7 +14,7 @@ type OSDecorator interface {
 	Create(path string) (FileDecorator, error)
 
 	// Exit - causes the current program to exit with the given error
-	Exit(err *argtoolsError.Error)
+	Exit(err error, code uint)
 
 	// IsNotExist - checks if error is "not exist"
 	IsNotExist(err error) bool
@@ -46,11 +45,11 @@ func (osDecoratorImpl) Create(path string) (FileDecorator, error) {
 }
 
 // Exit - causes the current program to exit with the given error
-func (osDecoratorImpl) Exit(err *argtoolsError.Error) {
+func (osDecoratorImpl) Exit(err error, code uint) {
 	exitCode := 0
 	if err != nil {
 		fmt.Println("argParser generator: " + err.Error())
-		exitCode = int(err.Code())
+		exitCode = int(code)
 	}
 	os.Exit(exitCode)
 }

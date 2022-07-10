@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/brianvoe/gofakeit"
 	"github.com/stretchr/testify/require"
-	"github.com/terryhay/argtools/internal/generator/osDecorator"
-	"github.com/terryhay/argtools/internal/generator/osDecorator/osDecoratorMock"
+	osDecorator2 "github.com/terryhay/argtools/internal/osDecorator"
+	osDecoratorMock2 "github.com/terryhay/argtools/internal/osDecorator/osDecoratorMock"
 	"github.com/terryhay/argtools/pkg/argtoolsError"
 	"os"
 	"testing"
@@ -23,7 +23,7 @@ func TestWrite(t *testing.T) {
 	testData := []struct {
 		caseName string
 
-		osd      osDecorator.OSDecorator
+		osd      osDecorator2.OSDecorator
 		dirPath  string
 		fileBody string
 
@@ -32,7 +32,7 @@ func TestWrite(t *testing.T) {
 		{
 			caseName: "check_dir_path_error",
 
-			osd: osDecoratorMock.NewMockOSDecorator(osDecoratorMock.MockOSDecoratorInit{
+			osd: osDecoratorMock2.NewMockOSDecorator(osDecoratorMock2.MockOSDecoratorInit{
 				IsNotExistFunc: func(err error) bool {
 					return err != nil
 				},
@@ -46,7 +46,7 @@ func TestWrite(t *testing.T) {
 		{
 			caseName: "check_dir_path_error",
 
-			osd: osDecoratorMock.NewMockOSDecorator(osDecoratorMock.MockOSDecoratorInit{
+			osd: osDecoratorMock2.NewMockOSDecorator(osDecoratorMock2.MockOSDecoratorInit{
 				IsNotExistFunc: func(err error) bool {
 					return err != nil
 				},
@@ -66,8 +66,8 @@ func TestWrite(t *testing.T) {
 		{
 			caseName: "create_file_error_with_successful_create_dir",
 
-			osd: osDecoratorMock.NewMockOSDecorator(osDecoratorMock.MockOSDecoratorInit{
-				CreateFunc: func(string) (osDecorator.FileDecorator, error) {
+			osd: osDecoratorMock2.NewMockOSDecorator(osDecoratorMock2.MockOSDecoratorInit{
+				CreateFunc: func(string) (osDecorator2.FileDecorator, error) {
 					return nil, mockCreateFuncErrRes
 				},
 				IsNotExistFunc: func(err error) bool {
@@ -89,8 +89,8 @@ func TestWrite(t *testing.T) {
 		{
 			caseName: "file_create_error",
 
-			osd: osDecoratorMock.NewMockOSDecorator(osDecoratorMock.MockOSDecoratorInit{
-				CreateFunc: func(path string) (osDecorator.FileDecorator, error) {
+			osd: osDecoratorMock2.NewMockOSDecorator(osDecoratorMock2.MockOSDecoratorInit{
+				CreateFunc: func(path string) (osDecorator2.FileDecorator, error) {
 					return nil, mockCreateFuncErrRes
 				},
 				IsNotExistFunc: func(err error) bool {
@@ -109,9 +109,9 @@ func TestWrite(t *testing.T) {
 		{
 			caseName: "file_create_error",
 
-			osd: osDecoratorMock.NewMockOSDecorator(osDecoratorMock.MockOSDecoratorInit{
-				CreateFunc: func(path string) (osDecorator.FileDecorator, error) {
-					return osDecoratorMock.NewMockFileDecorator(
+			osd: osDecoratorMock2.NewMockOSDecorator(osDecoratorMock2.MockOSDecoratorInit{
+				CreateFunc: func(path string) (osDecorator2.FileDecorator, error) {
+					return osDecoratorMock2.NewMockFileDecorator(
 							func() error {
 								return nil
 							},
@@ -136,9 +136,9 @@ func TestWrite(t *testing.T) {
 		{
 			caseName: "file_close_error",
 
-			osd: osDecoratorMock.NewMockOSDecorator(osDecoratorMock.MockOSDecoratorInit{
-				CreateFunc: func(path string) (osDecorator.FileDecorator, error) {
-					return osDecoratorMock.NewMockFileDecorator(
+			osd: osDecoratorMock2.NewMockOSDecorator(osDecoratorMock2.MockOSDecoratorInit{
+				CreateFunc: func(path string) (osDecorator2.FileDecorator, error) {
+					return osDecoratorMock2.NewMockFileDecorator(
 							func() error {
 								return fmt.Errorf(gofakeit.Color())
 							},

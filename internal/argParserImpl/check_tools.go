@@ -23,7 +23,7 @@ func checkParsedData(
 		argDescription *argParserConfig.ArgumentsDescription
 		contain        bool
 		flag           argParserConfig.Flag
-		parsedFlagData = data.GetFlagData()
+		parsedFlagData = data.GetFlagDataMap()
 	)
 
 	// check if all required flags is set

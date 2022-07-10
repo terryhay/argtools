@@ -4,7 +4,6 @@ import (
 	"github.com/brianvoe/gofakeit"
 	"github.com/stretchr/testify/require"
 	"github.com/terryhay/argtools/pkg/argParserConfig"
-	"github.com/terryhay/argtools/pkg/argtoolsError"
 	"testing"
 )
 
@@ -17,7 +16,7 @@ func TestParsedDataGetters(t *testing.T) {
 		require.Equal(t, argParserConfig.CommandIDUndefined, pointer.GetCommandID())
 		require.Equal(t, argParserConfig.CommandUndefined, pointer.GetCommand())
 		require.Nil(t, pointer.GetAgrData())
-		require.Nil(t, pointer.GetFlagData())
+		require.Nil(t, pointer.GetFlagDataMap())
 	}
 	{
 		pointer = NewParsedData(
@@ -34,7 +33,7 @@ func TestParsedDataGetters(t *testing.T) {
 		require.Equal(t, pointer.CommandID, pointer.GetCommandID())
 		require.Equal(t, pointer.Command, pointer.GetCommand())
 		require.Equal(t, pointer.ArgData, pointer.GetAgrData())
-		require.Equal(t, pointer.FlagData, pointer.GetFlagData())
+		require.Equal(t, pointer.FlagDataMap, pointer.GetFlagDataMap())
 	}
 	{
 		pointer = NewParsedData(
@@ -44,7 +43,7 @@ func TestParsedDataGetters(t *testing.T) {
 			nil,
 		)
 
-		require.Nil(t, pointer.GetFlagData())
+		require.Nil(t, pointer.GetFlagDataMap())
 	}
 }
 
@@ -56,44 +55,38 @@ func TestGetFlagArgValuesErrors(t *testing.T) {
 	testData := []struct {
 		caseName string
 
-		parsedData      *ParsedData
-		flag            argParserConfig.Flag
-		expectedErrCode argtoolsError.Code
+		parsedData *ParsedData
+		flag       argParserConfig.Flag
+
+		expectedSuccess bool
 	}{
 		{
-			caseName:        "nil_pointer",
-			expectedErrCode: argtoolsError.CodeParsedDataNilPointer,
+			caseName: "nil_pointer",
 		},
 		{
-			caseName:        "no_flag_data",
-			parsedData:      &ParsedData{},
-			expectedErrCode: argtoolsError.CodeParsedDataFlagDoesNotContainArgs,
+			caseName:   "no_flag_data",
+			parsedData: &ParsedData{},
 		},
 		{
 			caseName: "no_flag_data",
 			flag:     flag,
 			parsedData: &ParsedData{
-				FlagData: map[argParserConfig.Flag]*ParsedFlagData{
+				FlagDataMap: map[argParserConfig.Flag]*ParsedFlagData{
 					flag: {
 						Flag:    flag,
 						ArgData: &ParsedArgData{},
 					},
 				},
 			},
-			expectedErrCode: argtoolsError.CodeNone,
+			expectedSuccess: true,
 		},
 	}
 
 	for _, td := range testData {
 		t.Run(td.caseName+"_GetFlagArgValues", func(t *testing.T) {
-			v, err := td.parsedData.GetFlagArgValues(td.flag)
+			v, ok := td.parsedData.GetFlagArgValues(td.flag)
 			require.Equal(t, 0, len(v))
-			if td.expectedErrCode == argtoolsError.CodeNone {
-				require.Nil(t, err)
-			} else {
-				require.Equal(t, td.expectedErrCode, err.Code())
-			}
-
+			require.Equal(t, td.expectedSuccess, ok)
 		})
 	}
 }
@@ -106,44 +99,37 @@ func TestGetFlagArgValueErrors(t *testing.T) {
 	testData := []struct {
 		caseName string
 
-		parsedData      *ParsedData
-		flag            argParserConfig.Flag
-		expectedErrCode argtoolsError.Code
+		parsedData *ParsedData
+		flag       argParserConfig.Flag
+
+		expectedSuccess bool
 	}{
 		{
-			caseName:        "nil_pointer",
-			expectedErrCode: argtoolsError.CodeParsedDataNilPointer,
+			caseName: "nil_pointer",
 		},
 		{
-			caseName:        "no_flag_data",
-			parsedData:      &ParsedData{},
-			expectedErrCode: argtoolsError.CodeParsedDataFlagDoesNotContainArgs,
+			caseName:   "no_flag_data",
+			parsedData: &ParsedData{},
 		},
 		{
 			caseName: "no_flag_data",
 			flag:     flag,
 			parsedData: &ParsedData{
-				FlagData: map[argParserConfig.Flag]*ParsedFlagData{
+				FlagDataMap: map[argParserConfig.Flag]*ParsedFlagData{
 					flag: {
 						Flag:    flag,
 						ArgData: &ParsedArgData{},
 					},
 				},
 			},
-			expectedErrCode: argtoolsError.CodeParsedDataFlagDoesNotContainArgs,
 		},
 	}
 
 	for _, td := range testData {
 		t.Run(td.caseName+"_GetFlagArgValues", func(t *testing.T) {
-			v, err := td.parsedData.GetFlagArgValue(td.flag)
+			v, ok := td.parsedData.GetFlagArgValue(td.flag)
 			require.Equal(t, 0, len(v))
-			if td.expectedErrCode == argtoolsError.CodeNone {
-				require.Nil(t, err)
-				return
-			}
-			require.Equal(t, td.expectedErrCode, err.Code())
-
+			require.Equal(t, td.expectedSuccess, ok)
 		})
 	}
 }
@@ -155,7 +141,7 @@ func TestGetFlagArgValue(t *testing.T) {
 	value := ArgValue(gofakeit.Color())
 
 	parsedData := &ParsedData{
-		FlagData: map[argParserConfig.Flag]*ParsedFlagData{
+		FlagDataMap: map[argParserConfig.Flag]*ParsedFlagData{
 			flag: {
 				Flag: flag,
 				ArgData: &ParsedArgData{
@@ -166,14 +152,16 @@ func TestGetFlagArgValue(t *testing.T) {
 			},
 		},
 	}
-	{
-		v, err := parsedData.GetFlagArgValues(flag)
-		require.Nil(t, err)
+
+	t.Run("GetFlagArgValues", func(t *testing.T) {
+		v, ok := parsedData.GetFlagArgValues(flag)
+		require.True(t, ok)
 		require.Equal(t, value, v[0])
-	}
-	{
-		v, err := parsedData.GetFlagArgValue(flag)
-		require.Nil(t, err)
+	})
+
+	t.Run("GetFlagArgValue", func(t *testing.T) {
+		v, ok := parsedData.GetFlagArgValue(flag)
+		require.True(t, ok)
 		require.Equal(t, value, v)
-	}
+	})
 }

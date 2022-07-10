@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"github.com/brianvoe/gofakeit"
 	"github.com/stretchr/testify/require"
-	"github.com/terryhay/argtools/internal/generator/osDecorator"
-	"github.com/terryhay/argtools/pkg/argtoolsError"
+	"github.com/terryhay/argtools/internal/osDecorator"
 	"os"
 	"testing"
 )
@@ -25,7 +24,7 @@ func TestNewMockOSDecorator(t *testing.T) {
 			CreateFunc: func(path string) (osDecorator.FileDecorator, error) {
 				return nil, mockCreateFuncErrRes
 			},
-			ExitFunc: func(err *argtoolsError.Error) {
+			ExitFunc: func(err error, code uint) {
 
 			},
 			IsNotExistFunc: func(err error) bool {
@@ -45,7 +44,7 @@ func TestNewMockOSDecorator(t *testing.T) {
 	_, err := mockOSDecorator.Create("")
 	require.Equal(t, mockCreateFuncErrRes, err)
 
-	mockOSDecorator.Exit(nil)
+	mockOSDecorator.Exit(nil, 0)
 
 	res := mockOSDecorator.IsNotExist(nil)
 	require.Equal(t, res, mockIsNotExistFuncRes)

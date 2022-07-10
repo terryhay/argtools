@@ -286,7 +286,7 @@ func TestParse(t *testing.T) {
 			},
 			expectedParsedData: &parsedData.ParsedData{
 				CommandID: namelessCommandID,
-				FlagData: map[argParserConfig.Flag]*parsedData.ParsedFlagData{
+				FlagDataMap: map[argParserConfig.Flag]*parsedData.ParsedFlagData{
 					requiredFlag: {
 						Flag: requiredFlag,
 						ArgData: &parsedData.ParsedArgData{
@@ -369,7 +369,7 @@ func TestParse(t *testing.T) {
 						parsedData.ArgValue(arg),
 					},
 				},
-				FlagData: map[argParserConfig.Flag]*parsedData.ParsedFlagData{
+				FlagDataMap: map[argParserConfig.Flag]*parsedData.ParsedFlagData{
 					requiredFlag: {
 						Flag: requiredFlag,
 					},
@@ -427,7 +427,7 @@ func TestParse(t *testing.T) {
 						parsedData.ArgValue(arg),
 					},
 				},
-				FlagData: map[argParserConfig.Flag]*parsedData.ParsedFlagData{
+				FlagDataMap: map[argParserConfig.Flag]*parsedData.ParsedFlagData{
 					requiredFlag: {
 						Flag: requiredFlag,
 					},

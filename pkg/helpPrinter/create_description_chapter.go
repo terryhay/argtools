@@ -76,7 +76,6 @@ func CreateDescriptionChapter(
 		builder.WriteString(flagDescriptionsSubtitle)
 
 		for _, callNames = range getSortedFlagsForDescription(flagDescriptions) {
-
 			usingPattern = descriptionLine
 			if len(callNames) > tabLen {
 				usingPattern = descriptionTwoLines

@@ -52,6 +52,9 @@ const (
 	// CodeGeneratorCreateFileError - create a file error
 	CodeGeneratorCreateFileError
 
+	// CodeGeneratorNoRequiredFlag - get required flag data error
+	CodeGeneratorNoRequiredFlag
+
 	// CodeGeneratorWriteFileError - write file error
 	CodeGeneratorWriteFileError
 
@@ -101,6 +104,11 @@ const (
 	CodeParsedDataFlagDoesNotContainArgs
 )
 
+// ToUint converts Code type to uint
+func (c Code) ToUint() uint {
+	return uint(c)
+}
+
 // Error is detail of parser work error
 type Error struct {
 	code Code
@@ -117,10 +125,16 @@ func NewError(code Code, err error) *Error {
 
 // Code returns code of error, you must check if error == nil before
 func (i *Error) Code() Code {
+	if i == nil {
+		return CodeNone
+	}
 	return i.code
 }
 
 // Error decorates standard error interface
 func (i *Error) Error() string {
+	if i == nil {
+		return ""
+	}
 	return i.err.Error()
 }

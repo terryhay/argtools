@@ -2,7 +2,7 @@ package writeFile
 
 import (
 	"fmt"
-	"github.com/terryhay/argtools/internal/generator/osDecorator"
+	osDecorator2 "github.com/terryhay/argtools/internal/osDecorator"
 	"github.com/terryhay/argtools/pkg/argtoolsError"
 	"unicode/utf8"
 )
@@ -13,7 +13,7 @@ const (
 )
 
 // Write - write file string by dir path
-func Write(osd osDecorator.OSDecorator, dirPath, fileString string) (err *argtoolsError.Error) {
+func Write(osd osDecorator2.OSDecorator, dirPath, fileString string) (err *argtoolsError.Error) {
 	err = checkDirPath(osd, dirPath)
 	if err != nil {
 		return err
@@ -33,7 +33,7 @@ func Write(osd osDecorator.OSDecorator, dirPath, fileString string) (err *argtoo
 	return err
 }
 
-func checkDirPath(osd osDecorator.OSDecorator, dirPath string) *argtoolsError.Error {
+func checkDirPath(osd osDecorator2.OSDecorator, dirPath string) *argtoolsError.Error {
 	if _, err := osd.Stat(dirPath); osd.IsNotExist(err) {
 		return argtoolsError.NewError(
 			argtoolsError.CodeGeneratorInvalidGeneratePath,
@@ -56,7 +56,7 @@ func expandPath(path, name string) string {
 	return path + name
 }
 
-func createArgParserDir(osd osDecorator.OSDecorator, generatePath string) *argtoolsError.Error {
+func createArgParserDir(osd osDecorator2.OSDecorator, generatePath string) *argtoolsError.Error {
 	if err := osd.MkdirAll(generatePath, 0777); err != nil {
 		return argtoolsError.NewError(
 			argtoolsError.CodeGeneratorCreateDirError,
@@ -65,7 +65,7 @@ func createArgParserDir(osd osDecorator.OSDecorator, generatePath string) *argto
 	return nil
 }
 
-func write(osd osDecorator.OSDecorator, filePath, fileBody string) (res *argtoolsError.Error) {
+func write(osd osDecorator2.OSDecorator, filePath, fileBody string) (res *argtoolsError.Error) {
 	file, err := osd.Create(filePath)
 	if err != nil {
 		return argtoolsError.NewError(
@@ -73,7 +73,7 @@ func write(osd osDecorator.OSDecorator, filePath, fileBody string) (res *argtool
 			fmt.Errorf("create file error: %v\n", err))
 	}
 
-	defer func(file osDecorator.FileDecorator) {
+	defer func(file osDecorator2.FileDecorator) {
 		err = file.Close()
 		if err != nil {
 			res = argtoolsError.NewError(

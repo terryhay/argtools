@@ -47,7 +47,9 @@ func TestOSDecoratorExit(t *testing.T) {
 		t,
 		"os.Exit called",
 		func() {
-			NewOSDecorator().Exit(argtoolsError.NewError(argtoolsError.CodeUndefinedError, fmt.Errorf(gofakeit.Name())))
+			NewOSDecorator().Exit(
+				argtoolsError.NewError(argtoolsError.CodeUndefinedError, fmt.Errorf(gofakeit.Name())),
+				argtoolsError.CodeUndefinedError.ToUint())
 		},
 		"os.Exit was not called")
 }
